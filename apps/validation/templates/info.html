@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Your existing styles... */
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #eb1b23;
+            color: #fff;
+            text-align: center;
+            padding: 2px; /* Reduced header padding */
+        }
+
+        .header-logo {
+            width: 100px; /* Set the width of your college logo */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .logout-button {
+            background-color: #fff;
+            color: #eb1b23;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-right: 20px;
+        }
+
+        .logout-button:hover {
+            background-color: #ccc;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            width: 600px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-card .profile-card,
+        .main-card .pass-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            flex: 1;
+            padding: 20px;
+        }
+
+        .profile-card img,
+        .pass-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .profile-details,
+        .pass-details {
+            text-align: left;
+        }
+
+        .profile-details h2,
+        .pass-details h2 {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .profile-details p,
+        .pass-details p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .action-button {
+            background-color: #eb1b23;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin: 20px auto;
+        }
+
+        .action-button:hover {
+            background-color: #ff3336;
+        }
+
+        .camera-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .camera-card video {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .qr-result {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .location-selector {
+            margin-top: 10px;
+        }
+
+        .location-selector label {
+            font-weight: bold;
+        }
+
+        .location-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
+        <h1>Thapar NightPass</h1>
+        <button class="logout-button">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <div class="profile-card">
+                <img id="user_picture" src="" alt="Student Picture">
+                <div class="profile-details">
+                    <h2></h2>
+                    <p><strong>Registration Number:</strong> </p>
+                    <p><strong>Hostel:</strong></p>
+                    <p><strong>Room Number:</strong> </p>
+                    <p><strong>In Hostel:</strong> </p>
+                    <p><strong>Hostel Check-in Time:</strong> </p>
+                    <p><strong>Hostel Check-out Time:</strong> </p>
+                    <p><strong>Last Check-out Time:</strong> </p>
+                    <p><strong>Has Booked:</strong> </p>
+                </div>
+            </div>
+
+            <div class="pass-card" id="pass-card">
+                <div class="pass-details">
+                    <h2 class="user-pass-info">User Pass Information</h2>
+                    <p><strong>Pass ID:</strong> </p>
+                    <p><strong>Access:</strong> </p>
+                    <p><strong>Check-in:</strong> </p>
+                    <p><strong>Entry Time:</strong> </p>
+                    <p><strong>Check-out:</strong> </p>
+                    <p><strong>Exit Time:</strong> </p>
+                </div>
+                <button id="action-button" style="visibility: hidden;" class="action-button"></button>
+
+            </div>
+        </div>
+
+        <div class="camera-card">
+            <h2>QR Code Scanner</h2>
+            <video id="camera" autoplay></video>            
+            <div class="location-selector">
+                <select id="location-selector">
+                    {% for resource in campus_resources %}
+                    <option value="{{ resource.name }}">{{ resource.name }}</option>
+                    {% endfor %}
+                    {% for resource in hostels %}
+                    <option value="{{ resource.name }}">{{ resource.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script>
+        // JavaScript for accessing the user's camera and handling QR code scanning using Instascan
+        const videoElement = document.getElementById("camera");
+        const qrResultElement = document.getElementById("qr-result");
+
+        const scanner = new Instascan.Scanner({ video: videoElement });
+
+        scanner.addListener("scan", function (content) {
+            
+            fetch_data({'registration_number':content,
+                        'admin_campus_resource':document.getElementById("location-selector").value})
+            // Perform actions with the scanned QR code result here
+        });
+
+        Instascan.Camera.getCameras().then(function (cameras) {
+            if (cameras.length > 0) {
+                scanner.start(cameras[0]);
+            } else {
+                console.error("No cameras found.");
+            }
+        });
+        </script>
+        <script>
+        function updateProfile(data) {
+            const profileDetails = document.querySelector('.profile-details');
+            const nameElement = profileDetails.querySelector('h2');
+            const regNumberElement = profileDetails.querySelector('p:nth-child(2)');
+            const hostelElement = profileDetails.querySelector('p:nth-child(3)');
+            const roomNumberElement = profileDetails.querySelector('p:nth-child(4)');
+            const inHostelElement = profileDetails.querySelector('p:nth-child(5)');
+            const hostelCheckinElement = profileDetails.querySelector('p:nth-child(6)');
+            const hostelCheckoutElement = profileDetails.querySelector('p:nth-child(7)');
+            const lastCheckoutElement = profileDetails.querySelector('p:nth-child(8)');
+            const hasBookedElement = profileDetails.querySelector('p:nth-child(9)');
+
+            document.getElementById('user_picture').src = data.picture;
+            nameElement.textContent = data.name;
+            regNumberElement.textContent = `Registration Number: ${data.registration_number}`;
+            hostelElement.textContent = `Hostel: ${data.hostel}`;
+            roomNumberElement.textContent = `Room Number: ${data.room_number}`;
+            inHostelElement.textContent = `In Hostel: ${data.is_checked_in ? 'Yes' : 'No'}`;
+            hostelCheckinElement.textContent = `Hostel Check-in Time: ${data.hostel_checkin_time}`;
+            hostelCheckoutElement.textContent = `Hostel Check-out Time: ${data.hostel_checkout_time}`;
+            lastCheckoutElement.textContent = `Last Check-out Time: ${data.last_checkout_time}`;
+            hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
+        }
+
+        // Function to update the user pass section with data
+        function updateUserPass(data,user_data, task) {
+            const passDetails = document.querySelector('.pass-details');
+            const passIdElement = passDetails.querySelector('p:nth-child(2)');
+            const accessElement = passDetails.querySelector('p:nth-child(3)');
+            const checkinElement = passDetails.querySelector('p:nth-child(4)');
+            const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
+            const checkoutElement = passDetails.querySelector('p:nth-child(6)');
+            const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
+            const actionButton = document.getElementById('action-button')
+
+            passIdElement.textContent = `Pass ID: ${data.pass_id}`;
+            accessElement.textContent = `Access: ${data.campus_resource}`;
+            checkinElement.textContent = `Check-in: ${data.check_in}`;
+            entryTimeElement.textContent = `Entry Time: ${data.check_in_time}`;
+            checkoutElement.textContent = `Check-out: ${data.check_out}`;
+            exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
+            
+            if (task['check_out']) {
+                    actionButton.style.visibility = 'visible';
+                    actionButton.innerHTML = `Check Out`;
+                    actionButton.onclick = function()  {checkOut(user_data.registration_number);}
+            } else if (task['check_in']) {
+                    actionButton.style.visibility = 'visible';
+                    actionButton.innerHTML = `Check In`;
+                    actionButton.onclick = function(){checkIn(user_data.registration_number);}}
+        }
+
+        function fetch_data(dump) {
+            urls = ""
+            $.ajax({
+            method: "POST",
+            url: urls,
+            data:dump,
+            dataType: "json",
+            timeout: 120000,
+            success: function (response) {
+                let res = response.status;
+                if (res) {
+                    updateProfile(response.user);
+                    updateUserPass(response.user_pass, response.user, response.task);
+                    if (response.user_pass.pass_id) {
+                        document.getElementById('pass-card').style.backgroundColor = '#90EE90'
+                    } else [
+                    document.getElementById('pass-card').style.backgroundColor = '#FF7F7F'
+                    ]
+                    toastr.success(response.message);
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                toastr.error("Something went wrong, please try again later");
+            }
+        });
+        }
+
+        function checkIn(registration_number) {
+            urls = "checkin/"
+            $.ajax({
+            method: "POST",
+            url: urls,
+            data:{'admin_campus_resource':document.getElementById("location-selector").value,
+                  'registration_number':registration_number},
+            dataType: "json",
+            timeout: 120000,
+            success: function (response) {
+                let res = response.status;
+                if (res) {
+                    // updateProfile(response.user);
+                    // updateUserPass(response.user_pass, response.user);
+                    toastr.success(response.message);
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                toastr.error("Something went wrong, please try again later");
+            }
+        });
+        }
+
+        function checkOut(registration_number) {
+            urls = "checkout/"
+            $.ajax({
+            method: "POST",
+            url: urls,
+            data:{'admin_campus_resource':document.getElementById("location-selector").value,
+                  'registration_number':registration_number},
+            dataType: "json",
+            timeout: 120000,
+            success: function (response) {
+                let res = response.status;
+                if (res) {
+                    // updateProfile(response.user);
+                    // updateUserPass(response.user_pass, response.user);
+                    toastr.success(response.message);
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                toastr.error("Something went wrong, please try again later");
+            }
+        });
+        }
+
+    </script>
+</body>
+</html>
