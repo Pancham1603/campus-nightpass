@@ -25,11 +25,10 @@ urlpatterns = [
    path('admin/login', user_views.login_user),
    path('login/', user_views.login_user),
    path('logout/', user_views.logout_user),
-#    path('', include("apps.users.urls")),
    path('users/', include("django.contrib.auth.urls")),
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
-   
+   path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:

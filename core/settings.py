@@ -12,13 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
-import django_smtp_ssl
 from django.core.management.utils import get_random_secret_key
-import sys
-from dotenv import load_dotenv
-# import dj_database_url
 
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,13 +48,26 @@ INSTALLED_APPS = [
     'hijack',
     'hijack.contrib.admin',
     'corsheaders',
-    # 'oauth2_provider',
-    # 'social_django',
-    # 'rest_framework_social_oauth2',
-    # 'django.contrib.sites',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
-SITE_ID = 1
-LOGIN_REDIRECT_URL = '/'	
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        } 
+    }
+}
+
+SITE_ID = 3
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,9 +78,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'detect.middleware.UserAgentDetectionMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'hijack.middleware.HijackUserMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'allauth.account.middleware.AccountMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -90,8 +98,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                # 'social_django.context_processors.backends',
-                # 'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -155,10 +161,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# AUTHENTICATION_BACKENDS = (
-#    'rest_framework_social_oauth2.backends.DjangoOAuth2',
-#    'django.contrib.auth.backends.ModelBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+   'django.contrib.auth.backends.ModelBackend',
+   'allauth.account.auth_backends.AuthenticationBackend',
+)
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -180,41 +186,17 @@ TIME_ZONE =  'Asia/Kolkata'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'users.User'
-
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", None)
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", None)
-EMAIL_PORT = 465
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
 
 LOGIN_URL = '/login/'
 LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-# SOCIAL_AUTH_PIPELINE = (
-#     'social_core.pipeline.social_auth.associate_by_email',  # <--- enable this one
-# )
-
-# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '759213386629-nvrinr5r32k4fcebodp5horcp9cmo8n5.apps.googleusercontent.com'
-# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
-# SOCIAL_AUTH_USER_MODEL = 'users.Student'
-
-
-# REST_FRAMEWORK = {
-    
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-        
-#         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
-#         'rest_framework_social_oauth2.authentication.SocialAuthentication',
-#     ),
-# }
-
-# DISABLE_COLLECTSTATIC = 1
-
-AUTH_USER_MODEL = 'users.Student'
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = "mandatory" 
+ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+SOCIALACCOUNT_EMAIL_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = True

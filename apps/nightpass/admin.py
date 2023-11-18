@@ -8,7 +8,7 @@ class CampusResourceAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 class NightPassAdmin(admin.ModelAdmin):
-    list_display = ('pass_id', 'user', 'campus_resource')
+    list_display = ('pass_id', 'user','date', 'campus_resource', 'check_in', 'check_out')
     search_fields = ('pass_id', 'user__name','user__registration_number', 'campus_resource__name')
 
 

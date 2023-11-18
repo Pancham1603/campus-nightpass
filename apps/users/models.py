@@ -1,20 +1,19 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, registration_number, password=None, **extra_fields):
-        if not registration_number:
-            raise ValueError('The Registration Number field must be set')
-        user = self.model(registration_number=registration_number, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
-        return user
+# class CustomUserManager(BaseUserManager):
+#     def create_user(self, registration_number, password=None, **extra_fields):
+#         if not registration_number:
+#             raise ValueError('The Registration Number field must be set')
+#         user = self.model(registration_number=registration_number, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
 
-    def create_superuser(self, registration_number, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self.create_user(registration_number, password, **extra_fields)
+#     def create_superuser(self, registration_number, password=None, **extra_fields):
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+#         return self.create_user(registration_number, password, **extra_fields)
     
 class ThaparStaff(models.Model):
     name = models.CharField(max_length=100)
@@ -40,7 +39,7 @@ class Hostel(models.Model):
         return self.name
 
 
-class Student(AbstractBaseUser, PermissionsMixin):
+class Student(models.Model):
     registration_number = models.CharField(max_length=20, unique=True, primary_key=True)
     name = models.CharField(max_length=100)
     branch = models.CharField(max_length=50)
@@ -48,12 +47,11 @@ class Student(AbstractBaseUser, PermissionsMixin):
     mobile_number = models.CharField(max_length=15)
     father_name = models.CharField(max_length=100)
     mother_name = models.CharField(max_length=100)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, unique=True)
     course = models.CharField(max_length=50)
     semester = models.CharField(max_length=10)
     parent_contact = models.CharField(max_length=15)
     address = models.TextField()
-    qr = models.URLField(blank=True)
     picture = models.URLField(blank=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.RESTRICT, related_name='hostel', default=None, blank=True, null=True)
     room_number = models.CharField(max_length=10)
@@ -66,10 +64,6 @@ class Student(AbstractBaseUser, PermissionsMixin):
     hostel_checkin_time = models.DateTimeField(blank=True, null=True)
     last_checkout_time = models.DateTimeField(blank=True, null=True)
     violation_flags = models.IntegerField(default=0)
-
-    USERNAME_FIELD = 'registration_number'
-
-    objects = CustomUserManager()
 
     def __str__(self):
         return self.registration_number

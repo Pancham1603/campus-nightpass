@@ -2,8 +2,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from apps.users.models import Student 
 
 class CampusResource(models.Model):
     name = models.CharField(max_length=100)
@@ -23,7 +22,7 @@ class CampusResource(models.Model):
         return self.name
 
 class NightPass(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(Student, on_delete=models.CASCADE)
     pass_id = models.CharField(max_length=20, unique=True, primary_key=True)
     start_time = models.TimeField()
     end_time = models.TimeField()

@@ -12,7 +12,6 @@ import json
 from datetime import date, time, datetime
 import random, string
 from .models import *
-from ..users.manager import generate_qr
 from ..users.views import *
 from datetime import datetime
 import json
@@ -22,14 +21,15 @@ from django.db.utils import IntegrityError
 @login_required
 def campus_resources_home(request):
     campus_resources = CampusResource.objects.filter(is_display=True)
-    user_pass = NightPass.objects.filter(user=request.user, check_out=False).first()
-    return render(request, 'lmao.html', {'user':request.user,'campus_resources':campus_resources, 'user_pass':user_pass})			  
+    user = Student.objects.get(email=request.user.email)
+    user_pass = NightPass.objects.filter(user=user, check_out=False).first()
+    return render(request, 'lmao.html', {'user':user,'campus_resources':campus_resources, 'user_pass':user_pass})			  
 
 
 @csrf_exempt
 @login_required
 def generate_pass(request, campus_resource):
-    user = Student.objects.get(registration_number=request.user.registration_number)
+    user = Student.objects.get(email=request.user.email)
     campus_resource = CampusResource.objects.get(name=campus_resource)
     
     if (campus_resource.is_display == False) or not campus_resource.is_booking:
@@ -55,7 +55,7 @@ def generate_pass(request, campus_resource):
 
                     if not NightPass.objects.filter(pass_id=pass_id).count():
                         break
-                generated_pass = NightPass(campus_resource=campus_resource, pass_id=pass_id, user=user, date=date.today(), start_time=datetime.now(), end_time=datetime.now())
+                generated_pass = NightPass(campus_resource=campus_resource, pass_id=pass_id, user=user   , date=date.today(), start_time=datetime.now(), end_time=datetime.now())
                 generated_pass.save()
 
                 user.has_booked = True
@@ -63,7 +63,7 @@ def generate_pass(request, campus_resource):
                 user.save()
                 campus_resource.save()
                 data = {
-                    'pass_qr':user.qr,
+                    'pass_qr':None,
                     'status':True,
                     'message':f"Pass generated successfully for {campus_resource.name}!"
                 }
@@ -93,8 +93,9 @@ def generate_pass(request, campus_resource):
 @csrf_exempt
 @login_required
 def cancel_pass(request):
-    user = Student.objects.get(registration_number=request.user.registration_number)
-    user_nightpass = NightPass.objects.filter(user=user).first()
+    user = Student.objects.get(email=request.user.email)
+    user_nightpass = NightPass.objects.filter(user=user, check_in=False).first()
+    user_nightpass = user_nightpass if user_nightpass else NightPass.objects.filter(user=user).first()
     if not user_nightpass:
         data={
             'status':False,
