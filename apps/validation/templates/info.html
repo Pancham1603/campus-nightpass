@@ -66,7 +66,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js" integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
     <script>
-        // Configure QuaggaJS
+
         Quagga.init({
             inputStream: {
                 name: "Live",
@@ -90,7 +90,7 @@
             Quagga.start();
         });
 
-        // Add event listener for successful barcode scans
+        lastScannedBarcode = "";
         Quagga.onDetected(function (result) {
             var code = result.codeResult.code;
             if (code !== lastScannedBarcode) {
@@ -98,36 +98,20 @@
                         'admin_campus_resource':document.getElementById("location-selector").value})
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
-
                 lastScannedBarcode = code;
             }
-            // You can perform further actions with the scanned barcode here
-            // Stop Quagga to prevent continuous scanning (optional)
-            // Quagga.stop();
+
         });
+
+        Quagga.onProcessed(result => {
+            const drawingCanvas = Quagga.canvas.dom.overlay;
+            drawingCanvas.style.display = 'none';
+        });
+
+        setInterval(function () {
+            lastScannedBarcode = null;
+        }, 2000);
     </script>
-    <!-- <script>
-        // JavaScript for accessing the user's camera and handling QR code scanning using Instascan
-        const videoElement = document.getElementById("camera");
-        const qrResultElement = document.getElementById("qr-result");
-
-        const scanner = new Instascan.Scanner({ video: videoElement });
-
-        scanner.addListener("scan", function (content) {
-            
-            fetch_data({'registration_number':content,
-                        'admin_campus_resource':document.getElementById("location-selector").value})
-            // Perform actions with the scanned QR code result here
-        });
-
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                console.error("No cameras found.");
-            }
-        });
-        </script> -->
         <script src="../static/info.js"></script>
 </body>
 </html>

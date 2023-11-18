@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thapar NightPass</title>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code128.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -200,7 +200,7 @@
         <div class="profile-card">
             <div class="profile-images">
                 <img class="profile-img" src="{{ user.picture }}" alt="Student Picture">
-                <div class="qr-code" id="qrcode"></div>
+                <svg id="barcode"></svg>
             </div>
             <div class="profile-details">
                 <p><strong>Name:</strong> {{ user.name }}</p>
@@ -225,13 +225,7 @@
             </div>
         </div>
         <script>
-            var qrcode = new QRCode(document.getElementById("qrcode"), {
-                text: "{{user}}",
-                width: 100,
-                height: 100
-            });
-
-
+            JsBarcode("#barcode", "{{ user }}");
             let deadline = new Date("{{ user.last_checkout_time|date:'M d, Y H:i:s' }}" ).getTime();
             deadline += 20*60000
             let x = setInterval(function () {
