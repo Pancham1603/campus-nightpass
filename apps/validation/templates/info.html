@@ -50,7 +50,7 @@
 
         <div class="camera-card">
             <h2>QR Code Scanner</h2>
-            <video id="camera" autoplay></video>            
+            <div id="camera" class="viewport"> </div>
             <div class="location-selector">
                 <select id="location-selector">
                     {% for resource in campus_resources %}
@@ -64,8 +64,49 @@
         </div>
     </div>
 
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js" integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
     <script>
+        // Configure QuaggaJS
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#camera'),
+                constraints: {
+                    width: 640,
+                    height: 480,
+                    facingMode: "environment" // or "user" for front camera
+                },
+            },
+            decoder: {
+                readers: ['code_128_reader']
+            },
+            
+        }, function (err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            Quagga.start();
+        });
+
+        // Add event listener for successful barcode scans
+        Quagga.onDetected(function (result) {
+            var code = result.codeResult.code;
+            if (code !== lastScannedBarcode) {
+                fetch_data({'registration_number':code,
+                        'admin_campus_resource':document.getElementById("location-selector").value})
+                var audio = new Audio('../static/beep.mp3');
+                audio.play();
+
+                lastScannedBarcode = code;
+            }
+            // You can perform further actions with the scanned barcode here
+            // Stop Quagga to prevent continuous scanning (optional)
+            // Quagga.stop();
+        });
+    </script>
+    <!-- <script>
         // JavaScript for accessing the user's camera and handling QR code scanning using Instascan
         const videoElement = document.getElementById("camera");
         const qrResultElement = document.getElementById("qr-result");
@@ -86,7 +127,7 @@
                 console.error("No cameras found.");
             }
         });
-        </script>
+        </script> -->
         <script src="../static/info.js"></script>
 </body>
 </html>
