@@ -48,10 +48,11 @@
 
         .container {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: center;
             align-items: center;
         }
+
 
         .profile-card, .resource-card {
             background-color: #fff;
@@ -179,13 +180,48 @@
             padding: 10px;
             margin: 10px 0;
         }
-
+        .resource-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .resource-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .resource-details {
+            flex: 1;
+            padding: 10px;
+            text-align: left;
+        }
+        .resource-details h2 {
+            margin: 0;
+        }
+        .resource-details p {
+            margin: 0;
+        }
+        .location-cards
+        {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
     
 
         @media (max-width: 768px) {
             .profile-card, .resource-card {
                 width: 90%;
             }
+            .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
         }
     </style>
 </head>
@@ -249,7 +285,7 @@
                 }
             }, 1000);
         </script>
-
+  <div class="location-cards">
         {% if campus_resources|length > 0 %}
         {% for resource in campus_resources %}
         {% if resource == user_pass.campus_resource %}
@@ -277,7 +313,7 @@
         {% endif %}
         {% endfor %}
         {% endif %}
-
+    </div>
     </div>
 
     <div id="myModal" class="modal">
@@ -340,11 +376,13 @@
             success: function (response) {
                 let res = JSON.parse(response).status;
                 if (res) {
-                    console.log(JSON.parse(res))
+                    console.log(JSON.parse(response))
                     let qr = JSON.parse(response).pass_qr
                     document.getElementById('modal-resource-picture').src = qr
                     document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
                     toastr.success(JSON.parse(response).message);
+                    setTimeout(function(){ location.reload(); }, 5000);
+                    //location.reload();
                 }
                 else {
                     toastr.error(JSON.parse(response).message);
