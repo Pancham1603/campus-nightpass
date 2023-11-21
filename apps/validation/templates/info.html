@@ -50,7 +50,8 @@
 
         <div class="camera-card">
             <h2>QR Code Scanner</h2>
-            <div id="camera" class="viewport"> </div>
+            <input type="number" placeholder="Roll Number" id="roll_num" class="roll-no">
+            <div id="camera" class="viewport" style="margin-top: 10px;"> </div>
             <div class="location-selector">
                 <select id="location-selector">
                     {% for resource in campus_resources %}
@@ -94,10 +95,11 @@
         Quagga.onDetected(function (result) {
             var code = result.codeResult.code;
             if (code !== lastScannedBarcode) {
-                fetch_data({'registration_number':code,
-                        'admin_campus_resource':document.getElementById("location-selector").value})
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
+
+                fetch_data({'registration_number':code,
+                        'admin_campus_resource':document.getElementById("location-selector").value})
                 lastScannedBarcode = code;
             }
 
