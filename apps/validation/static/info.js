@@ -1,3 +1,33 @@
+function resetProfile() {
+    document.querySelector('.profile-card').innerHTML=`
+    <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" class="profile-picture">
+    </div>`;
+    resetPass();
+}
+function resetPass() {
+    const passDetails = document.querySelector('.pass-details');
+    const passIdElement = passDetails.querySelector('p:nth-child(2)');
+    const accessElement = passDetails.querySelector('p:nth-child(3)');
+    const checkinElement = passDetails.querySelector('p:nth-child(4)');
+    const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
+    const checkoutElement = passDetails.querySelector('p:nth-child(6)');
+    const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
+    const actionButton = document.getElementById('action-button')
+    document.getElementById('pass-card').style.backgroundColor = '#FFFFFF'
+    passIdElement.textContent = `Pass ID: `;
+    accessElement.textContent = `Access: `;
+    checkinElement.textContent = `Check-in: `;
+    entryTimeElement.textContent = `Entry Time: `;
+    checkoutElement.textContent = `Check-out: `;
+    exitTimeElement.textContent = `Exit Time: `;
+
+            actionButton.style.visibility = 'hidden';
+            actionButton.innerHTML = ``;
+            actionButton.style.setProperty('priority', 'important');
+            actionButton.onclick = function()  {}
+
+    }
+
 
 function fetch_data(dump) {
     urls = ""
