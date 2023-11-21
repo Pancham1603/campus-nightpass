@@ -4,8 +4,8 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from .models import CampusResource, NightPass
-from ..users.models import Student
+from .models import *
+from ..users.models import *
 import random
 import string
 import json
@@ -21,7 +21,7 @@ from django.db.utils import IntegrityError
 @login_required
 def campus_resources_home(request):
     campus_resources = CampusResource.objects.filter(is_display=True)
-    user = Student.objects.get(email=request.user.email)
+    user = request.user.student
     user_pass = NightPass.objects.filter(user=user, check_out=False).first()
     return render(request, 'lmao.html', {'user':user,'campus_resources':campus_resources, 'user_pass':user_pass})			  
 

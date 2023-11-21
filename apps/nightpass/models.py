@@ -1,8 +1,15 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db import models
-from django.contrib.auth import get_user_model
-from apps.users.models import Student 
+
+
+class Hostel(models.Model):
+    name = models.CharField(max_length=10, unique=True, primary_key=True)
+    contact_number = models.CharField(max_length=15)
+    email = models.EmailField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class CampusResource(models.Model):
     name = models.CharField(max_length=100)
@@ -21,19 +28,5 @@ class CampusResource(models.Model):
     def __str__(self):
         return self.name
 
-class NightPass(models.Model):
-    user = models.ForeignKey(Student, on_delete=models.CASCADE)
-    pass_id = models.CharField(max_length=20, unique=True, primary_key=True)
-    start_time = models.TimeField()
-    end_time = models.TimeField()
-    date = models.DateField()
-    campus_resource = models.ForeignKey(CampusResource, on_delete=models.CASCADE)
-    check_in = models.BooleanField(default=False)
-    check_out = models.BooleanField(default=False)
-    check_in_time = models.DateTimeField(blank=True, null=True)
-    check_out_time = models.DateTimeField(blank=True, null=True)
 
-
-    def __str__(self):
-        return self.pass_id
 

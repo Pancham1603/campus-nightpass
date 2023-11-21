@@ -36,15 +36,15 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'apps.users',
+    'apps.nightpass',
+    'apps.validation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.users',
-    'apps.nightpass',
-    'apps.validation',
     'hijack',
     'hijack.contrib.admin',
     'corsheaders',
@@ -192,11 +192,14 @@ LOGOUT_URL = '/logout/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+AUTH_USER_MODEL = 'users.CustomUser'
+
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = "mandatory" 
 ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USERNAME_REQUIRED =False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 SOCIALACCOUNT_EMAIL_REQUIRED = True
 SOCIALACCOUNT_AUTO_SIGNUP = True

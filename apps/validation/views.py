@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse
-from ..nightpass.models import CampusResource, NightPass
+from ..nightpass.models import *
 from ..users.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
