@@ -281,7 +281,7 @@
                 if (t < 0) {
                     clearInterval(x);
                     document.getElementById("timer")
-                            .innerHTML = "0m 0s";
+                            .innerHTML = "Defaulter Recorded! Successive violations will lead to revocation of nightpass facility.";
                 }
             }, 1000);
         </script>
@@ -325,11 +325,11 @@
             <div class="modal-details">
                 <h2 id="modal-resource-name"></h2>
                 <p id="modal-resource-description"></p>
-                <select>
+                <!-- <select>
                     <option value="time-slot-1">Time Slot 1</option>
                     <option value="time-slot-2">Time Slot 2</option>
                     <option value="time-slot-3">Time Slot 3</option>
-                </select>
+                </select> -->
                 <button class="modal-button" id="modal-resource-book">Book</button>
             </div>
         </div>
@@ -345,7 +345,7 @@
                         "onclick": null,
                         "showDuration": "300",
                         "hideDuration": "1000",
-                        "timeOut": "5000",
+                        "timeOut": "3000",
                         "extendedTimeOut": "1000",
                         "showEasing": "swing",
                         "hideEasing": "linear",
@@ -381,7 +381,7 @@
                     document.getElementById('modal-resource-picture').src = qr
                     document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
                     toastr.success(JSON.parse(response).message);
-                    setTimeout(function(){ location.reload(); }, 5000);
+                    setTimeout(function(){ location.reload(); }, 3000);
                     //location.reload();
                 }
                 else {

@@ -28,6 +28,74 @@ function resetPass() {
 
     }
 
+function updateProfile(data) {
+    document.querySelector('.profile-card').innerHTML=`
+    <img class="image" id="user_picture" src="" alt="Student Picture">
+    <div class="profile-details">
+        <h2></h2>
+        <p><strong>Registration Number:</strong> </p>
+        <p><strong>Hostel:</strong></p>
+        <p><strong>Room Number:</strong> </p>
+        <p><strong>In Hostel:</strong> </p>
+        <p><strong>Hostel Check-in Time:</strong> </p>
+        <p><strong>Hostel Check-out Time:</strong> </p>
+        <p><strong>Last Check-out Time:</strong> </p>
+        <p><strong>Has Booked:</strong> </p>
+    </div>`;
+    const profileDetails = document.querySelector('.profile-details');
+    const nameElement = profileDetails.querySelector('h2');
+    const regNumberElement = profileDetails.querySelector('p:nth-child(2)');
+    const hostelElement = profileDetails.querySelector('p:nth-child(3)');
+    const roomNumberElement = profileDetails.querySelector('p:nth-child(4)');
+    const inHostelElement = profileDetails.querySelector('p:nth-child(5)');
+    const hostelCheckinElement = profileDetails.querySelector('p:nth-child(6)');
+    const hostelCheckoutElement = profileDetails.querySelector('p:nth-child(7)');
+    const lastCheckoutElement = profileDetails.querySelector('p:nth-child(8)');
+    const hasBookedElement = profileDetails.querySelector('p:nth-child(9)');
+    const options = { hour: '2-digit', minute: '2-digit', hour12: true, month: 'long', day: '2-digit' };
+    const checkinTime = new Date(data.hostel_checkin_time).toLocaleString('en-US', options);
+    const checkoutTime = new Date(data.hostel_checkout_time).toLocaleString('en-US', options);
+    const lastCheckoutTime = new Date(data.last_checkout_time).toLocaleString('en-US', options);
+    document.getElementById('user_picture').src = data.picture;
+    nameElement.textContent = data.name;
+    regNumberElement.textContent = `Registration Number: ${data.registration_number}`;
+    hostelElement.textContent = `Hostel: ${data.hostel}`;
+    roomNumberElement.textContent = `Room Number: ${data.room_number}`;
+    inHostelElement.textContent = `In Hostel: ${data.is_checked_in ? 'Yes' : 'No'}`;
+    hostelCheckinElement.textContent = `Hostel Check-in Time: ${checkinTime}`;
+    hostelCheckoutElement.textContent = `Hostel Check-out Time: ${checkoutTime}`;
+    lastCheckoutElement.textContent = `Last Check-out Time: ${lastCheckoutTime}`;
+    hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
+    setTimeout(function(){resetProfile();}, 10000);
+}
+
+// Function to update the user pass section with data
+function updateUserPass(data,user_data, task) {
+    const passDetails = document.querySelector('.pass-details');
+    const passIdElement = passDetails.querySelector('p:nth-child(2)');
+    const accessElement = passDetails.querySelector('p:nth-child(3)');
+    const checkinElement = passDetails.querySelector('p:nth-child(4)');
+    const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
+    const checkoutElement = passDetails.querySelector('p:nth-child(6)');
+    const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
+    const actionButton = document.getElementById('action-button')
+
+    passIdElement.textContent = `Pass ID: ${data.pass_id}`;
+    accessElement.textContent = `Access: ${data.campus_resource}`;
+    checkinElement.textContent = `Check-in: ${data.check_in}`;
+    entryTimeElement.textContent = `Entry Time: ${data.check_in_time}`;
+    checkoutElement.textContent = `Check-out: ${data.check_out}`;
+    exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
+    
+    if (task['check_out']) {
+            actionButton.style.visibility = 'visible';
+            actionButton.innerHTML = `Check Out`;
+            actionButton.onclick = function()  {checkOut(user_data.registration_number);}
+    } else if (task['check_in']) {
+            actionButton.style.visibility = 'visible';
+            actionButton.innerHTML = `Check In`;
+            actionButton.onclick = function(){checkIn(user_data.registration_number);}}
+}
 
 function fetch_data(dump) {
     urls = ""
@@ -59,58 +127,6 @@ function fetch_data(dump) {
 });
 }
 
-function updateProfile(data) {
-    const profileDetails = document.querySelector('.profile-details');
-    const nameElement = profileDetails.querySelector('h2');
-    const regNumberElement = profileDetails.querySelector('p:nth-child(2)');
-    const hostelElement = profileDetails.querySelector('p:nth-child(3)');
-    const roomNumberElement = profileDetails.querySelector('p:nth-child(4)');
-    const inHostelElement = profileDetails.querySelector('p:nth-child(5)');
-    const hostelCheckinElement = profileDetails.querySelector('p:nth-child(6)');
-    const hostelCheckoutElement = profileDetails.querySelector('p:nth-child(7)');
-    const lastCheckoutElement = profileDetails.querySelector('p:nth-child(8)');
-    const hasBookedElement = profileDetails.querySelector('p:nth-child(9)');
-
-    document.getElementById('user_picture').src = data.picture;
-    nameElement.textContent = data.name;
-    regNumberElement.textContent = `Registration Number: ${data.registration_number}`;
-    hostelElement.textContent = `Hostel: ${data.hostel}`;
-    roomNumberElement.textContent = `Room Number: ${data.room_number}`;
-    inHostelElement.textContent = `In Hostel: ${data.is_checked_in ? 'Yes' : 'No'}`;
-    hostelCheckinElement.textContent = `Hostel Check-in Time: ${data.hostel_checkin_time}`;
-    hostelCheckoutElement.textContent = `Hostel Check-out Time: ${data.hostel_checkout_time}`;
-    lastCheckoutElement.textContent = `Last Check-out Time: ${data.last_checkout_time}`;
-    hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
-}
-
-// Function to update the user pass section with data
-function updateUserPass(data,user_data, task) {
-    const passDetails = document.querySelector('.pass-details');
-    const passIdElement = passDetails.querySelector('p:nth-child(2)');
-    const accessElement = passDetails.querySelector('p:nth-child(3)');
-    const checkinElement = passDetails.querySelector('p:nth-child(4)');
-    const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
-    const checkoutElement = passDetails.querySelector('p:nth-child(6)');
-    const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
-    const actionButton = document.getElementById('action-button')
-
-    passIdElement.textContent = `Pass ID: ${data.pass_id}`;
-    accessElement.textContent = `Access: ${data.campus_resource}`;
-    checkinElement.textContent = `Check-in: ${data.check_in}`;
-    entryTimeElement.textContent = `Entry Time: ${data.check_in_time}`;
-    checkoutElement.textContent = `Check-out: ${data.check_out}`;
-    exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
-    
-    if (task['check_out']) {
-            actionButton.style.visibility = 'visible';
-            actionButton.innerHTML = `Check Out`;
-            actionButton.onclick = function()  {checkOut(user_data.registration_number);}
-    } else if (task['check_in']) {
-            actionButton.style.visibility = 'visible';
-            actionButton.innerHTML = `Check In`;
-            actionButton.onclick = function(){checkIn(user_data.registration_number);}}
-}
-
 function checkIn(registration_number) {
     urls = "checkin/"
     $.ajax({
@@ -123,9 +139,12 @@ function checkIn(registration_number) {
     success: function (response) {
         let res = response.status;
         if (res) {
+           // resetProfile();
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
+            setTimeout(function(){ resetProfile(); }, 3000);
+
         }
         else {
             toastr.error(response.message);
@@ -149,9 +168,11 @@ function checkOut(registration_number) {
     success: function (response) {
         let res = response.status;
         if (res) {
+            
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
+            setTimeout(function(){ resetProfile(); }, 3000);
         }
         else {
             toastr.error(response.message);
