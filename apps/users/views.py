@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.views import View
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Student
+from .models import Student, CustomUser
 from .google_config import config
 import json
 import requests
@@ -84,8 +84,8 @@ def oauth_callback(request):
             # Save the response to a JSON file
             user_info = get_google_user_info(response.json()['access_token'])
             user_email = user_info['email']
-            
-            return HttpResponseRedirect('/success/')
+            login(request, user=CustomUser.objects.filter(email=user_email).first())
+            return HttpResponseRedirect('/')
         else:
             # Handle the case when the token request fails
             return HttpResponse(f"Error: {response.text}")
