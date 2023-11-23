@@ -104,7 +104,7 @@ function fetch_data(dump) {
     url: urls,
     data:dump,
     dataType: "json",
-    timeout: 120000,
+    timeout: 12000,
     success: function (response) {
         let res = response.status;
         if (res) {
@@ -132,8 +132,7 @@ function checkIn(registration_number) {
     $.ajax({
     method: "POST",
     url: urls,
-    data:{'admin_campus_resource':document.getElementById("location-selector").value,
-          'registration_number':registration_number},
+    data:{'registration_number':registration_number},
     dataType: "json",
     timeout: 120000,
     success: function (response) {
@@ -161,8 +160,7 @@ function checkOut(registration_number) {
     $.ajax({
     method: "POST",
     url: urls,
-    data:{'admin_campus_resource':document.getElementById("location-selector").value,
-          'registration_number':registration_number},
+    data:{'registration_number':registration_number},
     dataType: "json",
     timeout: 120000,
     success: function (response) {
@@ -192,8 +190,7 @@ function checkInput() {
     if (inputElement.value.length >= 0 && inputElement.value.length == 9) {
         enteredIntegers = inputElement.value.length;
         if (enteredIntegers === 9) {
-            fetch_data({'registration_number':inputElement.value,
-                        'admin_campus_resource':document.getElementById("location-selector").value})
+            fetch_data({'registration_number':inputElement.value})
             var audio = new Audio('../static/beep.mp3');
             audio.play();
             inputElement.value = '';
