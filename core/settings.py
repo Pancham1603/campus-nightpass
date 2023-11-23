@@ -48,11 +48,11 @@ INSTALLED_APPS = [
     'hijack',
     'hijack.contrib.admin',
     'corsheaders',
-    'django.contrib.sites',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
-    'allauth.socialaccount.providers.google',
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
+    # 'allauth.socialaccount',
+    # 'allauth.socialaccount.providers.google',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'detect.middleware.UserAgentDetectionMiddleware',
     'hijack.middleware.HijackUserMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
+    # 'allauth.account.middleware.AccountMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -163,7 +163,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = (
    'django.contrib.auth.backends.ModelBackend',
-   'allauth.account.auth_backends.AuthenticationBackend',
+#    'allauth.account.auth_backends.AuthenticationBackend',
 )
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -194,12 +194,10 @@ LOGOUT_REDIRECT_URL = '/'
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "mandatory" 
-ACCOUNT_SIGNUP_PASSWORD_VERIFICATION = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_USERNAME_REQUIRED =False
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-SOCIALACCOUNT_EMAIL_REQUIRED = True
-SOCIALACCOUNT_AUTO_SIGNUP = True
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
+# ACCOUNT_EMAIL_REQUIRED = True
+# ACCOUNT_UNIQUE_EMAIL = True
+# ACCOUNT_USERNAME_REQUIRED =False
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+# SOCIALACCOUNT_EMAIL_REQUIRED = True
+# SOCIALACCOUNT_AUTO_SIGNUP = True
