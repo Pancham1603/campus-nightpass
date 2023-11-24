@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 # Stage 1: Build dependencies
 FROM python:3.6.9 as builder
+=======
+# For more information, please refer to https://aka.ms/vscode-docker-python
+FROM python:3.8-slim-buster
+>>>>>>> parent of fec9be0 (fix)
 
 # Keeps Python from generating .pyc files in the container
 ENV PYTHONDONTWRITEBYTECODE=1
