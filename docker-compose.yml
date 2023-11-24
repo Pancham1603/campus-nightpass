@@ -1,0 +1,16 @@
+version: '3.4'
+
+services:
+  campus_nightpass:
+    image: tiet/campus_nightpass
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "4376:4376"
+    depends_on: 
+    volumes:
+      - ./database/:/app/database/
+      - ./static/:/app/static/
+      - ./logs/:/app/logs/
+    restart: always
