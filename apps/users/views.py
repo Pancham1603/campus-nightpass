@@ -99,20 +99,11 @@ def oauth_callback(request):
 def login_user(request):
     if not request.user.is_authenticated:
         if request.method == 'POST':
-            registration_id = request.POST['username']
-            password = request.POST['password']
-            user = authenticate(request, username=registration_id, password=password)
-            if user is not None:
-                login(request, user=user)
-                request.session['user'] = registration_id
-                return redirect('/')
-            else:
-                messages.error(request, 'Invalid password or account not activated')
-                return redirect("/login")
+            return gauth(request)
         else:
             return render(request=request, template_name='login.html')
     else:
-        return redirect('/events')
+        return redirect('/')
 
 
 def logout_user(request):

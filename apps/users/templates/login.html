@@ -130,7 +130,7 @@
       <div class="spinner"></div>
     </div>
     <div class="login-box">
-      <form method="post" action="/accounts/google/login/">
+      <form method="post" action="/login/">
         {% csrf_token %}
         <button class="gsi-material-button">
           <div class="gsi-material-button-state"></div>
@@ -149,7 +149,6 @@
           </div>
         </button>
       </form>
-      {% load socialaccount %}
       <!-- "Forgot Password" link -->
     </div>
   </div>

@@ -23,15 +23,10 @@ urlpatterns = [
    path('', include("apps.nightpass.urls")),
    path('admin/', admin.site.urls),
    path('admin/login', user_views.login_user),
-   path('login/', user_views.gauth),
+   path('login/', user_views.login_user),
    path('logout/', user_views.logout_user),
    path('users/', include("django.contrib.auth.urls")),
    path('accounts/google/login/callback/', user_views.oauth_callback),
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
-#    path('accounts/', include('allauth.urls')),
 ]
-
-if settings.DEBUG:
-    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-    urlpatterns += staticfiles_urlpatterns()
