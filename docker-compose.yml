@@ -8,7 +8,6 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "4376:4376"
-    depends_on: 
     volumes:
       - ./database/:/app/database/
       - ./static/:/app/static/
