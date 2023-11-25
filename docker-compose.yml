@@ -13,14 +13,3 @@ services:
       - ./static/:/app/static/
       - ./logs/:/app/logs/
     restart: always
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=tiet_admin
-      - POSTGRES_PASSWORD=tietkaadminBABLUhai
-      - POSTGRES_DB=campus_nightpass
-    restart: always
-volumes:
-  postgres_data:

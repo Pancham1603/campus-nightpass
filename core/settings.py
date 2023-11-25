@@ -105,28 +105,28 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-  'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    'NAME': os.getenv('DATABASE_NAME', None),
-    'USER': os.getenv('DATABASE_USER', None),
-    'PASSWORD': os.getenv('DATABASE_PASSWORD', None),
-    'HOST': os.getenv('DATABASE_HOST', None),
-    'PORT':5432,
-    'OPTIONS': {
-        'sslmode':'require'
-    }
-  }
-}
+# DATABASES = {
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#     'NAME': os.getenv('DATABASE_NAME', None),
+#     'USER': os.getenv('DATABASE_USER', None),
+#     'PASSWORD': os.getenv('DATABASE_PASSWORD', None),
+#     'HOST': os.getenv('DATABASE_HOST', None),
+#     'PORT':25060,
+#     'OPTIONS': {
+#         'sslmode':'require'
+#     }
+#   }
+# }
 
 
 # if DEVELOPMENT_MODE is True:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.sqlite3",
-#             "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#         }
-#     }
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 # elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
 #     if os.getenv("DATABASE_URL", None) is None:
 #         raise Exception("DATABASE_URL environment variable not defined")
