@@ -85,7 +85,7 @@ def oauth_callback(request):
             user_info = get_google_user_info(response.json()['access_token'])
             user_email = user_info['email']
             user = CustomUser.objects.filter(email=user_email).first()
-            if user:
+            if user and user.has_related_object():
                 messages.success(request, 'Logged in successfully.')
                 login(request, user=user)
                 return HttpResponseRedirect('/')
