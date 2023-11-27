@@ -21,7 +21,7 @@ def gauth(request):
         'include_granted_scopes': 'true',
         'response_type': 'code',
         'state': 'state_parameter_passthrough_value',
-        'redirect_uri': config['web']['redirect_uris'][0],
+        'redirect_uri': request.build_absolute_uri('/accounts/google/login/callback/'),
         'client_id': config['web']['client_id'],
     }
 
@@ -65,7 +65,7 @@ def oauth_callback(request):
         # Your client credentials
         client_id = config['web']['client_id']
         client_secret = config['web']['client_secret']
-        redirect_uri = config['web']['redirect_uris'][0]
+        redirect_uri = request.build_absolute_uri('/accounts/google/login/callback/')
 
         # Build the POST data
         post_data = {
