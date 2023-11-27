@@ -399,6 +399,15 @@
             var modal = document.getElementById("myModal");
             modal.style.display = "none";
         }
+
     </script>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+  toastr.info("{{ message }}")
+</script>
+{% endfor %}
+{% endif %}
 </body>
 </html>

@@ -24,11 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
-SECRET_KEY = 'lmao'
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+SECRET_KEY = os.getenv("DEVELOPMENT_MODE", get_random_secret_key())
+DEVELOPMENT_MODE = bool(os.getenv("DEVELOPMENT_MODE", False))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv("DEBUG", False))
 
 ALLOWED_HOSTS = ['*']
 
@@ -66,8 +66,6 @@ SOCIALACCOUNT_PROVIDERS = {
         } 
     }
 }
-
-SITE_ID = 3
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -198,3 +196,5 @@ AUTH_USER_MODEL = 'users.CustomUser'
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 # SOCIALACCOUNT_EMAIL_REQUIRED = True
 # SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# MESSAGE_STORAGE = 'django.contrib.messages.storage.session.CookieStorage'
