@@ -10,6 +10,7 @@ services:
       - "4376:4376"
     volumes:
       - ./data:/app/data
+      - ./static:/app/static
     restart: always
     # command: "gunicorn -b 0.0.0.0:4376 core.wsgi:application"
 
