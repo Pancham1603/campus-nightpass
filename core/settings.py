@@ -49,25 +49,10 @@ INSTALLED_APPS = [
     'hijack',
     'hijack.contrib.admin',
     'corsheaders',
-    'import_export'
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
-    # 'allauth.socialaccount',
-    # 'allauth.socialaccount.providers.google',
+    'import_export',
+    'django_crontab',
 ]
 
-SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'SCOPE': [
-            'profile',
-            'email',
-        ],
-        'AUTH_PARAMS': {
-            'access_type': 'online',
-        } 
-    }
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,7 +65,6 @@ MIDDLEWARE = [
     'detect.middleware.UserAgentDetectionMiddleware',
     'hijack.middleware.HijackUserMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -196,3 +180,6 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 
+CRONJOBS = [
+    ('0 5 * * *', 'cron.reset_nightpass'),
+]
