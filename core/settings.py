@@ -126,7 +126,7 @@ DATABASES = {
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR,"apps/users"))
+STATICFILES_DIRS = (os.path.join(BASE_DIR,"apps/users"), )
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
