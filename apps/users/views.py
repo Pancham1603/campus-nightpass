@@ -13,7 +13,7 @@ from urllib.parse import urlencode
 
 def gauth(request):
     # Load configuration from JSON file
-
+    print(request.build_absolute_uri('/accounts/google/login/callback/'))
     params = {
         'scope': 'profile',
         'access_type': 'offline',
@@ -84,11 +84,18 @@ def oauth_callback(request):
             # Save the response to a JSON file
             user_info = get_google_user_info(response.json()['access_token'])
             user_email = user_info['email']
-            login(request, user=CustomUser.objects.filter(email=user_email).first())
-            return HttpResponseRedirect('/')
+            user = CustomUser.objects.filter(email=user_email).first()
+            if user and user.has_related_object():
+                messages.success(request, 'Logged in successfully.')
+                login(request, user=user)
+                return HttpResponseRedirect('/')
+            else:
+                messages.error(request, 'Please use Thapar ID or contact DOSA office.')
+                return HttpResponseRedirect('/')
         else:
             # Handle the case when the token request fails
-            return HttpResponse(f"Error: {response.text}")
+            messages.error(request, 'Service unavailable. Please try again later')
+            return HttpResponseRedirect('/')
     else:
         # Handle the case when 'code' parameter is not present
         return HttpResponse('Error: Authorization code not found in GET parameters.')

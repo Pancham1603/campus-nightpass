@@ -41,11 +41,21 @@ class CustomUser(AbstractUser):
     email = models.EmailField(max_length=100, unique=True, primary_key=True)
     choices = (('student', 'Student'), ('faculty', 'Faculty'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
-
+    username = None
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
+
+    def has_related_object(self):
+        if self.user_type == 'student':
+            return hasattr(self, 'student')
+        elif self.user_type == 'faculty':
+            return hasattr(self, 'faculty')
+        elif self.user_type == 'security':
+            return hasattr(self, 'security')
+        else:
+            return False
 
     def __str__(self):
         return self.email
@@ -86,10 +96,10 @@ class Student(models.Model):
     last_checkout_time = models.DateTimeField(blank=True, null=True)
     violation_flags = models.IntegerField(default=0)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
-
+    email = models.EmailField(max_length=100, blank=True, null=True)
 
     def __str__(self):
-        return self.registration_number
+        return str(self.registration_number)
     
 
 class Security(models.Model):
