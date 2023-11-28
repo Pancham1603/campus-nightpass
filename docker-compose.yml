@@ -9,10 +9,11 @@ services:
     ports:
       - "4376:4376"
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - ./db.sqlite3:/db.sqlite3
       - ./static/:/app/static/
       - ./logs/:/app/logs/
     restart: always
+    # command: "gunicorn -b 0.0.0.0:4376 core.wsgi:application"
 
 volumes:
   campus_nightpass_db:
