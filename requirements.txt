@@ -8,3 +8,5 @@ python-dotenv
 requests
 django-detect
 dj-database-url
+django-import-export
+django-crontab

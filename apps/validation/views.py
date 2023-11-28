@@ -121,10 +121,10 @@ def check_out(request):
         return HttpResponse('Invalid Operation')
 
 
-def checkout_from_hostel(user_pass):
+def checkout_from_hostel(user_pass:NightPass):
     user = user_pass.user
     user.student.is_checked_in = False
-    user.student.hostel_checkout_time = datetime.now()
+    user.student.hostel_checkout_time, user_pass.hostel_checkout_time = datetime.now()
     user.student.last_checkout_time = datetime.now()
     user.student.save()
     data = {
@@ -178,10 +178,10 @@ def check_in(request):
 
 def checkin_to_hostel(user:Student):
     if not user.is_checked_in:
-        user.is_checked_in = True
-        user.hostel_checkin_time = datetime.now()
-        user.save()
         user_pass = NightPass.objects.filter(user=user.user, check_out=False).first()
+        user.is_checked_in = True
+        user.hostel_checkin_time, user_pass.hostel_checkin_time= datetime.now()
+        user.save()
         if (user_pass.student.check_in if user_pass else False):
             checkout_from_location(user_pass)
         data = {
