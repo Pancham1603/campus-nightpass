@@ -9,7 +9,7 @@ services:
     ports:
       - "4376:4376"
     volumes:
-      - ./data/db.sqlite3:/data/db.sqlite3
+      - ./data:/data
     restart: always
     # command: "gunicorn -b 0.0.0.0:4376 core.wsgi:application"
 
