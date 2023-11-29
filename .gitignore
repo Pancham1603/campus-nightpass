@@ -65,7 +65,6 @@ static
 *.xlsx
 *.csv
 *.xls
-migrations
 
 # Flask stuff:
 instance/
