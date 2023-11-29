@@ -22,9 +22,13 @@ from django.db.utils import IntegrityError
 def campus_resources_home(request):
     campus_resources = CampusResource.objects.filter(is_display=True)
     user = request.user
-    user_pass = NightPass.objects.filter(user=user, check_out=False).first()
-    return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass})			  
-
+    if user.user_type == 'student':
+        user_pass = NightPass.objects.filter(user=user, check_out=False).first()
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass})	
+    elif user.user_type == 'security':
+        return redirect('/access')
+    elif user.user_type == 'admin':
+        return redirect('/admin')
 
 @csrf_exempt
 @login_required
