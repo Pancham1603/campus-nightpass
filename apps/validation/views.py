@@ -185,7 +185,7 @@ def checkin_to_hostel(user:Student):
         user.save()
         user_pass.valid = False
         user_pass.save()
-        if (user_pass.student.check_in if user_pass else False):
+        if (user_pass.user.student.check_in if user_pass else False):
             checkout_from_location(user_pass)
         data = {
             'status':True,
