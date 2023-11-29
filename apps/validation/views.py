@@ -99,7 +99,7 @@ def check_out(request):
         data = request.POST
         try:
             user = Student.objects.get(registration_number=data['registration_number'])
-            user_pass = NightPass.objects.filter(user=user.user, check_out=False).first()
+            user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
             admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
             if not user_pass:
                 data = {
@@ -154,7 +154,7 @@ def check_in(request):
         data = request.POST
         try:
             user = Student.objects.get(registration_number=data['registration_number'])
-            user_pass = NightPass.objects.filter(user=user.user, check_out=False).first()
+            user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
             admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
 
             if type(admin_campus_resource) == Hostel:
@@ -178,10 +178,12 @@ def check_in(request):
 
 def checkin_to_hostel(user:Student):
     if not user.is_checked_in:
-        user_pass = NightPass.objects.filter(user=user.user, check_out=False).first()
+        user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
         user.is_checked_in = True
         user.hostel_checkin_time = user_pass.hostel_checkin_time= datetime.now()
         user.save()
+        user_pass.valid = False
+        user_pass.save()
         if (user_pass.student.check_in if user_pass else False):
             checkout_from_location(user_pass)
         data = {
