@@ -127,6 +127,7 @@ def checkout_from_hostel(user_pass:NightPass):
     user.student.hostel_checkout_time = user_pass.hostel_checkout_time = datetime.now()
     user.student.last_checkout_time = datetime.now()
     user.student.save()
+    user_pass.save()
     data = {
         'status':True,
         'message':'Successfully checked out!'
