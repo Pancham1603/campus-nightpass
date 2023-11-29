@@ -49,8 +49,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hijack',
-    'hijack.contrib.admin',
     'corsheaders',
     'import_export',
     'django_crontab',
@@ -66,7 +64,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'detect.middleware.UserAgentDetectionMiddleware',
-    'hijack.middleware.HijackUserMiddleware',
     'corsheaders.middleware.CorsMiddleware',
 ]
 

@@ -2,7 +2,6 @@ django
 gunicorn
 psycopg2-binary
 psycopg2
-django-hijack
 django-cors-headers
 python-dotenv
 requests
