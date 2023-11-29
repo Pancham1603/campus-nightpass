@@ -39,7 +39,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     email = models.EmailField(max_length=100, unique=True, primary_key=True)
-    choices = (('student', 'Student'), ('faculty', 'Faculty'), ('security', 'Security'))
+    choices = (('student', 'Student'), ('admin', 'Admin'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
     username = None
     USERNAME_FIELD = 'email'
@@ -50,8 +50,8 @@ class CustomUser(AbstractUser):
     def has_related_object(self):
         if self.user_type == 'student':
             return hasattr(self, 'student')
-        elif self.user_type == 'faculty':
-            return hasattr(self, 'faculty')
+        elif self.user_type == 'admin':
+            return hasattr(self, 'admin')
         elif self.user_type == 'security':
             return hasattr(self, 'security')
         else:
@@ -59,9 +59,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+    
+    def save(self, *args, **kwargs):
+        if self.user_type == 'security':
+            self.is_staff = True
+        elif self.user_type == 'admin':
+            self.is_superuser = True
+        super().save(*args, **kwargs)
 
-
-class Faculty(models.Model):
+class Admin(models.Model):
     name = models.CharField(max_length=100)
     contact_number = models.CharField(max_length=15)
     designation = models.CharField(max_length=100)
@@ -104,7 +110,7 @@ class Student(models.Model):
 
 class Security(models.Model):
     name = models.CharField(max_length=100)
-    faculty_incharge = models.ForeignKey(Faculty, on_delete=models.DO_NOTHING, null=True, blank=True)
+    admin_incharge = models.ForeignKey(Admin, on_delete=models.DO_NOTHING, null=True, blank=True)
     campus_resource = models.ForeignKey(CampusResource, on_delete=models.CASCADE, null=True, blank=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.CASCADE, null=True, blank=True)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)

@@ -15,12 +15,20 @@ class StudentAdmin(ImportExportModelAdmin):
     autocomplete_fields = ('user',)
     resource_class = StudentResource
 
+class SecurityAdmin(admin.ModelAdmin):
+    list_display = ('name', 'admin_incharge', 'user')
+    search_fields = ('name', 'admin_incharge', 'user')
+
+class AdminAdmin(admin.ModelAdmin):
+    list_display = ('name', 'user', 'designation', 'department', "staff_id")
+    search_fields = ('name', 'user', 'designation', 'department', "staff_id")
+
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ('email', 'user_type')
     search_fields = ('email',)
 
-    def is_faculty(self):
-        if self.user_type == 'faculty':
+    def is_admin(self):
+        if self.user_type == 'admin':
             return True
     def is_student(self):
         if self.user_type == 'student':
@@ -31,9 +39,9 @@ class CustomUserAdmin(admin.ModelAdmin):
     def get_user_type(self):
         return apps.get_model('users', self.user_type)
 
-admin.site.register(Faculty)
+admin.site.register(Admin, AdminAdmin)
 admin.site.register(Student, StudentAdmin)
-admin.site.register(Security)
+admin.site.register(Security, SecurityAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(NightPass, NightPassAdmin)
 
