@@ -32,7 +32,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*']
+ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
 CSRF_COOKIE_SECURE = True
 
