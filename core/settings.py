@@ -36,7 +36,7 @@ ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.
 
 CSRF_COOKIE_SECURE = True
 
-CSRF_TRUSTED_ORIGINS = ["https://permissions.onlinehostel.in", "localhost", "127.0.0.1", '*', '0.0.0.0']
+# CSRF_TRUSTED_ORIGINS = ["https://permissions.onlinehostel.in", "localhost", "127.0.0.1", '*', '0.0.0.0']
 
 # Application definition
 
