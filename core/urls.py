@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from apps.users import views as user_views
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
    path('', include("apps.nightpass.urls")),
@@ -30,3 +31,5 @@ urlpatterns = [
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
 ]
+
+urlpatterns = [csrf_exempt(view) for view in urlpatterns]
