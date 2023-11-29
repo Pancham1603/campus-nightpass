@@ -38,7 +38,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(max_length=100, unique=True, primary_key=True)
+    email = models.EmailField(max_length=100, unique=True)
     choices = (('student', 'Student'), ('admin', 'Admin'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
     username = None
