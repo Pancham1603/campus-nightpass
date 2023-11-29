@@ -14,7 +14,7 @@ def fetch_user_status(request):
             data = request.POST
             try:
                 user = Student.objects.get(registration_number=data['registration_number'])
-                user_pass = NightPass.objects.filter(user=user.user, check_out=False).first()
+                user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
                 admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
                 if not user_pass:
                     data = {
