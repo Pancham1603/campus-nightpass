@@ -31,5 +31,3 @@ urlpatterns = [
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
 ]
-
-urlpatterns = [csrf_exempt(view) for view in urlpatterns]
