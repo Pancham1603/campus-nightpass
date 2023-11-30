@@ -28,4 +28,5 @@ urlpatterns = [
    path('logout/', user_views.logout_user),
    path('users/', include("django.contrib.auth.urls")),
    path('accounts/google/login/callback/', user_views.oauth_callback),
-   path('access/', include("apps.validation.urls"))]
+   path('access/', include("apps.validation.urls")),
+   path('hijack/', include('hijack.urls')),]
