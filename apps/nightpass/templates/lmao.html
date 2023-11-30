@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thapar NightPass</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code128.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #eb1b23;
+            color: #fff;
+            text-align: center;
+            padding: 2px; /* Reduced header padding */
+        }
+
+        .header-logo {
+            width: 100px; /* Set the width of your college logo */
+            height: auto; /* Maintain aspect ratio */
+        }
+
+        .logout-button {
+            background-color: #fff;
+            color: #eb1b23;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-right: 20px;
+        }
+
+        .logout-button:hover {
+            background-color: #ccc;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        .profile-card, .resource-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            width: 300px;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+
+        .profile-card:hover, .resource-card:hover {
+            transform: scale(1.05);
+        }
+
+        .profile-img {
+            width: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .profile-details {
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .safe {
+            color: green;
+        }
+
+        .unsafe {
+            color: red;
+        }
+
+        .book-button {
+            background-color: #eb1b23;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .booked {
+            background-color: grey;
+        }
+
+        .book-button:hover {
+            background-color: #ff3336;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            width: 80%;
+            max-width: 400px;
+            margin: 20% auto;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            position: relative;
+            display: flex;
+        }
+
+        .modal-image {
+            flex: 1;
+        }
+
+        .modal-image img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .modal-details {
+            flex: 2;
+            padding: 10px;
+            text-align: left;
+        }
+
+        /* Close button for the modal */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .modal-button {
+            background-color: #eb1b23;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .modal-button:hover {
+            background-color: #ff3336;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .resource-card {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .resource-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .resource-details {
+            flex: 1;
+            padding: 10px;
+            text-align: left;
+        }
+        .resource-details h2 {
+            margin: 0;
+        }
+        .resource-details p {
+            margin: 0;
+        }
+        .location-cards
+        {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+    
+
+        @media (max-width: 768px) {
+            .profile-card, .resource-card {
+                width: 90%;
+            }
+            .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
+        <h1>Thapar NightPass</h1>
+        <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-images">
+                <img class="profile-img" src="{{ user.picture }}" alt="Student Picture">
+                <svg id="barcode"></svg>
+            </div>
+            <div class="profile-details">
+                <p><strong>Name:</strong> {{ user.name }}</p>
+                <p><strong>Roll Number:</strong> {{ user }}</p>
+                <p><strong>Hostel:</strong> {{ user.hostel }}</p>
+                <p><strong>Room Number:</strong> {{ user.room_number }}</p>
+                {% if user.is_checked_in  %}
+                    <p class="safe"><strong>Status:</strong> Inside Hostel {{ user.hostel }}  </p>
+                {% else %}
+                    {% if user_pass %}
+                        {% if user_pass.check_in and not user_pass.check_out %}
+                        <p class="safe"><strong>Status:</strong> In {{ user_pass.campus_resource }}  </p>
+                        {% else %}
+                        <p class="unsafe"><strong>Status:</strong> Outside Hostel  </p>
+                        <p class="unsafe"><strong>Time Left:</strong><span id="timer"></span></p>
+                        {% endif %}
+                    {% else %}
+                        <p class="unsafe"><strong>Status:</strong> Outside Hostel  </p>
+                        <p class="unsafe"><strong>Time Left: </strong><span id="timer"></span></p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <script>
+            JsBarcode("#barcode", "{{ user }}");
+            let deadline = new Date("{{ user.last_checkout_time|date:'M d, Y H:i:s' }}" ).getTime();
+            deadline += 20*60000
+            let x = setInterval(function () {
+                let now = new Date().getTime();
+                let t = deadline - now;
+                let days = Math.floor(t / (1000 * 60 * 60 * 24));
+                let hours = Math.floor(
+                    (t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor(
+                    (t % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor(
+                    (t % (1000 * 60)) / 1000);
+                document.getElementById("timer").innerHTML = 
+                    minutes + "m " + seconds + "s ";
+ 
+                // Output for over time
+                if (t < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer")
+                            .innerHTML = "Defaulter Recorded! Successive violations will lead to revocation of nightpass facility.";
+                }
+            }, 1000);
+        </script>
+  <div class="location-cards">
+        {% if campus_resources|length > 0 %}
+        {% for resource in campus_resources %}
+        {% if resource == user_pass.campus_resource %}
+        <div class="resource-card">
+            <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
+            <div class="resource-details">
+                <h2>{{ resource.name }}</h2>
+                <p>{{ resource.description }}</p>
+                <button class="book-button" style="background-color: gray;" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', false)">Cancel Slot</button>
+            </div>
+        </div>
+        {% else %}
+        <div class="resource-card">
+            <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
+            <div class="resource-details">
+                <h2>{{ resource.name }}</h2>
+                <p>{{ resource.description }}</p>
+                {% if resource.is_booking %}
+                <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
+                {% else %}
+                <button class="book-button" style="background-color: gray;">Unavailable</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-image">
+                <img src="" id="modal-resource-picture" alt="modal resource picture">
+            </div>
+            <div class="modal-details">
+                <h2 id="modal-resource-name"></h2>
+                <p id="modal-resource-description"></p>
+                <!-- <select>
+                    <option value="time-slot-1">Time Slot 1</option>
+                    <option value="time-slot-2">Time Slot 2</option>
+                    <option value="time-slot-3">Time Slot 3</option>
+                </select> -->
+                <button class="modal-button" id="modal-resource-book">Book</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": true,
+                        "progressBar": true,
+                        "positionClass": "toast-top-right",
+                        "preventDuplicates": true,
+                        "onclick": null,
+                        "showDuration": "300",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+
+        function openModal(name, description, picture, book) {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+
+            document.getElementById('modal-resource-name').innerHTML = name;
+            document.getElementById('modal-resource-description').innerHTML = description;
+            document.getElementById('modal-resource-picture').src = picture;
+            if (book) {
+                document.getElementById('modal-resource-book').innerHTML = 'Book';
+                var urls = "book/" + name;
+            } else {
+                document.getElementById('modal-resource-book').innerHTML = 'Cancel Booking'
+                var urls = "cancel/";
+            }
+
+            document.getElementById('modal-resource-book').onclick = function() {         
+            $.ajax({
+            method: "POST",
+            url: urls,
+            timeout: 120000,
+            success: function (response) {
+                let res = JSON.parse(response).status;
+                if (res) {
+                    console.log(JSON.parse(response))
+                    let qr = JSON.parse(response).pass_qr
+                    document.getElementById('modal-resource-picture').src = qr
+                    document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
+                    toastr.success(JSON.parse(response).message);
+                    setTimeout(function(){ location.reload(); }, 3000);
+                    //location.reload();
+                }
+                else {
+                    toastr.error(JSON.parse(response).message);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                toastr.error("Something went wrong, please try again later");
+            }
+        });
+            }
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+    </script>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+  toastr.info("{{ message }}")
+</script>
+{% endfor %}
+{% endif %}
+</body>
+</html>
