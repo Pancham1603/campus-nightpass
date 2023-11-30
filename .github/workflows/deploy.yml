@@ -23,4 +23,4 @@ jobs:
 
       - name: Deploy code
         run: |
-          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git remote set-url origin pancham1603:${{ secrets.GH_TOKEN }}@github.com/pancham1603/campus-nightpass.git && git pull origin production && git remote set-url origin https://github.com/pancham1603/campus-nightpass'
+          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://pancham1603:${{ secrets.GH_TOKEN }}@github.com/pancham1603/campus-nightpass.git production'
