@@ -190,7 +190,8 @@
             width: 100px;
             height: 100px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 5px;
+            margin-right: 5px;
         }
         .resource-details {
             flex: 1;
@@ -292,8 +293,8 @@
         <div class="resource-card">
             <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
             <div class="resource-details">
-                <h2 style="margin-bottom: 15px;">{{ resource.name }}</h2>
-                <p style="margin-bottom: 15px;">{{ resource.description }}</p>
+                <h2 style="margin-bottom: 5px;">{{ resource.name }}</h2>
+                <p style="margin-bottom: 5px;">{{ resource.description }}</p>
                 <button class="book-button" style="background-color: gray;" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', false)">Cancel Slot</button>
             </div>
         </div>
@@ -301,8 +302,8 @@
         <div class="resource-card">
             <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
             <div class="resource-details">
-                <h2 style="margin-bottom: 15px;">{{ resource.name }}</h2>
-                <p style="margin-bottom: 15px;">{{ resource.description }}</p>
+                <h2 style="margin-bottom: 5px;">{{ resource.name }}</h2>
+                <p style="margin-bottom: 5px;">{{ resource.description }}</p>
                 {% if resource.is_booking %}
                 <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
                 {% else %}
