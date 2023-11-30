@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from apps.nightpass.models import CampusResource, Hostel
+import uuid
 
 
 class CustomUserManager(BaseUserManager):
@@ -29,6 +30,8 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
+        extra_fields.setdefault('user_type', 'admin')
+
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError(_('Superuser must have is_staff=True.'))
@@ -38,7 +41,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(max_length=100, unique=True, primary_key=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    email = models.EmailField(max_length=100, unique=True)
     choices = (('student', 'Student'), ('admin', 'Admin'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
     username = None
@@ -82,19 +86,19 @@ class Admin(models.Model):
 
 class Student(models.Model):
     name = models.CharField(max_length=100)
-    contact_number = models.CharField(max_length=15)
+    contact_number = models.CharField(max_length=15, null=True, blank=True)
     registration_number = models.CharField(max_length=20, unique=True)
-    branch = models.CharField(max_length=50)
-    date_of_birth = models.DateField(blank=True, null=True)
-    father_name = models.CharField(max_length=100)
-    mother_name = models.CharField(max_length=100)
-    course = models.CharField(max_length=50)
-    semester = models.CharField(max_length=10)
-    parent_contact = models.CharField(max_length=15)
-    address = models.TextField()
-    picture = models.URLField(blank=True)
+    branch = models.CharField(max_length=50, null=True, blank=True)
+    date_of_birth = models.DateField(null=True, blank=True)
+    father_name = models.CharField(max_length=100, null=True, blank=True)
+    mother_name = models.CharField(max_length=100, null=True, blank=True)
+    course = models.CharField(max_length=50, null=True, blank=True)
+    semester = models.CharField(max_length=10, null=True, blank=True)
+    parent_contact = models.CharField(max_length=15, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    picture = models.URLField(blank=True, null=True)
     hostel = models.ForeignKey(Hostel, on_delete=models.RESTRICT, related_name='hostel', default=None, blank=True, null=True)
-    room_number = models.CharField(max_length=10)
+    room_number = models.CharField(max_length=10, null=True, blank=True)
     has_booked = models.BooleanField(default=False)
     is_checked_in = models.BooleanField(default=True)
     hostel_checkout_time = models.DateTimeField(blank=True, null=True)
@@ -132,6 +136,7 @@ class NightPass(models.Model):
     check_out_time = models.DateTimeField(blank=True, null=True)
     hostel_checkin_time = models.DateTimeField(blank=True, null=True)
     hostel_checkout_time = models.DateTimeField(blank=True, null=True)
+    valid = models.BooleanField(default=True)
 
     def __str__(self):
         return self.pass_id

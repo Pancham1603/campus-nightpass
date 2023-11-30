@@ -1,11 +1,13 @@
 django
+gunicorn
 psycopg2-binary
 psycopg2
-django-hijack
 django-cors-headers
+django-hijack
 python-dotenv
 requests
 django-detect
 dj-database-url
 django-import-export
 django-crontab
+uuid

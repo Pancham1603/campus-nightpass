@@ -25,14 +25,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
-DEVELOPMENT_MODE = bool(os.getenv("DEVELOPMENT_MODE", False))
+# SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", get_random_secret_key())
+SECRET_KEY = 'lmao'
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.getenv("DEBUG", False))
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
+CSRF_COOKIE_SECURE = True
+CSRF_TRUSTED_ORIGINS = ["https://permissions.thapar.edu","https://permissions.onlinehostel.in", "http://localhost", "http://127.0.0.1",  "http://localhost:4376", "http://127.0.0.1:4376", "http://permissions.onlinehostel.in"]
 
 # Application definition
 
@@ -46,11 +49,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'hijack',
-    'hijack.contrib.admin',
     'corsheaders',
     'import_export',
     'django_crontab',
+    'hijack',
+    'hijack.contrib.admin'
 ]
 
 
@@ -60,11 +63,12 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.RedirectUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'detect.middleware.UserAgentDetectionMiddleware',
     'hijack.middleware.HijackUserMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    'detect.middleware.UserAgentDetectionMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -112,7 +116,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": os.path.join(BASE_DIR, "data/db.sqlite3"),
     }
 }
 # elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
@@ -124,8 +128,8 @@ DATABASES = {
 
 
 STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR,"apps/users"))
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = (os.path.join(BASE_DIR,"apps/users"), )
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

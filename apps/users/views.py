@@ -15,7 +15,7 @@ def gauth(request):
     # Load configuration from JSON file
     print(request.build_absolute_uri('/accounts/google/login/callback/'))
     params = {
-        'scope': 'profile',
+        'scope': 'profile email',
         'access_type': 'offline',
         'prompt': 'consent',
         'include_granted_scopes': 'true',
