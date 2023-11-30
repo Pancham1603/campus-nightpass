@@ -10,3 +10,4 @@ django-detect
 dj-database-url
 django-import-export
 django-crontab
+uuid
