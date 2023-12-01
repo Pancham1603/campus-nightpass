@@ -289,4 +289,5 @@ def kiosk_extension(request):
                     'status':False,
                     'message':'Invalid!'
                     }
-            return HttpResponse(json.dumps(data))
+            return render('extension.html', {'data':data})
+
