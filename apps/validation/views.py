@@ -228,3 +228,65 @@ def scanner(request):
     
 
 
+@csrf_exempt
+def kiosk_extension(request):
+    if request.user.is_staff:
+        data = request.GET
+        try:
+            user = Student.objects.get(registration_number=data['registration_number'])
+            user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
+            admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
+            if user_pass:
+                data = {
+                    'status':True,
+                    'message':'Successfully fetched!',
+                    'user':{
+                        'name':user.name,
+                        'registration_number':user.registration_number,
+                        'hostel':user.hostel.name if user.hostel else None,
+                        'room_number':user.room_number,
+                        'picture':user.picture,
+                        'is_checked_in':user.is_checked_in,
+                        'hostel_checkin_time':str(user.hostel_checkin_time),
+                        'hostel_checkout_time':str(user.hostel_checkout_time),
+                        'last_checkout_time':str(user.last_checkout_time),
+                        'has_booked':user.has_booked,
+                    },
+                    'user_pass':{
+                        'pass_id':user_pass.pass_id,
+                        'campus_resource':user_pass.campus_resource.name,
+                        'check_in':user_pass.check_in,
+                        'check_out':user_pass.check_out,
+                        'check_in_time':str(user_pass.check_in_time),
+                        'check_out_time':str(user_pass.check_out_time),
+                    }
+                }
+                if type(admin_campus_resource) == Hostel:
+                    if not user.is_checked_in:
+                        checkin_to_hostel(user)
+                        data['colour'] = '#ffff80'
+                    else:
+                        checkout_from_hostel(user_pass)
+                        data['colour'] = '#8aff8a'
+                    return render('extension.html', {'data':data})
+                elif type(admin_campus_resource) == CampusResource and admin_campus_resource == (user_pass.campus_resource if user_pass else None):
+                    if not user_pass.check_in:
+                        checkin_to_location(user_pass)
+                        data['colour'] = '#8aff8a'
+                    elif not user_pass.check_out and user_pass.check_in:
+                        checkout_from_location(user_pass)
+                        data['colour'] = '#ffff80'
+                    return render('extension.html', {'data':data})
+                return 
+            else:
+                data = {
+                    'status':False,
+                    'message':'Pass does not exist!'
+                }
+                return render('extension.html', {'data':data})
+        except Student.DoesNotExist:
+            data = {
+                    'status':False,
+                    'message':'Invalid!'
+                    }
+            return HttpResponse(json.dumps(data))

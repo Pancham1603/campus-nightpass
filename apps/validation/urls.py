@@ -6,4 +6,5 @@ urlpatterns = [
     path('', scanner),
     path('checkin/', check_in),
     path('checkout/', check_out),
+    path('extension/fetchuser/performtask/', kiosk_extension)
 ]
