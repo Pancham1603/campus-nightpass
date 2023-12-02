@@ -104,7 +104,10 @@ function updateUserPass(data,user_data, task, request_user_location) {
             document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
             actionButton.style.visibility = 'visible';
             actionButton.innerHTML = `Check In`;
-            actionButton.onclick = function(){checkIn(user_data.registration_number);}}}
+            actionButton.onclick = function(){checkIn(user_data.registration_number);}}
+    } else {
+        document.getElementById('pass-card').style.backgroundColor = '#FF7F7F';
+    }
 }
 
 function fetch_data(dump) {
@@ -153,7 +156,7 @@ function checkIn(registration_number) {
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 3000);
+            setTimeout(function(){ resetProfile(); }, 7000);
 
         }
         else {
@@ -181,7 +184,7 @@ function checkOut(registration_number) {
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 3000);
+            setTimeout(function(){ resetProfile(); }, 7000);
         }
         else {
             toastr.error(response.message);
