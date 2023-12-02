@@ -11,3 +11,6 @@ dj-database-url
 django-import-export
 django-crontab
 uuid
+tablib
+XlsxWriter
+io
