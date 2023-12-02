@@ -89,8 +89,11 @@ function updateUserPass(data,user_data, task, request_user_location) {
     
     if (task['check_out']) {
         if (request_user_location == 'campus_resource') {
-            checkOut(user_data.registration_number);
+            actionButton.style.visibility = 'visible';
+            actionButton.innerHTML = `Check Out`;
+            // checkOut(user_data.registration_number);
             document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+            actionButton.onclick = function()  {checkOut(user_data.registration_number);}
         } else {
             actionButton.style.visibility = 'visible';
             actionButton.innerHTML = `Check Out`;
@@ -98,8 +101,11 @@ function updateUserPass(data,user_data, task, request_user_location) {
             actionButton.onclick = function()  {checkOut(user_data.registration_number);}}
     } else if (task['check_in']) {
         if (request_user_location == 'campus_resource') {
-            checkIn(user_data.registration_number);
+            // checkIn(user_data.registration_number);
             document.getElementById('pass-card').style.backgroundColor = '#90EE90';
+            actionButton.style.visibility = 'visible';
+            actionButton.innerHTML = `Check In`;
+            actionButton.onclick = function(){checkIn(user_data.registration_number);}
         } else {
             document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
             actionButton.style.visibility = 'visible';
