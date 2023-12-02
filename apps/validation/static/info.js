@@ -156,6 +156,7 @@ function checkIn(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
+        document.getElementById('roll_no').focus();
         let res = response.status;
         if (res) {
            // resetProfile();
@@ -184,6 +185,7 @@ function checkOut(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
+        document.getElementById('roll_no').focus();
         let res = response.status;
         if (res) {
             
