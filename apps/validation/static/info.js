@@ -138,36 +138,6 @@ function fetch_data(dump) {
 }
 
 
-function fetch_data(dump) {
-    urls = ""
-    $.ajax({
-    method: "POST",
-    url: urls,
-    data:dump,
-    dataType: "json",
-    timeout: 12000,
-    success: function (response) {
-        let res = response.status;
-        if (res) {
-            updateProfile(response.user);
-            updateUserPass(response.user_pass, response.user, response.task);
-            if (response.user_pass.pass_id) {
-                document.getElementById('pass-card').style.backgroundColor = '#90EE90'
-            } else [
-            document.getElementById('pass-card').style.backgroundColor = '#FF7F7F'
-            ]
-            toastr.success(response.message);
-        }
-        else {
-            toastr.error(response.message);
-        }
-    },
-    error: function (xhr, textStatus, errorThrown) {
-        toastr.error("Something went wrong, please try again later");
-    }
-});
-}
-
 function checkIn(registration_number) {
     urls = "checkin/"
     $.ajax({
