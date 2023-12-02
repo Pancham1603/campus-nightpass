@@ -1,6 +1,6 @@
 function resetProfile() {
     document.querySelector('.profile-card').innerHTML=`
-    <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" class="profile-picture">
+    <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity:0.5;" class="profile-picture">
     </div>`;
     resetPass();
 }
@@ -156,7 +156,7 @@ function checkIn(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
-        document.getElementById('roll_num').focus();
+        if (!navigator.userAgentData.mobile) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
            // resetProfile();
@@ -185,7 +185,7 @@ function checkOut(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
-        document.getElementById('roll_num').focus();
+        if (!navigator.userAgentData.mobile) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
             
