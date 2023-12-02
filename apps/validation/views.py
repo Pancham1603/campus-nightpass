@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
 from datetime import datetime
+import requests
 
 # Create your views here.
 
@@ -93,6 +94,21 @@ def fetch_user_status(request):
                         'message':'Invalid!'
                         }
                 return HttpResponse(json.dumps(data))
+            
+
+def req_library_logs(registration_number):
+    req = requests.session()
+    url = "https://library.thapar.edu/inout/login_verify.php"
+    data = {
+        "name": "user",
+        "pass": "$#**123",
+        "loc": "TESTLIB",
+        "submit": "Login"
+    }
+    response = req.post(url, data=data, verify=False)
+    req.get(f"https://library.thapar.edu/inout/user.php?id={registration_number}")
+    req.close()
+
 
 @csrf_exempt
 @login_required
@@ -112,6 +128,8 @@ def check_out(request):
             if type(admin_campus_resource) == Hostel:
                 return checkout_from_hostel(user_pass)
             elif type(admin_campus_resource) == CampusResource:
+                if admin_campus_resource.name == 'Library':
+                    req_library_logs(user.registration_number)
                 return checkout_from_location(user_pass)
         except Student.DoesNotExist:
             data = {
@@ -169,6 +187,8 @@ def check_in(request):
                         'message':'Pass does not exist!'
                     }
                     return HttpResponse(json.dumps(data))
+                if admin_campus_resource.name == 'Library':
+                    req_library_logs(user.registration_number)
                 return checkin_to_location(user_pass)
         except Student.DoesNotExist:
             data = {
