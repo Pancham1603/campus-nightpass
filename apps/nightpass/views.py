@@ -49,8 +49,9 @@ def generate_pass(request, campus_resource):
                 'message':'No slots available!'
                 }
         return HttpResponse(json.dumps(data))
-
-    if not user.student.has_booked:
+    
+    user_pass = NightPass.objects.filter(user=user, date=date.today()).first()
+    if not user.student.has_booked and not user_pass:
             campus_resource.refresh_from_db()
             if campus_resource.slots_booked < campus_resource.max_capacity:
                 while True:
@@ -92,6 +93,12 @@ def generate_pass(request, campus_resource):
                     'message':f"Cancel the booking for {user_nightpass.campus_resource} to book a new slot!"
                 }
             return HttpResponse(json.dumps(data))
+    elif user_pass:
+        data={
+                'status':False,
+                'message':f"Pass already generated for today!"
+            }
+        return HttpResponse(json.dumps(data))
 
 
 @csrf_exempt
