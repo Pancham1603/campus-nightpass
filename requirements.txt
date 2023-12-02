@@ -13,4 +13,3 @@ django-crontab
 uuid
 tablib
 XlsxWriter
-io
