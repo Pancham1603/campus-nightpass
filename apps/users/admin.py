@@ -8,6 +8,7 @@ from .resources import *
 from xlsxwriter import Workbook
 from datetime import date, datetime
 import io
+from django.utils import timezone
 
 
 class NightPassAdmin(admin.ModelAdmin):
@@ -19,9 +20,20 @@ class NightPassAdmin(admin.ModelAdmin):
         headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In','Check In Time', 'Check Out',  'Check Out Time', 'Hostel Check Out Time' ,'Hostel Check In Time']
         data = []
         for obj in queryset:
-            data.append([obj.user.student.name, obj.user.email , obj.user.student.hostel.name,obj.pass_id, obj.date.strftime('%d/%m/%y'), obj.campus_resource.name, obj.check_in, obj.check_in_time.strftime('%H:%M:%S') if obj.check_in_time is not None else None, obj.check_out, obj.check_out_time.strftime('%H:%M:%S') if obj.check_out_time is not None else None,  obj.hostel_checkout_time.strftime('%H:%M:%S') if obj.hostel_checkout_time is not None else None, obj.hostel_checkin_time.strftime('%H:%M:%S') if obj.hostel_checkin_time is not None else None,])
+            data.append([obj.user.student.name, 
+                         obj.user.email ,
+                         obj.user.student.hostel.name,
+                         obj.pass_id,
+                         obj.date.strftime('%d/%m/%y'),
+                         obj.campus_resource.name,
+                         obj.check_in, 
+                         timezone.localtime(obj.check_in_time).strftime('%H:%M:%S') if obj.check_in_time is not None else None, 
+                         obj.check_out, 
+                         timezone.localtime(obj.check_out_time).strftime('%H:%M:%S') if obj.check_out_time is not None else None,  
+                         timezone.localtime(obj.hostel_checkout_time).strftime('%H:%M:%S') if obj.hostel_checkout_time is not None else None, 
+                         timezone.localtime(obj.hostel_checkin_time).strftime('%H:%M:%S') if obj.hostel_checkin_time is not None else None,])
         output = io.BytesIO()
-        wb = Workbook(output, {'in_memory': True})
+        wb = Workbook(output, {'in_memory': True, 'remove_timezone':True})
         ws = wb.add_worksheet()
 
         for col_num, header in enumerate(headers):
