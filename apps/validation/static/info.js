@@ -118,6 +118,7 @@ function fetch_data(dump) {
     success: function (response) {
         let res = response.status;
         if (res) {
+            console.log(response.request_user_location)
             updateProfile(response.user);
             updateUserPass(response.user_pass, response.user, response.task, response.request_user_location);
             if (response.user_pass.pass_id) {
