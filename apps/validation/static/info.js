@@ -1,3 +1,11 @@
+function is_mobile() {
+    if (navigator.userAgentData.mobile) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 function resetProfile() {
     document.querySelector('.profile-card').innerHTML=`
     <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity:0.5;" class="profile-picture">
@@ -89,11 +97,15 @@ function updateUserPass(data,user_data, task, request_user_location) {
     
     if (task['check_out']) {
         if (request_user_location == 'campus_resource') {
-            // actionButton.style.visibility = 'visible';
-            // actionButton.innerHTML = `Check Out`;
-            checkOut(user_data.registration_number);
-            document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
-            // actionButton.onclick = function()  {checkOut(user_data.registration_number);}
+            if (is_mobile()){
+                actionButton.style.visibility = 'visible';
+                actionButton.innerHTML = `Check Out`;
+                document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+                actionButton.onclick = function()  {checkOut(user_data.registration_number);}
+            } else {
+                checkOut(user_data.registration_number);
+                document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+            }            
         } else {
             actionButton.style.visibility = 'visible';
             actionButton.innerHTML = `Check Out`;
@@ -101,11 +113,15 @@ function updateUserPass(data,user_data, task, request_user_location) {
             actionButton.onclick = function()  {checkOut(user_data.registration_number);}}
     } else if (task['check_in']) {
         if (request_user_location == 'campus_resource') {
-            checkIn(user_data.registration_number);
-            document.getElementById('pass-card').style.backgroundColor = '#90EE90';
-            // actionButton.style.visibility = 'visible';
-            // actionButton.innerHTML = `Check In`;
-            // actionButton.onclick = function(){checkIn(user_data.registration_number);}
+            if (is_mobile()){
+                actionButton.style.visibility = 'visible';
+                actionButton.innerHTML = `Check In`;
+                document.getElementById('pass-card').style.backgroundColor = '#90EE90';
+                actionButton.onclick = function()  {checkIn(user_data.registration_number);}
+            } else {
+                checkIn(user_data.registration_number);
+                document.getElementById('pass-card').style.backgroundColor = '#90EE90';    
+            }
         } else {
             document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
             actionButton.style.visibility = 'visible';
@@ -156,7 +172,7 @@ function checkIn(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
-        if (!navigator.userAgentData.mobile) {document.getElementById('roll_num').focus();}
+        if (!is_mobile()) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
            // resetProfile();
@@ -185,7 +201,7 @@ function checkOut(registration_number) {
     dataType: "json",
     timeout: 120000,
     success: function (response) {
-        if (!navigator.userAgentData.mobile) {document.getElementById('roll_num').focus();}
+        if (!is_mobile()) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
             
