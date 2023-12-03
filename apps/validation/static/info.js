@@ -1,3 +1,20 @@
+toastr.options = {
+    "closeButton": false,
+    "newestOnTop": true,
+    "progressBar": false,
+    "positionClass": "toast-bottom-full-width",
+    "preventDuplicates": true,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "3000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
 function is_mobile() {
     if (navigator.userAgentData.mobile) {
         return true;
@@ -150,7 +167,7 @@ function fetch_data(dump) {
             } else [
             document.getElementById('pass-card').style.backgroundColor = '#FF7F7F'
             ]
-            toastr.success(response.message);
+            // toastr.success(response.message);
         }
         else {
             toastr.error(response.message);
