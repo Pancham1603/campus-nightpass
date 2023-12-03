@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.apps import apps
 from django.http import HttpResponse
+from django.utils import timezone
+from django.utils.html import format_html
+from rangefilter.filter import DateRangeFilter 
 from tablib import Dataset
 from .models import *
 from import_export.admin import ImportExportModelAdmin
@@ -8,15 +11,14 @@ from .resources import *
 from xlsxwriter import Workbook
 from datetime import date, datetime
 import io
-from django.utils import timezone
-from django.utils.html import format_html
+
 
 
 class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'user','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
     search_fields = ('pass_id', 'user')
     actions = ['export_as_xlsx']
-    list_filter = ('date', 'campus_resource', 'defaulter')
+    list_filter = (('date', DateRangeFilter),'campus_resource', 'defaulter')
     autocomplete_fields = ('user', 'campus_resource') 
 
     def user(self, obj):

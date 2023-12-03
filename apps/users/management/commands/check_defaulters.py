@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from ...models import NightPass, Student
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime, time
 
 def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1))
@@ -11,6 +11,14 @@ def check_defaulters():
             defaulter = True
             remarks+= "Did not go to Location. "
         else:
+            if nightpass.hostel_checkout_time:
+                if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=20):
+                    defaulter = True
+                    remarks+= "Entered library after 20mins. "
+            else:
+                if (nightpass.check_in_time - datetime.combine(nightpass.check_in_time.date(), time(20,50))) > timedelta(minutes=20):
+                    defaulter = True
+                    remarks+= "Entered library after 20mins. "
             if not nightpass.check_out:
                 defaulter=True
                 remarks+= "Left library unethically. "
