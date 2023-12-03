@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from ...models import NightPass, Student
-from datetime import date, timedelta, datetime, time
+from datetime import date, timedelta, datetime, time, timezone
+import pytz
 
 def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1))
@@ -16,7 +17,11 @@ def check_defaulters():
                     defaulter = True
                     remarks+= "Entered library after 20mins. "
             else:
-                if (nightpass.check_in_time - datetime.combine(nightpass.check_in_time.date(), time(20,50))) > timedelta(minutes=20):
+                last_default_time = datetime.combine(nightpass.check_in_time.date(), time(20,50))
+                utc_timezone = pytz.utc
+                asia_kolkata_timezone = pytz.timezone('Asia/Kolkata')
+                last_default_time.replace(tzinfo=utc_timezone).astimezone(asia_kolkata_timezone)
+                if (nightpass.check_in_time - last_default_time) > timedelta(minutes=20):
                     defaulter = True
                     remarks+= "Entered library after 20mins. "
             if not nightpass.check_out:
