@@ -9,12 +9,22 @@ from xlsxwriter import Workbook
 from datetime import date, datetime
 import io
 from django.utils import timezone
+from django.utils.html import format_html
 
 
 class NightPassAdmin(admin.ModelAdmin):
-    list_display = ('pass_id', 'user','date', 'campus_resource', 'check_in', 'check_out')
-    search_fields = ('pass_id', 'user__name','user__registration_number', 'campus_resource__name')
+    list_display = ( 'user','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
+    search_fields = ('pass_id', 'user')
     actions = ['export_as_xlsx']
+
+    def hostel_check_out(self, obj):
+        return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">') if obj.hostel_checkout_time is not None else format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')
+    
+    def hostel_check_in(self, obj):
+        return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">') if obj.hostel_checkin_time is not None else format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')
+
+    hostel_check_out.allow_tags = True
+    hostel_check_in.allow_tags = True
 
     def export_as_xlsx(modeladmin, request, queryset):
         headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In','Check In Time', 'Check Out',  'Check Out Time', 'Hostel Check Out Time' ,'Hostel Check In Time']
