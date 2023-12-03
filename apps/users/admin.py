@@ -25,6 +25,8 @@ class NightPassAdmin(admin.ModelAdmin):
 
     hostel_check_out.allow_tags = True
     hostel_check_in.allow_tags = True
+    hostel_check_out.short_description = 'Hostel Out'
+    hostel_check_in.short_description = 'Hostel In'
 
     def export_as_xlsx(modeladmin, request, queryset):
         headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In','Check In Time', 'Check Out',  'Check Out Time', 'Hostel Check Out Time' ,'Hostel Check In Time']
