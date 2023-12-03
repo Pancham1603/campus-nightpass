@@ -18,7 +18,7 @@ def check_defaulters():
                 if not nightpass.hostel_checkin_time:
                     defaulter = True
                     remarks+= "Did not enter hostel. "
-                elif (nightpass.hostel_checkin_time - nightpass.user.student.last_checkout_time) > timedelta(minutes=20):            
+                elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=20):            
                     defaulter = True
                     remarks+= "Entered hostel after 20mins. "
                 if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=20):
