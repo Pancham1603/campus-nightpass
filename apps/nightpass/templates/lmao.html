@@ -48,7 +48,7 @@
         <script>
             JsBarcode("#barcode", "{{ user }}");
             let deadline = new Date("{{ user.last_checkout_time|date:'M d, Y H:i:s' }}" ).getTime();
-            deadline += 20*60000
+            deadline += 25*60000
             let x = setInterval(function () {
                 let now = new Date().getTime();
                 let t = deadline - now;

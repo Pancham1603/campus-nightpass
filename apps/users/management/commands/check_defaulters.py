@@ -15,15 +15,15 @@ def check_defaulters():
             remarks+= "Did not go to Location. "
         else:
             if nightpass.hostel_checkout_time:
-                if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=20):
+                if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=30):
                     defaulter = True
-                    remarks+= "Entered library after 20mins. "
+                    remarks+= "Entered library after 30mins. "
             else:
-                last_default_time = datetime.combine(nightpass.check_in_time.date(), time(20,50))
+                last_default_time = datetime.combine(nightpass.check_in_time.date(), time(21,00))
                 last_default_time = timezone.make_aware(last_default_time, timezone.get_current_timezone())
-                if (nightpass.check_in_time - last_default_time) > timedelta(minutes=20):
+                if (nightpass.check_in_time > last_default_time):
                     defaulter = True
-                    remarks+= "Entered library after 20mins. "
+                    remarks+= "Entered library after 30mins. "
             if not nightpass.check_out_time:
                 defaulter=True
                 remarks+= "Left library unethically. "
@@ -31,12 +31,12 @@ def check_defaulters():
                 if not nightpass.hostel_checkin_time:
                     defaulter = True
                     remarks+= "Did not enter hostel. "
-                elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=20):            
+                elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=30):            
                     defaulter = True
-                    remarks+= "Entered hostel after 20mins. "
-                if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=20):
+                    remarks+= "Entered hostel after 30mins. "
+                if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
                     defaulter = True
-                    remarks+= "Time <20min in Location. " 
+                    remarks+= "Time <10min in Location. " 
 
         if defaulter:
             nightpass.defaulter = True
