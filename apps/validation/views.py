@@ -160,7 +160,7 @@ def checkout_from_location(user_pass, direct:bool=True):
     user.student.last_checkout_time = datetime.now() if direct else None
     user.student.has_booked = False
     user.student.save()
-    user_pass.check_out = True
+    user_pass.check_out = True if direct else False
     user_pass.check_out_time = datetime.now() if direct else None
     user_pass.save()
     data = {

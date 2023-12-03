@@ -24,7 +24,7 @@ def check_defaulters():
                 if (nightpass.check_in_time - last_default_time) > timedelta(minutes=20):
                     defaulter = True
                     remarks+= "Entered library after 20mins. "
-            if not nightpass.check_out:
+            if not nightpass.check_out_time:
                 defaulter=True
                 remarks+= "Left library unethically. "
             else:
