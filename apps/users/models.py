@@ -137,6 +137,8 @@ class NightPass(models.Model):
     hostel_checkin_time = models.DateTimeField(blank=True, null=True)
     hostel_checkout_time = models.DateTimeField(blank=True, null=True)
     valid = models.BooleanField(default=True)
+    defaulter = models.BooleanField(default=False, blank=True, null=True)
+    defaulter_remarks = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.pass_id

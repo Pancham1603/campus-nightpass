@@ -13,3 +13,11 @@ services:
       - ./static:/app/static
     restart: always
     # command: "gunicorn -b 0.0.0.0:4376 core.wsgi:application"
+
+  cron:
+    build: .
+    command: python manage.py crontab add && python manage.py crontab run
+    volumes:
+      - .:/app
+    depends_on:
+      - campus_nightpass

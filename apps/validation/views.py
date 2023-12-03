@@ -141,11 +141,11 @@ def check_out(request):
         return HttpResponse('Invalid Operation')
 
 
-def checkout_from_hostel(user_pass:NightPass):
+def checkout_from_hostel(user_pass:NightPass, direct:bool=True):
     user = user_pass.user
     user.student.is_checked_in = False
-    user.student.hostel_checkout_time = user_pass.hostel_checkout_time = datetime.now()
-    user.student.last_checkout_time = datetime.now()
+    user.student.hostel_checkout_time = user_pass.hostel_checkout_time = datetime.now() if direct else None
+    user.student.last_checkout_time = datetime.now() if direct else None
     user.student.save()
     user_pass.save()
     data = {
@@ -154,13 +154,13 @@ def checkout_from_hostel(user_pass:NightPass):
     }
     return HttpResponse(json.dumps(data))
 
-def checkout_from_location(user_pass):
+def checkout_from_location(user_pass, direct:bool=True):
     user = user_pass.user
-    user.student.last_checkout_time = datetime.now()
+    user.student.last_checkout_time = datetime.now() if direct else None
     user.student.has_booked = False
     user.student.save()
     user_pass.check_out = True
-    user_pass.check_out_time = datetime.now()
+    user_pass.check_out_time = datetime.now() if direct else None
     user_pass.save()
     data = {
         'status':True,
@@ -208,7 +208,7 @@ def checkin_to_hostel(user:Student):
         user_pass.valid = False
         user_pass.save()
         if (user_pass.user.student.is_checked_in if user_pass else False):
-            checkout_from_location(user_pass)
+            checkout_from_location(user_pass, direct=False)
         data = {
             'status':True,
             'message':'Successfully checked in!'
@@ -225,7 +225,7 @@ def checkin_to_hostel(user:Student):
 def checkin_to_location(user_pass):
     user = user_pass.user
     if user.student.is_checked_in:
-        checkout_from_hostel(user_pass)
+        checkout_from_hostel(user_pass, direct=False)
     user_pass.check_in = True
     user_pass.check_in_time = datetime.now()
     user_pass.save()
@@ -248,7 +248,6 @@ def scanner(request):
     else:
         return HttpResponse('Invalid Operation')
     
-
 
 @csrf_exempt
 def kiosk_extension(request):
