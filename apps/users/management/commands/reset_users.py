@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
-from ...cron import reset_campus_resources
+from ...models import Student
 
 class Command(BaseCommand):
-    help = 'Reset campus resources'
+    help = 'Reset all users'
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Running your cron job...'))
-        reset_campus_resources()
+        Student.objects.all().update(is_checked_in=True, last_checkout_time=None, hostel_checkin_time=None, hostel_checkout_time=None)
         self.stdout.write(self.style.SUCCESS('Cron job completed successfully'))
