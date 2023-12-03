@@ -192,11 +192,12 @@ ACCOUNT_USERNAME_REQUIRED = False
 #     ('0 20 * * *', 'core.cron.stop_booking'),
 # ]
 
+CRONTAB_TIME_ZONE = 'Asia/Kolkata'
 
 CRONJOBS = [
-    ('55 6 * * *', 'core.cron.reset_campus_resources'),
-    ('55 6 * * *', 'core.cron.reset_nightpass'),
-    ('55 6 * * *', 'core.cron.reset_users'),
-    ('55 6 * * *', 'core.cron.stop_booking'),
-    ('55 6 * * *', 'core.cron.check_defaulters'),
+    ('2 7 * * *', 'core.cron.reset_campus_resources'),
+    ('2 7 * * *', 'core.cron.reset_nightpass'),
+    ('2 7 * * *', 'core.cron.reset_users'),
+    ('2 7 * * *', 'core.cron.stop_booking'),
+    ('2 7 * * *', 'core.cron.check_defaulters'),
 ]
