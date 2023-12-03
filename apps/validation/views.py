@@ -113,30 +113,31 @@ def req_library_logs(registration_number):
 @csrf_exempt
 @login_required
 def check_out(request):
-    if request.method == 'POST':
-        data = request.POST
-        try:
-            user = Student.objects.get(registration_number=data['registration_number'])
-            user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
-            admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
-            if not user_pass:
-                data = {
-                    'status':False,
-                    'message':'Pass does not exist!'
-                }
-                return HttpResponse(json.dumps(data))
-            if type(admin_campus_resource) == Hostel:
-                return checkout_from_hostel(user_pass)
-            elif type(admin_campus_resource) == CampusResource:
-                if admin_campus_resource.name == 'Library':
-                    req_library_logs(user.registration_number)
-                return checkout_from_location(user_pass)
-        except Student.DoesNotExist:
-            data = {
-                    'status':False,
-                    'message':'Invalid!'
+    if request.user.is_staff:
+        if request.method == 'POST':
+            data = request.POST
+            try:
+                user = Student.objects.get(registration_number=data['registration_number'])
+                user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
+                admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
+                if not user_pass:
+                    data = {
+                        'status':False,
+                        'message':'Pass does not exist!'
                     }
-            return HttpResponse(json.dumps(data))
+                    return HttpResponse(json.dumps(data))
+                if type(admin_campus_resource) == Hostel:
+                    return checkout_from_hostel(user_pass)
+                elif type(admin_campus_resource) == CampusResource:
+                    if admin_campus_resource.name == 'Library':
+                        req_library_logs(user.registration_number)
+                    return checkout_from_location(user_pass)
+            except Student.DoesNotExist:
+                data = {
+                        'status':False,
+                        'message':'Invalid!'
+                        }
+                return HttpResponse(json.dumps(data))
     else:
         return HttpResponse('Invalid Operation')
 
@@ -171,31 +172,32 @@ def checkout_from_location(user_pass, direct:bool=True):
 @csrf_exempt
 @login_required
 def check_in(request):
-    if request.method == 'POST':
-        data = request.POST
-        try:
-            user = Student.objects.get(registration_number=data['registration_number'])
-            user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
-            admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
+    if request.user.is_staff:
+        if request.method == 'POST':
+            data = request.POST
+            try:
+                user = Student.objects.get(registration_number=data['registration_number'])
+                user_pass = NightPass.objects.filter(user=user.user, valid=True).first()
+                admin_campus_resource = request.user.security.campus_resource if request.user.security.campus_resource else request.user.security.hostel
 
-            if type(admin_campus_resource) == Hostel:
-                return checkin_to_hostel(user)
-            elif type(admin_campus_resource) == CampusResource:
-                if not user_pass:
-                    data = {
+                if type(admin_campus_resource) == Hostel:
+                    return checkin_to_hostel(user)
+                elif type(admin_campus_resource) == CampusResource:
+                    if not user_pass:
+                        data = {
+                            'status':False,
+                            'message':'Pass does not exist!'
+                        }
+                        return HttpResponse(json.dumps(data))
+                    if admin_campus_resource.name == 'Library':
+                        req_library_logs(user.registration_number)
+                    return checkin_to_location(user_pass)
+            except Student.DoesNotExist:
+                data = {
                         'status':False,
-                        'message':'Pass does not exist!'
-                    }
-                    return HttpResponse(json.dumps(data))
-                if admin_campus_resource.name == 'Library':
-                    req_library_logs(user.registration_number)
-                return checkin_to_location(user_pass)
-        except Student.DoesNotExist:
-            data = {
-                    'status':False,
-                    'message':'Invalid!'
-                    }
-            return HttpResponse(json.dumps(data))
+                        'message':'Invalid!'
+                        }
+                return HttpResponse(json.dumps(data))
     else:
         return HttpResponse('Invalid Operation')
 
@@ -207,7 +209,7 @@ def checkin_to_hostel(user:Student):
         user.save()
         user_pass.valid = False
         user_pass.save()
-        if (user_pass.user.student.is_checked_in if user_pass else False):
+        if (not user_pass.check_out if user_pass else False):
             checkout_from_location(user_pass, direct=False)
         data = {
             'status':True,
