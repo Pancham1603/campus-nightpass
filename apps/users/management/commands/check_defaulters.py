@@ -29,6 +29,8 @@ def check_defaulters():
             nightpass.defaulter = True
             nightpass.defaulter_remarks = remarks
             nightpass.save()
+            nightpass.user.student.violation_flags+=1
+            nightpass.user.student.save()
 
 
 class Command(BaseCommand):
