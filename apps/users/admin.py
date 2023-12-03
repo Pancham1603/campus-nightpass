@@ -16,6 +16,11 @@ class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'user','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
     search_fields = ('pass_id', 'user')
     actions = ['export_as_xlsx']
+    list_filter = ('date', 'campus_resource', 'defaulter')
+    autocomplete_fields = ('user', 'campus_resource') 
+
+    def user(self, obj):
+        return obj.user.student.name
 
     def hostel_check_out(self, obj):
         return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">') if obj.hostel_checkout_time is not None else format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')

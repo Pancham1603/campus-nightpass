@@ -21,7 +21,7 @@ class CampusResource(models.Model):
     is_booking = models.BooleanField(default=False)
     is_display = models.BooleanField(default=False)
     booking_complete = models.BooleanField(default=False)
-    slots_booked = models.IntegerField(default=0)
+    slots_booked = models.IntegerField(default=0, editable=False)
     type = models.CharField(max_length=100, choices=[('hostel', 'Hostel'), ('location', 'Location'), ('gate', 'Gate')], null=True, blank=True)
 
 
