@@ -29,7 +29,7 @@ class NightPassAdmin(admin.ModelAdmin):
     hostel_check_in.short_description = 'Hostel In'
 
     def export_as_xlsx(modeladmin, request, queryset):
-        headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In','Check In Time', 'Check Out',  'Check Out Time', 'Hostel Check Out Time' ,'Hostel Check In Time']
+        headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In','Check In Time', 'Check Out',  'Check Out Time', 'Hostel Check Out Time' ,'Hostel Check In Time', 'Defaulter', 'Remarks']
         data = []
         for obj in queryset:
             data.append([obj.user.student.name, 
@@ -43,7 +43,9 @@ class NightPassAdmin(admin.ModelAdmin):
                          obj.check_out, 
                          timezone.localtime(obj.check_out_time).strftime('%H:%M:%S') if obj.check_out_time is not None else None,  
                          timezone.localtime(obj.hostel_checkout_time).strftime('%H:%M:%S') if obj.hostel_checkout_time is not None else None, 
-                         timezone.localtime(obj.hostel_checkin_time).strftime('%H:%M:%S') if obj.hostel_checkin_time is not None else None,])
+                         timezone.localtime(obj.hostel_checkin_time).strftime('%H:%M:%S') if obj.hostel_checkin_time is not None else None,
+                         obj.defaulter,
+                         obj.defaulter_remarks])
         output = io.BytesIO()
         wb = Workbook(output, {'in_memory': True, 'remove_timezone':True})
         ws = wb.add_worksheet()
