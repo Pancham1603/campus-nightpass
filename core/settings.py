@@ -194,9 +194,9 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 
 CRONJOBS = [
-    ('51 6 * * *', 'core.cron.reset_campus_resources'),
-    ('51 6 * * *', 'core.cron.reset_nightpass'),
-    ('51 6 * * *', 'core.cron.reset_users'),
-    ('51 6 * * *', 'core.cron.stop_booking'),
-    ('51 6 * * *', 'core.cron.check_defaulters'),
+    ('55 6 * * *', 'core.cron.reset_campus_resources'),
+    ('55 6 * * *', 'core.cron.reset_nightpass'),
+    ('55 6 * * *', 'core.cron.reset_users'),
+    ('55 6 * * *', 'core.cron.stop_booking'),
+    ('55 6 * * *', 'core.cron.check_defaulters'),
 ]
