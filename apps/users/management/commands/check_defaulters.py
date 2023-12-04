@@ -6,6 +6,7 @@ from django.utils import timezone
 
 def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1))
+    previous_day_nightpasses.update(defaulter=False, defaulter_remarks='')
     for nightpass in previous_day_nightpasses:
         print(nightpass.user.email)
         defaulter = False
