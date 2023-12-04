@@ -78,6 +78,7 @@ class StudentAdmin(ImportExportModelAdmin):
     search_fields = ('name','registration_number',)
     autocomplete_fields = ('user',)
     resource_class = StudentResource
+    readonly_fields = ('hostel_checkin_time', 'hostel_checkout_time', 'last_checkout_time',)
 
 class SecurityAdmin(admin.ModelAdmin):
     list_display = ('name', 'admin_incharge', 'user')
