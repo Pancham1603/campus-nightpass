@@ -4,7 +4,7 @@ from ..users.models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
-from datetime import datetime
+from datetime import datetime, date
 import requests
 
 # Create your views here.
@@ -85,7 +85,6 @@ def fetch_user_status(request):
                             'status':False,
                             'message':f'Pass for {admin_campus_resource.name} does not exist!'
                             }
-
                     return HttpResponse(json.dumps(data))
                 
             except Student.DoesNotExist:
@@ -131,7 +130,7 @@ def check_out(request):
                 elif type(admin_campus_resource) == CampusResource:
                     if admin_campus_resource.name == 'Library':
                         req_library_logs(user.registration_number)
-                    return checkout_from_location(user_pass)
+                    return checkout_from_location(user_pass, admin_campus_resource)
             except Student.DoesNotExist:
                 data = {
                         'status':False,
@@ -153,9 +152,10 @@ def checkout_from_hostel(user_pass:NightPass, direct:bool=True):
         'status':True,
         'message':'Successfully checked out!'
     }
+    data['student_stats'] = None
     return HttpResponse(json.dumps(data))
 
-def checkout_from_location(user_pass, direct:bool=True):
+def checkout_from_location(user_pass, admin_campus_resource:CampusResource ,direct:bool=True, ):
     user = user_pass.user
     user.student.last_checkout_time = datetime.now() if direct else None
     user.student.has_booked = False
@@ -167,6 +167,11 @@ def checkout_from_location(user_pass, direct:bool=True):
         'status':True,
         'message':'Successfully checked out!'
     }
+    data['student_stats'] = {
+        'check_in_count':NightPass.objects.filter(check_in=True, check_out=False,valid=True, date=date.today(), campus_resource=admin_campus_resource).count(),
+        'total_count':NightPass.objects.filter(valid=True, date=date.today(), campus_resource=admin_campus_resource).count()
+    }
+
     return HttpResponse(json.dumps(data))
 
 @csrf_exempt
@@ -191,7 +196,7 @@ def check_in(request):
                         return HttpResponse(json.dumps(data))
                     if admin_campus_resource.name == 'Library':
                         req_library_logs(user.registration_number)
-                    return checkin_to_location(user_pass)
+                    return checkin_to_location(user_pass, admin_campus_resource)
             except Student.DoesNotExist:
                 data = {
                         'status':False,
@@ -215,6 +220,7 @@ def checkin_to_hostel(user:Student):
             'status':True,
             'message':'Successfully checked in!'
         }
+        data['student_stats'] = None
 
         return HttpResponse(json.dumps(data))
     else:
@@ -224,7 +230,7 @@ def checkin_to_hostel(user:Student):
         }
         return HttpResponse(json.dumps(data))
 
-def checkin_to_location(user_pass):
+def checkin_to_location(user_pass, admin_campus_resource:CampusResource):
     user = user_pass.user
     if user.student.is_checked_in:
         checkout_from_hostel(user_pass, direct=False)
@@ -235,6 +241,10 @@ def checkin_to_location(user_pass):
         'status':True,
         'message':'Successfully checked in!'
     }
+    data['student_stats'] = {
+        'check_in_count':NightPass.objects.filter(check_in=True, check_out=False,valid=True, date=date.today(), campus_resource=admin_campus_resource).count(),
+        'total_count':NightPass.objects.filter(valid=True, date=date.today(), campus_resource=admin_campus_resource).count()
+    }
     return HttpResponse(json.dumps(data))
 
 @csrf_exempt
@@ -243,10 +253,12 @@ def scanner(request):
     if request.method == "POST":
         return fetch_user_status(request)
     if request.user.is_staff:
-        if request.iOS:
-            return render(request, 'info.html')
-        else:
-            return render(request, 'info.html')
+        if request.user.security.campus_resource:
+            check_in_count = NightPass.objects.filter(check_in=True, check_out=False,valid=True, date=date.today(), campus_resource=request.user.security.campus_resource).count()
+            total_count = NightPass.objects.filter(valid=True, date=date.today(), campus_resource=request.user.security.campus_resource).count()
+            return render(request, 'info.html', {'check_in_count':check_in_count, 'total_count':total_count})
+        elif request.user.security.hostel:
+            return render(request, 'info.html', {'check_in_count':None, 'total_count':None})
     else:
         return HttpResponse('Invalid Operation')
     

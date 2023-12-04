@@ -149,6 +149,11 @@ function updateUserPass(data,user_data, task, request_user_location) {
     }
 }
 
+function updateStats(data) {
+    document.getElementById('total_count').innerHTML = 'Booking: ' + data.total_count;
+    document.getElementById('check_in_count').innerHTML = 'Checked In: ' + data.check_in_count;
+}
+
 function fetch_data(dump) {
     urls = ""
     $.ajax({
@@ -160,7 +165,6 @@ function fetch_data(dump) {
     success: function (response) {
         let res = response.status;
         if (res) {
-            console.log(response.request_user_location)
             updateProfile(response.user);
             updateUserPass(response.user_pass, response.user, response.task, response.request_user_location);
             if (response.user_pass.pass_id) {
@@ -192,11 +196,12 @@ function checkIn(registration_number) {
         if (!is_mobile()) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
+            if (response.student_stats) {updateStats(response.student_stats);}
            // resetProfile();
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 7000);
+            setTimeout(function(){ resetProfile(); }, 5000);
 
         }
         else {
@@ -221,7 +226,7 @@ function checkOut(registration_number) {
         if (!is_mobile()) {document.getElementById('roll_num').focus();}
         let res = response.status;
         if (res) {
-            
+            if (response.student_stats) {updateStats(response.student_stats);}
             // updateProfile(response.user);
             // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
