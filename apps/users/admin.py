@@ -16,9 +16,9 @@ import io
 
 class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'user','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
-    search_fields = ('pass_id', 'user')
+    search_fields = ('user__student__name','user__student__registration_number','user__student__email')
     actions = ['export_as_xlsx']
-    list_filter = (('date', DateRangeFilter),'campus_resource', 'defaulter')
+    list_filter = (('date', DateRangeFilter),'campus_resource','user__student__hostel', 'defaulter', 'check_in', 'check_out')
     autocomplete_fields = ('user', 'campus_resource') 
     readonly_fields = ('pass_id', 'check_in_time', 'check_out_time', 'hostel_checkout_time', 'hostel_checkin_time')
 
