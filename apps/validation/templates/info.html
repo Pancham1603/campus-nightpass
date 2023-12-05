@@ -90,15 +90,14 @@
             Quagga.start();
         });
 
-        lastScannedBarcode = "";
+        let lastScannedBarcode = [];
         Quagga.onDetected(function (result) {
             var code = result.codeResult.code;
-            if (code !== lastScannedBarcode) {
+            if (!lastScannedBarcode.includes(code)) {
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
-
-                fetch_data({'registration_number':code})
-                lastScannedBarcode = code;
+                if (code.length == 9) {fetch_data({'registration_number':code})}
+                lastScannedBarcode.concat(code);
             }
 
         });
@@ -109,7 +108,7 @@
         });
 
         setInterval(function () {
-            lastScannedBarcode = null;
+            lastScannedBarcode.pop();
         }, 10000);
     </script>
         <script src="../static/info.js"></script>
