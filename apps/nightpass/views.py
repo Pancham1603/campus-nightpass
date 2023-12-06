@@ -51,46 +51,45 @@ def generate_pass(request, campus_resource):
         return HttpResponse(json.dumps(data))
     
     user_pass = NightPass.objects.filter(user=user, date=date.today()).first()
-    if not user.student.has_booked and not user_pass:
-            campus_resource.refresh_from_db()
-            if campus_resource.slots_booked < campus_resource.max_capacity:
-                while True:
-                    pass_id = ''.join(random.choices(string.ascii_uppercase +
-                                        string.digits, k=16))
+    if not user_pass:
+        campus_resource.refresh_from_db()
+        if campus_resource.slots_booked < campus_resource.max_capacity:
+            while True:
+                pass_id = ''.join(random.choices(string.ascii_uppercase +
+                                    string.digits, k=16))
 
-                    if not NightPass.objects.filter(pass_id=pass_id).count():
-                        break
-                generated_pass = NightPass(campus_resource=campus_resource, pass_id=pass_id, user=user , date=date.today(), start_time=datetime.now(), end_time=datetime.now())
-                generated_pass.save()
+                if not NightPass.objects.filter(pass_id=pass_id).count():
+                    break
+            generated_pass = NightPass(campus_resource=campus_resource, pass_id=pass_id, user=user , date=date.today(), start_time=datetime.now(), end_time=datetime.now())
+            generated_pass.save()
 
-                user.student.has_booked = True
-                campus_resource.slots_booked += 1
-                user.student.save()
-                campus_resource.save()
-                data = {
-                    'pass_qr':None,
-                    'status':True,
-                    'message':f"Pass generated successfully for {campus_resource.name}!"
-                }
-                return HttpResponse(json.dumps(data))
-            else:
-                data={
-                    'status':False,
-                    'message':f"No more slots available for {campus_resource.name}!"
-                }
-                return HttpResponse(json.dumps(data))
-    elif user.student.has_booked:
-        user_nightpass = NightPass.objects.filter(user=user, check_out = False).first()
-        if user_nightpass.check_in:
+            user.student.has_booked = True
+            campus_resource.slots_booked += 1
+            user.student.save()
+            campus_resource.save()
+            data = {
+                'pass_qr':None,
+                'status':True,
+                'message':f"Pass generated successfully for {campus_resource.name}!"
+            }
+            return HttpResponse(json.dumps(data))
+        else:
             data={
                 'status':False,
-                'message':f"New slot can be booked once you exit {user_nightpass.campus_resource}."
+                'message':f"No more slots available for {campus_resource.name}!"
+            }
+            return HttpResponse(json.dumps(data))
+    elif user_pass.valid:
+        if user_pass.check_in:
+            data={
+                'status':False,
+                'message':f"New slot can be booked once you exit {user_pass.campus_resource}."
             }
             return HttpResponse(json.dumps(data))
         else:
             data={
                     'status':False,
-                    'message':f"Cancel the booking for {user_nightpass.campus_resource} to book a new slot!"
+                    'message':f"Cancel the booking for {user_pass.campus_resource} to book a new slot!"
                 }
             return HttpResponse(json.dumps(data))
     elif user_pass:
