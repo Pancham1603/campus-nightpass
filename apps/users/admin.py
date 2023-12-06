@@ -40,12 +40,13 @@ class NightPassAdmin(admin.ModelAdmin):
     hostel_check_in.short_description = 'Hostel In'
 
     def export_as_xlsx(modeladmin, request, queryset):
-        headers = ['User', 'Email', 'Hostel', 'Pass ID', 'Date', 'Campus Resource', 'Check In', 'Check Out', 'Hostel Check Out Time', 'Check In Time', 'Check Out Time' ,'Hostel Check In Time', 'Defaulter', 'Remarks']
+        headers = ['User', 'Email', 'Hostel', 'Gender','Pass ID', 'Date', 'Campus Resource', 'Check In', 'Check Out', 'Hostel Check Out Time', 'Check In Time', 'Check Out Time' ,'Hostel Check In Time', 'Defaulter', 'Remarks']
         data = []
         for obj in queryset:
             data.append([obj.user.student.name, 
                          obj.user.email ,
                          obj.user.student.hostel.name,
+                         obj.user.student.gender,
                          obj.pass_id,
                          obj.date.strftime('%d/%m/%y'),
                          obj.campus_resource.name,
