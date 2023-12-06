@@ -1,24 +1,41 @@
-toastr.options = {
-    "closeButton": false,
-    "newestOnTop": true,
-    "progressBar": false,
-    "positionClass": "toast-bottom-full-width",
-    "preventDuplicates": true,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "3000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
-}
+
 
 function is_mobile() {
     if (navigator.userAgentData.mobile) {
+        toastr.options = {
+            "closeButton": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
         return true;
     } else {
+        toastr.options = {
+            "closeButton": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-bottom-full-width",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
         return false;
     }
 }
@@ -171,7 +188,6 @@ function fetch_data(dump) {
             } else [
             document.getElementById('pass-card').style.backgroundColor = '#FF7F7F'
             ]
-            // toastr.success(response.message);
         }
         else {
             toastr.error(response.message);
@@ -197,9 +213,6 @@ function checkIn(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
-           // resetProfile();
-            // updateProfile(response.user);
-            // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
             setTimeout(function(){ resetProfile(); }, 5000);
 
@@ -227,8 +240,6 @@ function checkOut(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
-            // updateProfile(response.user);
-            // updateUserPass(response.user_pass, response.user);
             toastr.success(response.message);
             setTimeout(function(){ resetProfile(); }, 7000);
         }
