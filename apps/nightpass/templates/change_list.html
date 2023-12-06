@@ -1,0 +1,8 @@
+{% extends "admin/change_list.html" %}
+
+{% block object-tools %}
+    {{ block.super }}
+    <div class="actions">
+        <a href="{% url 'admin:your_app_name_your_model_name_custom_action' %}" class="button">Refresh Slot Count</a>
+    </div>
+{% endblock %}

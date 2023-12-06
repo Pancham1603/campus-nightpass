@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from datetime import datetime, date, timedelta
 import requests
-
+from django.utils import timezone   
 # Create your views here.
 
 def fetch_user_status(request):
@@ -275,12 +275,14 @@ def scanner(request):
     
 
 def is_repeated_scan(user_pass:NightPass):
-    if (user_pass.check_in and not user_pass.check_out) and (datetime.now()-user_pass.check_in_time<timedelta(minutes=10)):
+    if (user_pass.check_in and not user_pass.check_out) and (timezone.make_aware(datetime.now(), timezone.get_current_timezone())-user_pass.check_in_time<timedelta(minutes=10)):
         return True
-    elif (user_pass.hostel_checkout_time) and (datetime.now()-user_pass.hostel_checkout_time<timedelta(minutes=10)):
+    elif (user_pass.hostel_checkout_time) and (timezone.make_aware(datetime.now(), timezone.get_current_timezone())-user_pass.hostel_checkout_time<timedelta(minutes=10)):
         return True
     else: 
         return False
+
+
 
 @csrf_exempt
 def kiosk_extension(request):
