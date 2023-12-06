@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from datetime import datetime, date, timedelta
 import requests
-from django.utils import timezone   
+from django.utils import timezone
 # Create your views here.
 
 def fetch_user_status(request):
@@ -155,7 +155,7 @@ def checkout_from_hostel(user_pass:NightPass, direct:bool=True):
     data['student_stats'] = None
     return HttpResponse(json.dumps(data))
 
-def checkout_from_location(user_pass, admin_campus_resource:CampusResource ,direct:bool=True, ):
+def checkout_from_location(user_pass, admin_campus_resource:CampusResource=None ,direct:bool=True, ):
     user = user_pass.user
     if not is_repeated_scan(user_pass):
         user.student.last_checkout_time = datetime.now() if direct else None
@@ -220,7 +220,7 @@ def checkin_to_hostel(user:Student):
             user_pass.valid = False
             user_pass.save()
             if (not user_pass.check_out if user_pass else False):
-                checkout_from_location(user_pass, direct=False)
+                checkout_from_location(user_pass,admin_campus_resource=user_pass.campus_resource ,direct=False)
             data = {
                 'status':True,
                 'message':'Successfully checked in!'
