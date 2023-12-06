@@ -175,7 +175,7 @@ def checkout_from_location(user_pass, admin_campus_resource:CampusResource ,dire
     else:
         data = {
                 'status':False,
-                'message':'You just checked out! Please wait for 10mins before checking in again'
+                'message':'You just checked in! Please wait for 10mins before checking out'
             }
     return HttpResponse(json.dumps(data))
 
