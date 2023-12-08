@@ -120,6 +120,7 @@
         </div>
     </div>
 
+    {% if user_incidents|length > 0 %}
     <div class="container" style="width: 100%;">
         <div class="profile-card" style="width: 80%;">
     <div class="table-section">
@@ -145,6 +146,7 @@
     </div>
     </div>
     </div>
+    {% endif %}
 
     <script>
         function verifyNotification(notif_text) {
