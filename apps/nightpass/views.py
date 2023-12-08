@@ -24,7 +24,8 @@ def campus_resources_home(request):
     user = request.user
     if user.user_type == 'student':
         user_pass = NightPass.objects.filter(user=user, check_out=False).first()
-        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass})	
+        user_incidents = NightPass.objects.filter(user=user, defaulter=True)
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents})	
     elif user.user_type == 'security':
         return redirect('/access')
     elif user.user_type == 'admin':

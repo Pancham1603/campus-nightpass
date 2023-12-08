@@ -3,6 +3,7 @@ body {
     background-color: #f5f5f5;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
 .header {
@@ -75,6 +76,10 @@ body {
     font-size: 18px;
     margin-bottom: 20px;
     text-align: left;
+}
+
+.profile-details p {
+    margin-bottom: 10px;
 }
 
 .safe {
@@ -201,6 +206,36 @@ select {
     align-items: center;
 }
 
+.table-section {
+    margin-top: 10px;
+    overflow-x: auto;
+ /* Add horizontal scroll for small screens */
+}
+
+.activity-table {
+    width: 100%;
+    max-width: 100%; /* Set a maximum width for the table */
+    border-collapse: collapse;
+    margin-top: 20px;
+    white-space: nowrap; /* Prevent text wrapping */
+    overflow: hidden;
+}
+
+.activity-table th, .activity-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis; /* Display ellipsis for overflowed text */
+    white-space: wrap;
+}
+
+.activity-table th {
+    background-color: #eb1b23;
+    color: #fff;
+}
+
+
 
 @media (max-width: 768px) {
     .profile-card, .resource-card {
@@ -212,4 +247,12 @@ select {
     justify-content: center;
     align-items: center;
 }
+
+    .activity-table {
+        font-size: 14px;
+    }
+
+    .activity-table th, .activity-table td {
+        padding: 5px;
+    }
 }

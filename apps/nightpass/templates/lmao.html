@@ -120,6 +120,32 @@
         </div>
     </div>
 
+    <div class="container" style="width: 100%;">
+        <div class="profile-card" style="width: 80%;">
+    <div class="table-section">
+        <h2>Incident History</h2>
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for incident in user_incidents %}
+                <tr>
+                    <td>{{ incident.date }}</td>
+                    <td>{{ incident.campus_resource.name }}</td>
+                    <td>{{ incident.defaulter_remarks }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+
     <script>
         function verifyNotification(notif_text) {
           let text = notif_text;
@@ -129,6 +155,8 @@
             return false;
           }
         }
+
+
     </script>
 
     <script>
