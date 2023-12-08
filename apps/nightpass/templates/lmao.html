@@ -121,6 +121,17 @@
     </div>
 
     <script>
+        function verifyNotification(notif_text) {
+          let text = notif_text;
+          if (confirm(text) == true) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+    </script>
+
+    <script>
        toastr.options = {
             "closeButton": false,
             "newestOnTop": true,
@@ -138,6 +149,11 @@
             "hideMethod": "fadeOut"
         }
 
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
         function openModal(name, description, picture, book) {
             var modal = document.getElementById("myModal");
             modal.style.display = "block";
@@ -148,42 +164,45 @@
             if (book) {
                 document.getElementById('modal-resource-book').innerHTML = 'Book';
                 var urls = "book/" + name;
+                var notif_text = "Make sure you you use your slot else cancel before 8:00 PM. Not showing up at the location will lead to a defaulter record.";
             } else {
                 document.getElementById('modal-resource-book').innerHTML = 'Cancel Booking'
                 var urls = "cancel/";
+                var notif_text = "Are you sure you want to cancel your booking?";
             }
 
-            document.getElementById('modal-resource-book').onclick = function() {         
-            $.ajax({
-            method: "POST",
-            url: urls,
-            timeout: 120000,
-            success: function (response) {
-                let res = JSON.parse(response).status;
-                if (res) {
-                    console.log(JSON.parse(response))
-                    let qr = JSON.parse(response).pass_qr
-                    document.getElementById('modal-resource-picture').src = qr
-                    document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
-                    toastr.success(JSON.parse(response).message);
-                    setTimeout(function(){ location.reload(); }, 3000);
-                    //location.reload();
-                }
-                else {
-                    toastr.error(JSON.parse(response).message);
-                }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                toastr.error("Something went wrong, please try again later");
+            document.getElementById('modal-resource-book').onclick = function() {   
+            
+            if (!verifyNotification(notif_text)) {
+                closeModal();
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: urls,
+                    timeout: 120000,
+                    success: function (response) {
+                        let res = JSON.parse(response).status;
+                        if (res) {
+                            console.log(JSON.parse(response))
+                            let qr = JSON.parse(response).pass_qr
+                            document.getElementById('modal-resource-picture').src = qr
+                            document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
+                            toastr.success(JSON.parse(response).message);
+                            setTimeout(function(){ location.reload(); }, 3000);
+                            //location.reload();
+                        }
+                        else {
+                            toastr.error(JSON.parse(response).message);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        toastr.error("Something went wrong, please try again later");
+                    }
+                });
             }
-        });
             }
         }
 
-        function closeModal() {
-            var modal = document.getElementById("myModal");
-            modal.style.display = "none";
-        }
 
     </script>
 
