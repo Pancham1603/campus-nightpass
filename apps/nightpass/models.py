@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class Hostel(models.Model):
@@ -21,12 +23,9 @@ class CampusResource(models.Model):
     is_booking = models.BooleanField(default=False)
     is_display = models.BooleanField(default=False)
     booking_complete = models.BooleanField(default=False)
-    slots_booked = models.IntegerField(default=0)
+    slots_booked = models.IntegerField(default=0, editable=False)
     type = models.CharField(max_length=100, choices=[('hostel', 'Hostel'), ('location', 'Location'), ('gate', 'Gate')], null=True, blank=True)
 
 
     def __str__(self):
         return self.name
-
-
-

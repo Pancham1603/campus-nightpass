@@ -38,8 +38,8 @@
         </div>
 
         <div class="camera-card">
-            <h2>QR Code Scanner</h2>
-            <input type="number" placeholder="Roll Number" id="roll_num" class="roll-no">
+            <!-- <h2>QR Code Scanner</h2> -->
+            <input type="number" placeholder="Roll Number" id="roll_num" class="roll-no" autofocus>
             <div id="camera" class="viewport" style="margin-top: 10px;"> </div>
             <!-- <div class="location-selector">
                 <select id="location-selector">
@@ -52,7 +52,17 @@
                 </select>
             </div> -->
         </div>
+        {% if request.user.security.campus_resource %}
+        <div class="camera-card" style="margin: 20px;">
+            <h2>
+                {{ request.user.security.campus_resource }}
+            </h2>
+            <h3 id="check_in_count" style="color: rgb(2, 116, 34)">Students: {{ check_in_count }}</h3><br>
+            <h3 id="total_count">Booking: {{ total_count }}</h3><br>
+        </div>
+        {% endif %}
     </div>
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js" integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
     <script>
@@ -80,15 +90,14 @@
             Quagga.start();
         });
 
-        lastScannedBarcode = "";
+        let lastScannedBarcode = [];
         Quagga.onDetected(function (result) {
             var code = result.codeResult.code;
-            if (code !== lastScannedBarcode) {
+            if (!lastScannedBarcode.includes(code)) {
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
-
-                fetch_data({'registration_number':code})
-                lastScannedBarcode = code;
+                if (code.length == 9) {fetch_data({'registration_number':code})}
+                lastScannedBarcode.concat(code);
             }
 
         });
@@ -99,8 +108,8 @@
         });
 
         setInterval(function () {
-            lastScannedBarcode = null;
-        }, 2000);
+            lastScannedBarcode.pop();
+        }, 10000);
     </script>
         <script src="../static/info.js"></script>
 </body>

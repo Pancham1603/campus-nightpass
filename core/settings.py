@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'import_export',
     'django_crontab',
     'hijack',
-    'hijack.contrib.admin'
+    'hijack.contrib.admin',
+    'rangefilter'
 ]
 
 
@@ -184,6 +185,12 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 
-CRONJOBS = [
-    ('0 5 * * *', 'cron.reset_nightpass'),
-]
+# CRONJOBS = [
+#     ('0 0 * * *', 'core.cron.reset_campus_resources'),
+#     ('0 1 * * *', 'core.cron.reset_nightpass'),
+#     ('0 1 * * *', 'core.cron.reset_users'),
+#     ('0 1 * * *', 'core.cron.check_defaulters'),
+#     ('0 20 * * *', 'core.cron.stop_booking'),
+# ]
+
+# CRONTAB_TIME_ZONE = 'Asia/Kolkata'

@@ -11,3 +11,7 @@ dj-database-url
 django-import-export
 django-crontab
 uuid
+tablib
+XlsxWriter
+django-admin-rangefilter
+pytz

@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  campus_nightpass:
+    image: tiet/campus_nightpass
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "4376:4376"
+    volumes:
+      - ./data:/app/data
+      - ./static:/app/static
+    restart: always
+    # command: "gunicorn -b 0.0.0.0:4376 core.wsgi:application"
