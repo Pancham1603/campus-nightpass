@@ -1,9 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
-from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-from django.template.loader import render_to_string
+from django.utils import timezone
 from .models import *
 from ..users.models import *
 import random
@@ -13,9 +12,8 @@ from datetime import date, time, datetime
 import random, string
 from .models import *
 from ..users.views import *
-from datetime import datetime
-import json
-from django.db.utils import IntegrityError
+from datetime import datetime, date, timedelta
+
 
 
 @login_required
@@ -105,34 +103,42 @@ def generate_pass(request, campus_resource):
 @login_required
 def cancel_pass(request):
     user = request.user
-    user_nightpass = NightPass.objects.filter(user=user, check_in=False).first()
-    user_nightpass = user_nightpass if user_nightpass else NightPass.objects.filter(user=user).first()
+    user_nightpass = NightPass.objects.filter(user=user, valid=True).first()
     if not user_nightpass:
         data={
             'status':False,
             'message':f"No pass to cancel!"
         }
         return HttpResponse(json.dumps(data))
-    if user_nightpass.check_out and user_nightpass.check_in:
-        data={
-            'status':False,
-            'message':f"Cannot cancel pass after utilization."
-        }
-        return HttpResponse(json.dumps(data))
-    elif user_nightpass.check_in:
-        data={
-            'status':False,
-            'message':f"Cannot cancel pass once you enter {user_nightpass.campus_resource}."
-        }
-        return HttpResponse(json.dumps(data))
     else:
-        user_nightpass.delete()
-        user_nightpass.campus_resource.slots_booked -= 1
-        user_nightpass.campus_resource.save()
-        user.student.has_booked = False
-        user.student.save()
-        data={
-            'status':True,
-            'message':f"Pass cancelled successfully!"
-        }
-        return HttpResponse(json.dumps(data))
+        last_time = timezone.make_aware(datetime.combine(date.today(), time(20,00)), timezone.get_current_timezone())
+        if timezone.now() > last_time:
+            data = {
+                'status':False,
+                'message':f"Cannot cancel pass after 8pm."
+            }
+            return HttpResponse(json.dumps(data))
+        else:
+            if user_nightpass.check_out and user_nightpass.check_in:
+                data={
+                    'status':False,
+                    'message':f"Cannot cancel pass after utilization."
+                }
+                return HttpResponse(json.dumps(data))
+            elif user_nightpass.check_in:
+                data={
+                    'status':False,
+                    'message':f"Cannot cancel pass once you enter {user_nightpass.campus_resource}."
+                }
+                return HttpResponse(json.dumps(data))
+            else:
+                user_nightpass.delete()
+                user_nightpass.campus_resource.slots_booked -= 1
+                user_nightpass.campus_resource.save()
+                user.student.has_booked = False
+                user.student.save()
+                data={
+                    'status':True,
+                    'message':f"Pass cancelled successfully!"
+                }
+                return HttpResponse(json.dumps(data))
