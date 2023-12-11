@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .models import *
 from ..users.models import *
-from ..global_settings.models import Settings
+from ..global_settings.models import Settings as settings
 import random
 import string
 import json
@@ -16,7 +16,7 @@ from ..users.views import *
 from datetime import datetime, date, timedelta
 
 
-Settings = Settings.objects.first()
+Settings = settings.objects.first()
 
 @login_required
 def campus_resources_home(request):

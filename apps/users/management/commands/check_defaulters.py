@@ -1,10 +1,10 @@
 from django.core.management.base import BaseCommand
 from ...models import NightPass
-from ....global_settings import Settings
+from ....global_settings import Settings as settings
 from datetime import date, timedelta, datetime, time
 from django.utils import timezone
 
-Settings = Settings.objects.first()
+Settings = settings.objects.first()
 
 def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1))
