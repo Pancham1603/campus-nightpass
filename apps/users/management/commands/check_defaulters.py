@@ -4,6 +4,7 @@ from ....global_settings import Settings
 from datetime import date, timedelta, datetime, time
 from django.utils import timezone
 
+Settings = Settings.objects.first()
 
 def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1))

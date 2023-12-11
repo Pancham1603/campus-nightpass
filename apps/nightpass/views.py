@@ -16,6 +16,7 @@ from ..users.views import *
 from datetime import datetime, date, timedelta
 
 
+Settings = Settings.objects.first()
 
 @login_required
 def campus_resources_home(request):
