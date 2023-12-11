@@ -45,17 +45,40 @@ def generate_pass(request, campus_resource):
     if (campus_resource.is_display == False) or not campus_resource.is_booking:
         data = {
                 'status':False,
-                'message':'Booking is currently not available for this resource'
+                'message':'Booking is currently not available for this resource.'
                 }
         return HttpResponse(json.dumps(data))
 
     if campus_resource.booking_complete:
         data = {
                 'status':False,
-                'message':'No slots available!'
+                'message':'All slots are booked for today!'
                 }
         return HttpResponse(json.dumps(data))
     
+
+    if Settings.enable_gender_ratio:
+        if user.student.gender == 'male':
+            male_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource,
+                                                        user__student__gender='male').count()
+            if male_pass_count > Settings.male_ratio*(campus_resource.max_capacity):
+                data = {
+                'status':False,
+                'message':'All slots are booked for today!'
+                }
+                return HttpResponse(json.dumps(data))
+
+        elif user.student.gender == 'female':
+            female_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__gender='female').count()
+            if female_pass_count > Settings.female_ratio*(campus_resource.max_capacity):
+                data = {
+                'status':False,
+                'message':'All slots are booked for today!'
+                }
+                return HttpResponse(json.dumps(data))
+    
+
     user_pass = NightPass.objects.filter(user=user, date=date.today()).first()
     if not user_pass:
         campus_resource.refresh_from_db()

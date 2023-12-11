@@ -9,6 +9,7 @@ class Settings(models.Model):
     last_entry_without_hostel_checkout = models.TimeField(blank=True, null=True)
     valid_entry_without_hostel_checkout = models.TimeField(blank=True, null=True)
 
+    enable_gender_ratio = models.BooleanField(default=False)
+    male_ratio = models.FloatField(blank=True, null=True, default=0.5)
+    female_ratio = models.FloatField(blank=True, null=True, default=0.5)
     
-    def __str__(self):
-        return self.name
