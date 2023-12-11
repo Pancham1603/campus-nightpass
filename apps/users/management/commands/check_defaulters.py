@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from ...models import NightPass
-from ....global_settings import Settings as settings
+from ....global_settings.models import Settings as settings
 from datetime import date, timedelta, datetime, time
 from django.utils import timezone
 
