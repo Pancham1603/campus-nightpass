@@ -151,18 +151,13 @@ def cancel_pass(request):
             }
             return HttpResponse(json.dumps(data))
         else:
-            if user_nightpass.check_out and user_nightpass.check_in:
+            if user_nightpass.check_out or user_nightpass.check_in or user_nightpass.hostel_checkout_time:
                 data={
                     'status':False,
                     'message':f"Cannot cancel pass after utilization."
                 }
                 return HttpResponse(json.dumps(data))
-            elif user_nightpass.check_in:
-                data={
-                    'status':False,
-                    'message':f"Cannot cancel pass once you enter {user_nightpass.campus_resource}."
-                }
-                return HttpResponse(json.dumps(data))
+            
             else:
                 user_nightpass.delete()
                 user_nightpass.campus_resource.slots_booked -= 1
