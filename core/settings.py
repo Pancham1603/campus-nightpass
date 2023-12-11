@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.nightpass',
     'apps.validation',
+    'apps.global_settings',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

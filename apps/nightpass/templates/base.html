@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thapar NightPass</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code128.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+    <div class="header">
+        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
+        <h1>Thapar NightPass</h1>
+        <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
+    </div>
+    {% block content %}
+    {% endblock %}
+
+<script>
+    toastr.options = {
+            "closeButton": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+</script>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+  toastr.info("{{ message }}")
+</script>
+{% endfor %}
+{% endif %}
+</body>
+</html>

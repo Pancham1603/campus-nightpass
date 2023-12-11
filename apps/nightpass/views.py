@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils import timezone
 from .models import *
 from ..users.models import *
+from ..global_settings.models import Settings
 import random
 import string
 import json
@@ -21,9 +22,15 @@ def campus_resources_home(request):
     campus_resources = CampusResource.objects.filter(is_display=True)
     user = request.user
     if user.user_type == 'student':
-        user_pass = NightPass.objects.filter(user=user, check_out=False).first()
+        user_pass = NightPass.objects.filter(user=user, valid=True).first()
         user_incidents = NightPass.objects.filter(user=user, defaulter=True)
-        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents})	
+        
+        if Settings.enable_hostel_timers:
+            checkin_timer = user.student.hostel.frontend_checkin_timer
+        else:
+            checkin_timer = Settings.frontend_checkin_timer
+
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer})	
     elif user.user_type == 'security':
         return redirect('/access')
     elif user.user_type == 'admin':
@@ -142,3 +149,12 @@ def cancel_pass(request):
                     'message':f"Pass cancelled successfully!"
                 }
                 return HttpResponse(json.dumps(data))
+
+
+def hostel_home(request):
+    user = request.user
+    if request.user.is_staff and user.user_type == 'security':
+        hostel_passes = NightPass.objects.filter(valid=True, user__student__hostel=request.user.security.hostel) | NightPass.objects.filter(date=date.today(), user__student__hostel=request.user.security.hostel).order_by('check_out')
+        return render(request, 'caretaker.html', {'hostel_passes':hostel_passes})
+    else:
+        return redirect('/access')
