@@ -17,17 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-# from apps.users import views as user_views
+from apps.users import views as user_views
 from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
-#    path('', include("apps.nightpass.urls")),
-#    path('admin/', admin.site.urls),
-#    path('admin/login', user_views.login_user),
-#    path('login/', user_views.login_user),
-#    path('logout/', user_views.logout_user),
-#    path('users/', include("django.contrib.auth.urls")),
-#    path('accounts/google/login/callback/', user_views.oauth_callback),
-#    path('access/', include("apps.validation.urls")),
-#    path('hijack/', include('hijack.urls')),
+   path('', include("apps.nightpass.urls")),
+   path('admin/', admin.site.urls),
+   path('admin/login', user_views.login_user),
+   path('login/', user_views.login_user),
+   path('logout/', user_views.logout_user),
+   path('users/', include("django.contrib.auth.urls")),
+   path('accounts/google/login/callback/', user_views.oauth_callback),
+   path('access/', include("apps.validation.urls")),
+   path('hijack/', include('hijack.urls')),
    ]
