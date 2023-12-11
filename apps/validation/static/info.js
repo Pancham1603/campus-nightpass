@@ -272,4 +272,4 @@ function checkInput() {
 
 setInterval(function () {
     checkInput()
-}, 1000);
+}, 300);
