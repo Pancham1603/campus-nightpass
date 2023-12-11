@@ -16,10 +16,11 @@ from ..users.views import *
 from datetime import datetime, date, timedelta
 
 
-Settings = settings.objects.first()
+
 
 @login_required
 def campus_resources_home(request):
+    Settings = settings.objects.first()
     campus_resources = CampusResource.objects.filter(is_display=True)
     user = request.user
     if user.user_type == 'student':
@@ -57,12 +58,12 @@ def generate_pass(request, campus_resource):
                 }
         return HttpResponse(json.dumps(data))
     
-
+    Settings = settings.objects.first()
     if Settings.enable_gender_ratio:
         if user.student.gender == 'male':
             male_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource,
                                                         user__student__gender='male').count()
-            if male_pass_count > Settings.male_ratio*(campus_resource.max_capacity):
+            if (male_pass_count > Settings.male_ratio*(campus_resource.max_capacity)) or Settings.male_ratio==float(0):
                 data = {
                 'status':False,
                 'message':'All slots are booked for today!'
@@ -72,7 +73,7 @@ def generate_pass(request, campus_resource):
         elif user.student.gender == 'female':
             female_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
                                                          user__student__gender='female').count()
-            if female_pass_count > Settings.female_ratio*(campus_resource.max_capacity):
+            if (female_pass_count > Settings.female_ratio*(campus_resource.max_capacity)) or Settings.female_ratio==float(0) :
                 data = {
                 'status':False,
                 'message':'All slots are booked for today!'
