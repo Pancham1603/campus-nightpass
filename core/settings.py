@@ -56,7 +56,6 @@ INSTALLED_APPS = [
     'django_crontab',
     'hijack',
     'hijack.contrib.admin',
-    'rangefilter',
 ]
 
 
