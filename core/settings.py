@@ -51,12 +51,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'explorer',
     'import_export',
     'django_crontab',
     'hijack',
     'hijack.contrib.admin',
     'rangefilter',
-    'explorer'
 ]
 
 
