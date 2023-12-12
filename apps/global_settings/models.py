@@ -13,3 +13,5 @@ class Settings(models.Model):
     male_ratio = models.FloatField(blank=True, null=True, default=0.5)
     female_ratio = models.FloatField(blank=True, null=True, default=0.5)
     
+    class Meta:
+        verbose_name_plural = 'Settings'
