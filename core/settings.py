@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'django_crontab',
     'hijack',
     'hijack.contrib.admin',
-    'rangefilter'
+    'rangefilter',
+    'explorer'
 ]
 
 
@@ -195,3 +196,17 @@ ACCOUNT_USERNAME_REQUIRED = False
 # ]
 
 # CRONTAB_TIME_ZONE = 'Asia/Kolkata'
+
+EXPLORER_CONNECTIONS = { 'Default': 'default' }
+EXPLORER_DEFAULT_CONNECTION = 'default'
+
+EXPLORER_SCHEMA_EXCLUDE_TABLE_PREFIXES = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.admin'
+)
+
+EXPLORER_PERMISSION_CHANGE = lambda r: r.user.is_superuser
+EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
+

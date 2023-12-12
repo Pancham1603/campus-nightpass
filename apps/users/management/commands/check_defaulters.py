@@ -30,11 +30,11 @@ def check_defaulters():
 
             if nightpass.hostel_checkout_time:
                 if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=checkin_timer):
-                    if (nightpass.check_in_time > start_default_time):
+                    if (nightpass.check_in_time.time() > start_default_time):
                         defaulter = True
                         remarks+= f"Late check in at {nightpass.campus_resource.name}"
             else:
-                if (nightpass.check_in_time > end_default_time):
+                if (nightpass.check_in_time > end_default_time.time()):
                     defaulter = True
                     remarks+= f"Late check in at {nightpass.campus_resource.name}"
             if not nightpass.check_out_time:

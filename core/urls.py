@@ -30,4 +30,6 @@ urlpatterns = [
    path('accounts/google/login/callback/', user_views.oauth_callback),
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
+   path('explorer/', include('explorer.urls')),
    ]
+
