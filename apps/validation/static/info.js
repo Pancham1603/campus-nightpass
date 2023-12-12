@@ -70,6 +70,7 @@ function resetPass() {
 
     }
 
+var timeouts = [];
 function updateProfile(data) {
     // document.querySelector('.profile-card').innerHTML=`
     // <img class="image" id="user_picture" src="" alt="Student Picture">
@@ -121,12 +122,10 @@ function updateProfile(data) {
     // hostelCheckoutElement.textContent = `Hostel Check-out Time: ${checkoutTime}`;
     // lastCheckoutElement.textContent = `Last Check-out Time: ${lastCheckoutTime}`;
     // hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
-    const highestId = window.setTimeout(() => {
-        for (let i = highestId; i >= 0; i--) {
-          window.clearInterval(i);
-        }
-      }, 0);
-    setTimeout(function(){resetProfile();}, 7000);
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+    timeouts.push(setTimeout(function(){resetProfile();}, 7000));
 }
 
 // Function to update the user pass section with data
@@ -232,7 +231,10 @@ function checkIn(registration_number) {
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 5000);
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+            timeouts.push(setTimeout(function(){ resetProfile(); }, 5000));
 
         }
         else {
@@ -259,7 +261,10 @@ function checkOut(registration_number) {
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 7000);
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+            timeouts.push(setTimeout(function(){ resetProfile(); }, 7000));
         }
         else {
             toastr.error(response.message);
