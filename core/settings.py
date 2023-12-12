@@ -56,7 +56,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'hijack',
     'hijack.contrib.admin',
-    "daterange.apps.DateRangeFilterConfig",
+    "daterangefilter",
 ]
 
 

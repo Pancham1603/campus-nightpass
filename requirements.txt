@@ -12,7 +12,7 @@ django-import-export
 django-crontab
 uuid
 tablib
-django-daterange-filterspec
+django-daterangefilter
 XlsxWriter
 pytz
 django-sql-explorer[xls]
