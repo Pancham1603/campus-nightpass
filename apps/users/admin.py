@@ -3,7 +3,7 @@ from django.apps import apps
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.html import format_html
-from daterangefilter.filters import PastDateRangeFilter
+from rangefilter.filters import DateRangeFilter
 from tablib import Dataset
 from .models import *
 from import_export.admin import ImportExportModelAdmin
@@ -18,7 +18,7 @@ class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'name','user','hostel','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
     search_fields = ('user__student__name','user__student__registration_number','user__student__email')
     actions = ['export_as_xlsx']
-    list_filter = (('date', PastDateRangeFilter),'campus_resource','user__student__gender','user__student__hostel', 'defaulter', 'check_in', 'check_out')
+    list_filter = (('date', DateRangeFilter),'campus_resource','user__student__gender','user__student__hostel', 'defaulter', 'check_in', 'check_out')
     autocomplete_fields = ('user', 'campus_resource') 
     readonly_fields = ('pass_id', 'check_in_time', 'check_out_time', 'hostel_checkout_time', 'hostel_checkin_time')
 
