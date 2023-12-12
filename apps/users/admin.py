@@ -3,7 +3,7 @@ from django.apps import apps
 from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.html import format_html
-from django.contrib.admin.filters import DateRangeFilter 
+from daterange.filters import DateRangeFilter 
 from tablib import Dataset
 from .models import *
 from import_export.admin import ImportExportModelAdmin
