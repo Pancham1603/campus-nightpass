@@ -13,6 +13,7 @@ django-crontab
 uuid
 tablib
 XlsxWriter
+pandas
 django-admin-rangefilter
 pytz
 django-sql-explorer[xls]
