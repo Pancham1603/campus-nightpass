@@ -16,3 +16,4 @@ django-admin-rangefilter
 XlsxWriter
 pytz
 django-sql-explorer[xls]
+django-pwa
