@@ -31,6 +31,6 @@ urlpatterns = [
    path('access/', include("apps.validation.urls")),
    path('hijack/', include('hijack.urls')),
    path('explorer/', include('explorer.urls')),
-   path("", include('pwa.urls'))
+#    path("", include('pwa.urls'))
    ]
 
