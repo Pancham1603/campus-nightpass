@@ -80,6 +80,12 @@ def generate_pass(request, campus_resource):
                 }
                 return HttpResponse(json.dumps(data))
     
+    if user.student.violation_flags > Settings.max_violation_count:
+        data = {
+                'status':False,
+                'message':'Nightpass facility has been temporarily suspended! Contact DOSA office for further details.'
+                }
+        return HttpResponse(json.dumps(data))
 
     user_pass = NightPass.objects.filter(user=user, date=date.today()).first()
     if not user_pass:

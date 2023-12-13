@@ -12,6 +12,8 @@ class Settings(models.Model):
     enable_gender_ratio = models.BooleanField(default=False)
     male_ratio = models.FloatField(blank=True, null=True, default=0.5)
     female_ratio = models.FloatField(blank=True, null=True, default=0.5)
+
+    max_violation_count = models.IntegerField(blank=True, null=True, default=3)
     
     class Meta:
         verbose_name_plural = 'Settings'
