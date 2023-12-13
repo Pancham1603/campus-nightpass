@@ -80,7 +80,7 @@ def generate_pass(request, campus_resource):
                 }
                 return HttpResponse(json.dumps(data))
     
-    if user.student.violation_flags > Settings.max_violation_count:
+    if user.student.violation_flags >= Settings.max_violation_count:
         data = {
                 'status':False,
                 'message':'Nightpass facility has been temporarily suspended! Contact DOSA office for further details.'
