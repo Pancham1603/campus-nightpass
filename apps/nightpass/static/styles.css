@@ -235,6 +235,15 @@ select {
     color: #fff;
 }
 
+footer {
+    background-color: #696b6d;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
 
 
 @media (max-width: 768px) {
@@ -256,3 +265,5 @@ select {
         padding: 5px;
     }
 }
+
+
