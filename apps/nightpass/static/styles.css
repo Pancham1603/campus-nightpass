@@ -246,6 +246,23 @@ footer {
 }
 
 
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.student-table th, .student-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.student-table th {
+    background-color: #f2f2f2;
+}
+
+
 @media (max-width: 768px) {
     .profile-card, .resource-card {
         width: 90%;
@@ -263,6 +280,24 @@ footer {
 
     .activity-table th, .activity-table td {
         padding: 5px;
+    }
+
+    .student-table th, .student-table td {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .student-table th, .student-table td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        float: left;
+        text-transform: uppercase;
+    }
+
+    .student-table th, .student-table td {
+        border: none;
+        border-bottom: 1px solid #ddd;
     }
 }
 
