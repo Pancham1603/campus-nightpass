@@ -262,6 +262,15 @@ footer {
     background-color: #f2f2f2;
 }
 
+.student-container {
+    max-width: 800px; /* Adjust the maximum width as needed */
+    margin: 10px auto; /* Center the container horizontally */
+    padding: 20px; /* Add some padding for spacing */
+    overflow-x: auto; /* Add horizontal scrolling for small screens */
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+}
 
 @media (max-width: 768px) {
     .profile-card, .resource-card {
@@ -272,7 +281,7 @@ footer {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-}
+    }
 
     .activity-table {
         font-size: 14px;
@@ -284,7 +293,6 @@ footer {
 
     .student-table th, .student-table td {
         display: block;
-        width: 100%;
         box-sizing: border-box;
     }
 
@@ -299,6 +307,11 @@ footer {
         border: none;
         border-bottom: 1px solid #ddd;
     }
+    .student-container {
+        padding: 10px; /* Reduce padding for smaller screens */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
 }
-
-

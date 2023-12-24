@@ -2,33 +2,29 @@
 
 {% block content %}
 
-    <h2>Student Information</h2>
-    <div class="container" style="width: 100%;">
-        <div class="profile-card" style="width: 80%;">
+<div class="student-container">
     <table class="student-table">
         <thead>
             <tr>
-                <th data-label="S.No" class="student-sno">S.No</th>
+                <th data-label="Roll Number" class="student-sno">S.No</th>
                 <th data-label="Name" class="student-name">Name</th>
-                <th data-label="Room No" class="student-room">Room No</th>
+                <th data-label="Room Number" class="student-room">Room No</th>
                 <th data-label="Mobile No" class="student-mobile">Mobile No</th>
                 <th data-label="Status" class="student-status">Status</th>
             </tr>
         </thead>
         <tbody>
             {% for pass in hostel_passes %}
-            <!-- Sample data, replace with actual student data from your Django model or database -->
             <tr>
-                <td data-label="S.No" class="student-sno">{{ pass.user.student.registration_number }}</td>
+                <td data-label="Roll Number" class="student-sno">{{ pass.user.student.registration_number }}</td>
                 <td data-label="Name" class="student-name">{{ pass.user.student.name }}</td>
-                <td data-label="Room No" class="student-room">{{ pass.user.student.room_number }}</td>
-                <td data-label="Mobile No" class="student-mobile">{{ pass.user.student.contact_number }}</td>
+                <td data-label="Room Number" class="student-room">{{ pass.user.student.room_number }}</td>
+                <td data-label="Mobile Number" class="student-mobile">{{ pass.user.student.contact_number }}</td>
                 <td data-label="Status" class="student-status">Active</td>
             </tr>
             {% endfor %}
-            <!-- Add more rows as needed -->
         </tbody>
     </table>
-    </div></div>
+</div>
 
 {% endblock %}
