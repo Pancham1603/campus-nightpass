@@ -30,7 +30,7 @@ SECRET_KEY = 'lmao'
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.users',
     'apps.nightpass',
     'apps.validation',
+    'apps.global_settings',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,11 +51,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'corsheaders',
+    'explorer',
     'import_export',
     'django_crontab',
     'hijack',
     'hijack.contrib.admin',
-    'rangefilter'
+    "rangefilter",
+    # 'pwa'
 ]
 
 
@@ -194,3 +197,49 @@ ACCOUNT_USERNAME_REQUIRED = False
 # ]
 
 # CRONTAB_TIME_ZONE = 'Asia/Kolkata'
+
+EXPLORER_CONNECTIONS = { 'Default': 'default' }
+EXPLORER_DEFAULT_CONNECTION = 'default'
+
+EXPLORER_SCHEMA_EXCLUDE_TABLE_PREFIXES = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.admin'
+)
+
+EXPLORER_PERMISSION_CHANGE = lambda r: r.user.is_superuser
+EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
+
+
+# PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'static', 'serviceworker.js')
+
+# PWA_APP_NAME = 'Thapar NightPass'
+# PWA_APP_DESCRIPTION = "Thapar NightPass"
+# PWA_APP_THEME_COLOR = '#eb1b23'
+# PWA_APP_BACKGROUND_COLOR = '#ffffff'
+# PWA_APP_DISPLAY = 'standalone'
+# PWA_APP_SCOPE = '/'
+# PWA_APP_ORIENTATION = 'any'
+# PWA_APP_START_URL = '/'
+# PWA_APP_STATUS_BAR_COLOR = '#eb1b23'
+# PWA_APP_ICONS = [
+# 	{
+# 		'src': 'static/thapar_logo.png',
+# 		'sizes': '160x160'
+# 	}
+# ]
+# PWA_APP_ICONS_APPLE = [
+# 	{
+# 		'src': 'static/thapar_logo.png',
+# 		'sizes': '160x160'
+# 	}
+# ]
+# PWA_APP_SPLASH_SCREEN = [
+# 	{
+# 		'src': 'static/thapar_logo.png',
+# 		'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+# 	}
+# ]
+# PWA_APP_DIR = 'ltr'
+# PWA_APP_LANG = 'en-US'

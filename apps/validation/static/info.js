@@ -70,45 +70,62 @@ function resetPass() {
 
     }
 
+var timeouts = [];
 function updateProfile(data) {
+    // document.querySelector('.profile-card').innerHTML=`
+    // <img class="image" id="user_picture" src="" alt="Student Picture">
+    // <div class="profile-details">
+    //     <h2></h2>
+    //     <p><strong>Registration Number:</strong> </p>
+    //     <p><strong>Hostel:</strong></p>
+    //     <p><strong>Room Number:</strong> </p>
+    //     <p><strong>In Hostel:</strong> </p>
+    //     <p><strong>Hostel Check-in Time:</strong> </p>
+    //     <p><strong>Hostel Check-out Time:</strong> </p>
+    //     <p><strong>Last Check-out Time:</strong> </p>
+    //     <p><strong>Has Booked:</strong> </p>
+    // </div>`;
+
     document.querySelector('.profile-card').innerHTML=`
-    <img class="image" id="user_picture" src="" alt="Student Picture">
-    <div class="profile-details">
-        <h2></h2>
-        <p><strong>Registration Number:</strong> </p>
-        <p><strong>Hostel:</strong></p>
-        <p><strong>Room Number:</strong> </p>
-        <p><strong>In Hostel:</strong> </p>
-        <p><strong>Hostel Check-in Time:</strong> </p>
-        <p><strong>Hostel Check-out Time:</strong> </p>
-        <p><strong>Last Check-out Time:</strong> </p>
-        <p><strong>Has Booked:</strong> </p>
-    </div>`;
-    const profileDetails = document.querySelector('.profile-details');
+    <h2></h2>
+    <p><strong>Roll Number:</strong> </p>
+    <img class="tempimg" id="user_picture" src="" alt="Student Picture"></div>
+`;
+
+
+    const profileDetails = document.querySelector('.profile-card');
     const nameElement = profileDetails.querySelector('h2');
-    const regNumberElement = profileDetails.querySelector('p:nth-child(2)');
-    const hostelElement = profileDetails.querySelector('p:nth-child(3)');
-    const roomNumberElement = profileDetails.querySelector('p:nth-child(4)');
-    const inHostelElement = profileDetails.querySelector('p:nth-child(5)');
-    const hostelCheckinElement = profileDetails.querySelector('p:nth-child(6)');
-    const hostelCheckoutElement = profileDetails.querySelector('p:nth-child(7)');
-    const lastCheckoutElement = profileDetails.querySelector('p:nth-child(8)');
-    const hasBookedElement = profileDetails.querySelector('p:nth-child(9)');
-    const options = { hour: '2-digit', minute: '2-digit', hour12: true, month: 'long', day: '2-digit' };
-    const checkinTime = new Date(data.hostel_checkin_time).toLocaleString('en-US', options);
-    const checkoutTime = new Date(data.hostel_checkout_time).toLocaleString('en-US', options);
-    const lastCheckoutTime = new Date(data.last_checkout_time).toLocaleString('en-US', options);
+    const regNumberElement = profileDetails.querySelector('p');
+
+
+    // const profileDetails = document.querySelector('.profile-details');
+    // const nameElement = profileDetails.querySelector('h2');
+    // const regNumberElement = profileDetails.querySelector('p:nth-child(2)');
+    // const hostelElement = profileDetails.querySelector('p:nth-child(3)');
+    // const roomNumberElement = profileDetails.querySelector('p:nth-child(4)');
+    // const inHostelElement = profileDetails.querySelector('p:nth-child(5)');
+    // const hostelCheckinElement = profileDetails.querySelector('p:nth-child(6)');
+    // const hostelCheckoutElement = profileDetails.querySelector('p:nth-child(7)');
+    // const lastCheckoutElement = profileDetails.querySelector('p:nth-child(8)');
+    // const hasBookedElement = profileDetails.querySelector('p:nth-child(9)');
+    // const options = { hour: '2-digit', minute: '2-digit', hour12: true, month: 'long', day: '2-digit' };
+    // const checkinTime = new Date(data.hostel_checkin_time).toLocaleString('en-US', options);
+    // const checkoutTime = new Date(data.hostel_checkout_time).toLocaleString('en-US', options);
+    // const lastCheckoutTime = new Date(data.last_checkout_time).toLocaleString('en-US', options);
     document.getElementById('user_picture').src = data.picture;
     nameElement.textContent = data.name;
     regNumberElement.textContent = `Registration Number: ${data.registration_number}`;
-    hostelElement.textContent = `Hostel: ${data.hostel}`;
-    roomNumberElement.textContent = `Room Number: ${data.room_number}`;
-    inHostelElement.textContent = `In Hostel: ${data.is_checked_in ? 'Yes' : 'No'}`;
-    hostelCheckinElement.textContent = `Hostel Check-in Time: ${checkinTime}`;
-    hostelCheckoutElement.textContent = `Hostel Check-out Time: ${checkoutTime}`;
-    lastCheckoutElement.textContent = `Last Check-out Time: ${lastCheckoutTime}`;
-    hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
-    setTimeout(function(){resetProfile();}, 10000);
+    // hostelElement.textContent = `Hostel: ${data.hostel}`;
+    // roomNumberElement.textContent = `Room Number: ${data.room_number}`;
+    // inHostelElement.textContent = `In Hostel: ${data.is_checked_in ? 'Yes' : 'No'}`;
+    // hostelCheckinElement.textContent = `Hostel Check-in Time: ${checkinTime}`;
+    // hostelCheckoutElement.textContent = `Hostel Check-out Time: ${checkoutTime}`;
+    // lastCheckoutElement.textContent = `Last Check-out Time: ${lastCheckoutTime}`;
+    // hasBookedElement.textContent = `Has Booked: ${data.has_booked ? 'Yes' : 'No'}`;
+    for (var i = 0; i < timeouts.length; i++) {
+        clearTimeout(timeouts[i]);
+    }
+    timeouts.push(setTimeout(function(){resetProfile();}, 7000));
 }
 
 // Function to update the user pass section with data
@@ -214,7 +231,10 @@ function checkIn(registration_number) {
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 5000);
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+            timeouts.push(setTimeout(function(){ resetProfile(); }, 5000));
 
         }
         else {
@@ -241,7 +261,10 @@ function checkOut(registration_number) {
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
             toastr.success(response.message);
-            setTimeout(function(){ resetProfile(); }, 7000);
+            for (var i = 0; i < timeouts.length; i++) {
+                clearTimeout(timeouts[i]);
+            }
+            timeouts.push(setTimeout(function(){ resetProfile(); }, 7000));
         }
         else {
             toastr.error(response.message);
@@ -272,4 +295,4 @@ function checkInput() {
 
 setInterval(function () {
     checkInput()
-}, 1000);
+}, 300);

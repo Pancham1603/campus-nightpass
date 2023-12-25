@@ -123,6 +123,9 @@ class Security(models.Model):
     def __str__(self):
         return self.name
     
+    class Meta:
+        verbose_name_plural = 'Security'
+    
 
 class NightPass(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
@@ -143,3 +146,6 @@ class NightPass(models.Model):
 
     def __str__(self):
         return self.pass_id
+    
+    class Meta:
+        verbose_name_plural = 'Night Passes'

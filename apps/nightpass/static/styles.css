@@ -235,7 +235,61 @@ select {
     color: #fff;
 }
 
+footer {
+    background-color: #696b6d;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
 
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.custom-table th {
+    background-color: #eb1b23;
+    color: #fff;
+    font-weight: bold;
+}
+
+.red {
+    background-color: #d92550;
+}
+
+.green {
+    background-color: #3ac47d;
+}
+
+.yellow {
+    background-color: #f7b924;
+}
+
+.badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.table-container {
+    max-width: 800px; /* Adjust the maximum width as needed */
+    margin: 10px auto; /* Center the container horizontally */
+    padding: 20px; /* Add some padding for spacing */
+    overflow-x: auto; /* Add horizontal scrolling for small screens */
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+}
 
 @media (max-width: 768px) {
     .profile-card, .resource-card {
@@ -246,7 +300,7 @@ select {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-}
+    }
 
     .activity-table {
         font-size: 14px;

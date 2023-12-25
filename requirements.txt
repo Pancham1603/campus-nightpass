@@ -12,6 +12,8 @@ django-import-export
 django-crontab
 uuid
 tablib
-XlsxWriter
 django-admin-rangefilter
+XlsxWriter
 pytz
+django-sql-explorer[xls]
+django-pwa

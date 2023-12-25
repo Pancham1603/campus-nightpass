@@ -10,6 +10,9 @@ class Hostel(models.Model):
     contact_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
+    frontend_checkin_timer = models.IntegerField(blank=True, null=True, default=0)
+    backend_checkin_timer = models.IntegerField(blank=True, null=True, default=0)
+
     def __str__(self):
         return self.name
 

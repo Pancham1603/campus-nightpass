@@ -108,7 +108,7 @@ def login_user(request):
         if request.method == 'POST':
             return gauth(request)
         else:
-            return render(request=request, template_name='login.html')
+            return render(request=request, template_name='index.html')
     else:
         return redirect('/')
 

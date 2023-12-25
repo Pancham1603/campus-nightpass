@@ -97,7 +97,7 @@
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
                 if (code.length == 9) {fetch_data({'registration_number':code})}
-                lastScannedBarcode.concat(code);
+                lastScannedBarcode.push(code);
             }
 
         });
@@ -109,7 +109,7 @@
 
         setInterval(function () {
             lastScannedBarcode.pop();
-        }, 10000);
+        }, 5000);
     </script>
         <script src="../static/info.js"></script>
 </body>

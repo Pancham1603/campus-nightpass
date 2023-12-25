@@ -1,21 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thapar NightPass</title>
-    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code128.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <link rel="stylesheet" href="../static/styles.css">
-</head>
-<body>
-    <div class="header">
-        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
-        <h1>Thapar NightPass</h1>
-        <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
-    </div>
+{% extends 'base.html' %}
+{% block content %}
 
     <div class="container">
         <div class="profile-card">
@@ -48,7 +32,7 @@
         <script>
             JsBarcode("#barcode", "{{ user }}");
             let deadline = new Date("{{ user.last_checkout_time|date:'M d, Y H:i:s' }}" ).getTime();
-            deadline += 25*60000
+            deadline += parseInt("{{ frontend_checkin_timer }}")*60000
             let x = setInterval(function () {
                 let now = new Date().getTime();
                 let t = deadline - now;
@@ -232,16 +216,6 @@
             }
             }
         }
-
-
-    </script>
-
-{% if messages %}
-{% for message in messages %}
-<script>
-  toastr.info("{{ message }}")
 </script>
-{% endfor %}
-{% endif %}
-</body>
-</html>
+
+    {% endblock %}
