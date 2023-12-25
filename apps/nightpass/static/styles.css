@@ -245,31 +245,39 @@ footer {
     width: 100%;
 }
 
-
-.student-table {
+.custom-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
-.student-table th, .student-table td {
+.custom-table th,
+.custom-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
 }
 
-.student-table th {
-    background-color: #f2f2f2;
+.custom-table th {
+    background-color: #eb1b23;
+    color: #fff;
+    font-weight: bold;
 }
 
-.student-container {
-    max-width: 800px; /* Adjust the maximum width as needed */
-    margin: 10px auto; /* Center the container horizontally */
-    padding: 20px; /* Add some padding for spacing */
-    overflow-x: auto; /* Add horizontal scrolling for small screens */
-    background-color: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+.red {
+    background-color: #d92550;
+}
 
+.green {
+    background-color: #3ac47d;
+}
+
+.yellow {
+    background-color: #f7b924;
+}
+
+.badge {
+    color: white;
+    padding: 5px 10px;
 }
 
 @media (max-width: 768px) {
@@ -289,29 +297,5 @@ footer {
 
     .activity-table th, .activity-table td {
         padding: 5px;
-    }
-
-    .student-table th, .student-table td {
-        display: block;
-        box-sizing: border-box;
-    }
-
-    .student-table th, .student-table td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        float: left;
-        text-transform: uppercase;
-    }
-
-    .student-table th, .student-table td {
-        border: none;
-        border-bottom: 1px solid #ddd;
-    }
-    .student-container {
-        padding: 10px; /* Reduce padding for smaller screens */
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
     }
 }
