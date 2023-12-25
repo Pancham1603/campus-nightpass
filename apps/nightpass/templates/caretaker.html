@@ -1,45 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="table-responsive">
-    <table class="custom-table">
-        <thead>
-            <tr>
-                <th>Roll Number</th>
-                <th>Name</th>
-                <th>Room Number</th>
-                <th>Mobile Number</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for pass in hostel_passes %}
-            <tr>
-                <td>{{ pass.user.student.registration_number }}</td>
-                <td>{{ pass.user.student.name }}</td>
-                <td>{{ pass.user.student.room_number }}</td>
-                <td>{{ pass.user.student.contact_number }}</td>
-
-                {% if pass.user.student.is_checked_in  %}
-                    <td><span class="badge green">Inside Hostel {{ pass.user.student.hostel }}</span></td>
-                {% else %}
-                    {% if pass %}
-                        {% if pass.check_in and not pass.check_out %}
-                            <td><span class="badge yellow">In {{ pass.campus_resource }}</span></td>
-                        {% else %}
-                            <td><span class="badge red">Outside Hostel</span></td>
-                        {% endif %}
+<div class="table-container">
+    <div class="table-responsive">
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Room No</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pass in hostel_passes %}
+                <tr>
+                    <td>{{ pass.user.student.name }}</td>
+                    <td>{{ pass.user.student.room_number }}</td>
+                    {% if pass.user.student.is_checked_in  %}
+                        <td><span class="badge green">Checked In</span></td>
                     {% else %}
-                        <td><span class="badge red">Outside Hostel</span></td>
+                        {% if pass %}
+                            {% if pass.check_in and not pass.check_out %}
+                                <td><span class="badge yellow">{{ pass.campus_resource }}</span></td>
+                            {% else %}
+                                <td><span class="badge red">Outside</span></td>
+                            {% endif %}
+                        {% else %}
+                            <td><span class="badge red">Outside</span></td>
+                        {% endif %}
                     {% endif %}
-                {% endif %}
-                <td><button>Details</button></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    <td><a href="tel:{{ pass.user.student.contact_number }}"><button>Call</button></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
+    </div>
 </div>
-
 {% endblock %}

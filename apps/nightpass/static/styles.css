@@ -278,6 +278,17 @@ footer {
 .badge {
     color: white;
     padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.table-container {
+    max-width: 800px; /* Adjust the maximum width as needed */
+    margin: 10px auto; /* Center the container horizontally */
+    padding: 20px; /* Add some padding for spacing */
+    overflow-x: auto; /* Add horizontal scrolling for small screens */
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
 }
 
 @media (max-width: 768px) {
