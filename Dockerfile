@@ -26,6 +26,11 @@ RUN chmod 0644 /etc/cron.d/cronjob
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
 
+RUN crontab /etc/cron.d/cronjob
+
+# Run cron in the foreground
+CMD ["cron", "-f"]
+
 # Creates a non-root user with an explicit UID and adds permission to access the /app folder
 # For more info, please refer to https://aka.ms/vscode-docker-python-configure-containers
 # RUN adduser -u 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
