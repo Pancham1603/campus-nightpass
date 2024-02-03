@@ -16,14 +16,14 @@ from ..users.views import *
 from datetime import datetime, date, timedelta
 
 sem_vs_year = {
-    1: 1,
-    2: 1,
-    3: 2,
-    4: 2,
-    5: 3,
-    6: 3,
-    7: 4,
-    8: 4,
+    "1": 1,
+    "2": 1,
+    "3": 2,
+    "4": 2,
+    "5": 3,
+    "6": 3,
+    "7": 4,
+    "8": 4,
 }
 
 @login_required
