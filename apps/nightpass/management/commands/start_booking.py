@@ -6,5 +6,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Running your cron job...'))
-        CampusResource.objects.all().update(is_booking=True)
+        CampusResource.objects.all().update(is_booking=True, booking_complete=False)
         self.stdout.write(self.style.SUCCESS('Cron job completed successfully'))

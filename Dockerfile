@@ -25,7 +25,7 @@ RUN chmod 0644 /etc/cron.d/cronjob
 
 # Create the log file to be able to run tail
 RUN touch /var/log/cron.log
-
+ 
 RUN crontab /etc/cron.d/cronjob
 
 # Run cron in the foreground

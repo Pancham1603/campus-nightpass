@@ -15,8 +15,16 @@ from .models import *
 from ..users.views import *
 from datetime import datetime, date, timedelta
 
-
-
+sem_vs_year = {
+    1: 1,
+    2: 1,
+    3: 2,
+    4: 2,
+    5: 3,
+    6: 3,
+    7: 4,
+    8: 4,
+}
 
 @login_required
 def campus_resources_home(request):
@@ -80,6 +88,43 @@ def generate_pass(request, campus_resource):
                 }
                 return HttpResponse(json.dumps(data))
     
+    if Settings.enable_yearwise_limits:
+        data = {
+                'status':False,
+                'message':'All slots are booked for today!'
+                }
+        student_year = sem_vs_year[user.student.semester]
+        if student_year == 1:
+            student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__semester__in=[1,2]).count()
+            if student_year_pass_count > Settings.first_year:
+                return HttpResponse(json.dumps(data))
+        elif student_year == 2:
+            student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__semester__in=[3,4]).count()
+            if student_year_pass_count > Settings.second_year:
+                return HttpResponse(json.dumps(data))
+        elif student_year == 3:
+            student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__semester__in=[5,6]).count()
+            if student_year_pass_count > Settings.third_year:
+                return HttpResponse(json.dumps(data))
+        elif student_year == 4:
+            student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__semester__in=[7,8]).count()
+            if student_year_pass_count > Settings.fourth_year:
+                return HttpResponse(json.dumps(data))
+            
+    if Settings.enable_hostel_limits:
+        student_hostel_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
+                                                         user__student__hostel=user.student.hostel).count()
+        if student_hostel_pass_count > user.student.hostel.max_students_allowed:
+            data = {
+                'status':False,
+                'message':'All slots are booked for today!'
+                }
+            return HttpResponse(json.dumps(data))
+
     if int(user.student.violation_flags) >= int(Settings.max_violation_count):
         data = {
                 'status':False,
