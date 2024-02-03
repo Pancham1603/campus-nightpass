@@ -12,13 +12,33 @@ from xlsxwriter import Workbook
 from datetime import date, datetime
 import io
 
+class YearWiseFilter(admin.SimpleListFilter):
+    title = 'Year'
+    parameter_name = 'year'
 
+    def lookups(self, request, model_admin):
+        return (
+            ('1', '1st Year'),
+            ('2', '2nd Year'),
+            ('3', '3rd Year'),
+            ('4', '4th Year'),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.filter(user__student__semester__in=['1','2'])
+        if self.value() == '2':
+            return queryset.filter(user__student__semester__in=['3','4'])
+        if self.value() == '3':
+            return queryset.filter(user__student__semester__in=['5','6'])
+        if self.value() == '4':
+            return queryset.filter(user__student__semester__in=['7','8'])
 
 class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'name','user','hostel','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')
     search_fields = ('user__student__name','user__student__registration_number','user__student__email')
     actions = ['export_as_xlsx']
-    list_filter = (('date', DateRangeFilter),'campus_resource','user__student__gender','user__student__hostel', 'defaulter', 'check_in', 'check_out')
+    list_filter = (('date', DateRangeFilter),'campus_resource','user__student__gender','user__student__hostel', YearWiseFilter,'defaulter', 'check_in', 'check_out')
     autocomplete_fields = ('user', 'campus_resource') 
     readonly_fields = ('pass_id', 'check_in_time', 'check_out_time', 'hostel_checkout_time', 'hostel_checkin_time')
 
