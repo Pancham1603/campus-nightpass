@@ -1,0 +1,6 @@
+
+1 0 * * * /usr/local/bin/python /app/manage.py reset_users >> /var/log/cron.log 2>&1
+1 0 * * * /usr/local/bin/python /app/manage.py reset_nightpass >> /var/log/cron.log 2>&1
+1 0 * * * /usr/local/bin/python /app/manage.py reset_campus_resources >> /var/log/cron.log 2>&1
+9 11 * * * /usr/local/bin/python /app/manage.py stop_booking >> /var/log/cron.log 2>&1
+1 0 * * * /usr/local/bin/python /app/manage.py check_defaulters >> /var/log/cron.log 2>&1

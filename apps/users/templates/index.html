@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thapar NightPass</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/barcodes/JsBarcode.code128.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="../static/login.css">
+</head>
+<body>
+
+    <style>
+        section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+
+        .login-button {
+            background-color: #df3136;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #000000;
+        }
+
+        footer {
+            background-color: #696b6d;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 30px;
+                text-align: center;
+            }
+
+        }
+    </style>
+
+    <div class="header">
+        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
+        <h1>Thapar NightPass</h1>
+        <button class="logout-button" style="visibility: hidden;" onclick="window.location.href = '/logout';">Logout</button>
+    </div>
+
+    <section>
+        <h2>Welcome to the Night Pass Management System</h2>
+        <p>Book your night pass to access campus resources and facilities. Enjoy a seamless experience!</p>
+        <form action="/login/" method="post">
+            {% csrf_token %}
+            <input class="login-button" type="submit" value="Get Started">
+        </form>
+    </section>
+
+    <footer>
+        Made with ♥ by <a href="https://www.linkedin.com/in/pancham1603/" target="_blank" style="text-decoration: underline; color: white;">Pancham Agarwal</a>
+    </footer>
+<script>
+    toastr.options = {
+            "closeButton": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+</script>
+
+{% if messages %}
+{% for message in messages %}
+<script>
+  toastr.info("{{ message }}")
+</script>
+{% endfor %}
+{% endif %}
+</body>
+</html>

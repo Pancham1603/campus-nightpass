@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-images">
+                <img class="profile-img" src="{{ user.picture }}" alt="Student Picture">
+                <svg id="barcode"></svg>
+            </div>
+            <div class="profile-details">
+                <p><strong>Name:</strong> {{ user.name }}</p>
+                <p><strong>Roll Number:</strong> {{ user }}</p>
+                <p><strong>Hostel:</strong> {{ user.hostel }}</p>
+                <p><strong>Room Number:</strong> {{ user.room_number }}</p>
+                {% if user.is_checked_in  %}
+                    <p class="safe"><strong>Status:</strong> Inside Hostel {{ user.hostel }}  </p>
+                {% else %}
+                    {% if user_pass %}
+                        {% if user_pass.check_in and not user_pass.check_out %}
+                        <p class="safe"><strong>Status:</strong> In {{ user_pass.campus_resource }}  </p>
+                        {% else %}
+                        <p class="unsafe"><strong>Status:</strong> Outside Hostel  </p>
+                        <p class="unsafe"><strong>Time Left:</strong><span id="timer"></span></p>
+                        {% endif %}
+                    {% else %}
+                        <p class="unsafe"><strong>Status:</strong> Outside Hostel  </p>
+                        <p class="unsafe"><strong>Time Left: </strong><span id="timer"></span></p>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+        <script>
+            JsBarcode("#barcode", "{{ user }}");
+            let deadline = new Date("{{ user.last_checkout_time|date:'M d, Y H:i:s' }}" ).getTime();
+            deadline += parseInt("{{ frontend_checkin_timer }}")*60000
+            let x = setInterval(function () {
+                let now = new Date().getTime();
+                let t = deadline - now;
+                let days = Math.floor(t / (1000 * 60 * 60 * 24));
+                let hours = Math.floor(
+                    (t % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                let minutes = Math.floor(
+                    (t % (1000 * 60 * 60)) / (1000 * 60));
+                let seconds = Math.floor(
+                    (t % (1000 * 60)) / 1000);
+                document.getElementById("timer").innerHTML = 
+                    minutes + "m " + seconds + "s ";
+ 
+                // Output for over time
+                if (t < 0) {
+                    clearInterval(x);
+                    document.getElementById("timer")
+                            .innerHTML = "Defaulter Recorded! Successive violations will lead to revocation of nightpass facility.";
+                }
+            }, 1000);
+        </script>
+  <div class="location-cards">
+        {% if campus_resources|length > 0 %}
+        {% for resource in campus_resources %}
+        {% if resource == user_pass.campus_resource %}
+        <div class="resource-card">
+            <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
+            <div class="resource-details">
+                <h2 style="margin-bottom: 5px;">{{ resource.name }}</h2>
+                <p style="margin-bottom: 5px;">{{ resource.description }}</p>
+                <button class="book-button" style="background-color: gray;" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', false)">Cancel Slot</button>
+            </div>
+        </div>
+        {% else %}
+        <div class="resource-card">
+            <img class "resource-img" src="{{ resource.picture }}" alt="Resource 1">
+            <div class="resource-details">
+                <h2 style="margin-bottom: 5px;">{{ resource.name }}</h2>
+                <p style="margin-bottom: 5px;">{{ resource.description }}</p>
+                {% if resource.is_booking %}
+                <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
+                {% else %}
+                <button class="book-button" style="background-color: gray;">Unavailable</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="modal-image">
+                <img src="" id="modal-resource-picture" alt="modal resource picture">
+            </div>
+            <div class="modal-details">
+                <h2 id="modal-resource-name"></h2>
+                <p id="modal-resource-description"></p>
+                <!-- <select>
+                    <option value="time-slot-1">Time Slot 1</option>
+                    <option value="time-slot-2">Time Slot 2</option>
+                    <option value="time-slot-3">Time Slot 3</option>
+                </select> -->
+                <button class="modal-button" id="modal-resource-book">Book</button>
+            </div>
+        </div>
+    </div>
+
+    {% if user_incidents|length > 0 %}
+    <div class="container" style="width: 100%;">
+        <div class="profile-card" style="width: 80%;">
+    <div class="table-section">
+        <h2>Incident History</h2>
+        <table class="activity-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Remarks</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for incident in user_incidents %}
+                <tr>
+                    <td>{{ incident.date }}</td>
+                    <td>{{ incident.campus_resource.name }}</td>
+                    <td>{{ incident.defaulter_remarks }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+    </div>
+    {% endif %}
+
+    <script>
+        function verifyNotification(notif_text) {
+          let text = notif_text;
+          if (confirm(text) == true) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+
+
+    </script>
+
+    <script>
+       toastr.options = {
+            "closeButton": false,
+            "newestOnTop": true,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "3000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        function closeModal() {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "none";
+        }
+
+        function openModal(name, description, picture, book) {
+            var modal = document.getElementById("myModal");
+            modal.style.display = "block";
+
+            document.getElementById('modal-resource-name').innerHTML = name;
+            document.getElementById('modal-resource-description').innerHTML = description;
+            document.getElementById('modal-resource-picture').src = picture;
+            if (book) {
+                document.getElementById('modal-resource-book').innerHTML = 'Book';
+                var urls = "book/" + name;
+                var notif_text = "Make sure you use your slot else cancel before 8:00 PM. Not showing up at the location will lead to revocation of nightpass facility.";
+            } else {
+                document.getElementById('modal-resource-book').innerHTML = 'Cancel Booking'
+                var urls = "cancel/";
+                var notif_text = "Are you sure you want to cancel your booking?";
+            }
+
+            document.getElementById('modal-resource-book').onclick = function() {   
+            
+            if (!verifyNotification(notif_text)) {
+                closeModal();
+            } else {
+                $.ajax({
+                    method: "POST",
+                    url: urls,
+                    timeout: 120000,
+                    success: function (response) {
+                        let res = JSON.parse(response).status;
+                        if (res) {
+                            console.log(JSON.parse(response))
+                            let qr = JSON.parse(response).pass_qr
+                            document.getElementById('modal-resource-picture').src = qr
+                            document.getElementById('modal-resource-book').classList.add("modal-resource-booked");
+                            toastr.success(JSON.parse(response).message);
+                            setTimeout(function(){ location.reload(); }, 3000);
+                            //location.reload();
+                        }
+                        else {
+                            toastr.error(JSON.parse(response).message);
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        toastr.error("Something went wrong, please try again later");
+                    }
+                });
+            }
+            }
+        }
+</script>
+
+    {% endblock %}
