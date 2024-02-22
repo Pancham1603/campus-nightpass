@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Information</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="../static/info.css">
+</head>
+<body>
+    <div class="header">
+        <img class="header-logo" src="https://i.imgur.com/gnAYCgT.png" alt="College Logo">
+        <h1>Thapar NightPass</h1>
+        <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
+    </div>
+
+    <div class="container">
+        <div class="main-card">
+            <div class="profile-card">
+                <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity: 0.5;" draggable="false" class="profile-picture">
+            </div>
+
+            <div class="pass-card" id="pass-card">
+                <div class="pass-details">
+                    <h2 class="user-pass-info">User Pass Information</h2>
+                    <p><strong>Pass ID:</strong> </p>
+                    <p><strong>Access:</strong> </p>
+                    <p><strong>Check-in:</strong> </p>
+                    <p><strong>Entry Time:</strong> </p>
+                    <p><strong>Check-out:</strong> </p>
+                    <p><strong>Exit Time:</strong> </p>
+                </div>
+                <button id="action-button" style="visibility: hidden;" class="action-button"></button>
+
+            </div>
+        </div>
+
+        <div class="camera-card">
+            <!-- <h2>QR Code Scanner</h2> -->
+            <input type="number" placeholder="Roll Number" id="roll_num" class="roll-no" autofocus>
+            <div id="camera" class="viewport" style="margin-top: 10px;"> </div>
+            <!-- <div class="location-selector">
+                <select id="location-selector">
+                    {% for resource in campus_resources %}
+                    <option value="{{ resource.name }}">{{ resource.name }}</option>
+                    {% endfor %}
+                    {% for resource in hostels %}
+                    <option value="{{ resource.name }}">{{ resource.name }}</option>
+                    {% endfor %}
+                </select>
+            </div> -->
+        </div>
+        {% if request.user.security.campus_resource %}
+        <div class="camera-card" style="margin: 20px;">
+            <h2>
+                {{ request.user.security.campus_resource }}
+            </h2>
+            <h3 id="check_in_count" style="color: rgb(2, 116, 34)">Students: {{ check_in_count }}</h3><br>
+            <h3 id="total_count">Booking: {{ total_count }}</h3><br>
+        </div>
+        {% endif %}
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js" integrity="sha512-bCsBoYoW6zE0aja5xcIyoCDPfT27+cGr7AOCqelttLVRGay6EKGQbR6wm6SUcUGOMGXJpj+jrIpMS6i80+kZPw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    
+    <script>
+
+        Quagga.init({
+            inputStream: {
+                name: "Live",
+                type: "LiveStream",
+                target: document.querySelector('#camera'),
+                constraints: {
+                    width: 640,
+                    height: 480,
+                    facingMode: "environment" // or "user" for front camera
+                },
+            },
+            decoder: {
+                readers: ['code_128_reader']
+            },
+            
+        }, function (err) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            Quagga.start();
+        });
+
+        let lastScannedBarcode = [];
+        Quagga.onDetected(function (result) {
+            var code = result.codeResult.code;
+            if (!lastScannedBarcode.includes(code)) {
+                var audio = new Audio('../static/beep.mp3');
+                audio.play();
+                if (code.length == 9) {fetch_data({'registration_number':code})}
+                lastScannedBarcode.push(code);
+            }
+
+        });
+
+        Quagga.onProcessed(result => {
+            const drawingCanvas = Quagga.canvas.dom.overlay;
+            drawingCanvas.style.display = 'none';
+        });
+
+        setInterval(function () {
+            lastScannedBarcode.pop();
+        }, 5000);
+    </script>
+        <script src="../static/info.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Default Warning</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #eb2705;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Thapar NightPass: Incident Logged</h1>
+        <p>
+            Dear {{ user_pass.user.student.name }},
+        </p>
+        <p>
+            This is to inform you that an incident has been recorded for your recent actions. Please review and address this matter promptly. <b>Further incidents may lead to revocation of the NightPass facility</b>.
+        </p>
+        <p>
+            <b>Incident Remark: {{ defaulter_remarks}}</b>
+        </p>
+        <!-- <p><i>
+            Date - {{ user_pass.date }}<br>
+            Hostel check out - {{ user_pass.hostel_checkout_time }}<br>
+            {{ user_pass.campus_resource.name }} check in - {{ user_pass.check_in_time }}<br>
+            {{ user_pass.campus_resource.name }} check out - {{ user_pass.check_out_time }}<br>
+            Hostel check in - {{ user_pass.hostel_checkin_time }}
+        </i></p> -->
+        <table>
+            <tr>
+                <th>Date</th>
+                <td>{{ user_pass.date }}</td>
+            </tr>
+            <tr>
+                <th>Location </th>
+                <td>{{ user_pass.campus_resource.name }}</td>
+            </tr>
+            <tr>
+                <th>Hostel Check Out</th>
+                <td>{{ user_pass.hostel_checkout_time }}</td>
+            </tr>
+            <tr>
+                <th>{{ user_pass.campus_resource.name }} Check In</th>
+                <td>{{ user_pass.check_in_time }}</td>
+            </tr>
+            <tr>
+                <th>{{ user_pass.campus_resource.name }} Check Out</th>
+                <td>{{ user_pass.check_out_time }}</td>
+            </tr>
+            <tr>
+                <th>Hostel Check In</th>
+                <td>{{ user_pass.hostel_checkin_time }}</td>
+            </tr>
+        </table>
+        <p>
+            If you have any questions or concerns, please contact the Office of the Dean of Student Affairs.
+        </p>
+        <p>
+            DoSA Office<br>
+            TIET, Patiala
+        </p>
+    </div>
+</body>
+</html>
