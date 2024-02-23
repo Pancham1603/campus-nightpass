@@ -16,13 +16,11 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/campus_nightpass
-          chmod 600 ~/.ssh/campus_nightpass
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy code
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/campus_nightpass git@github.com
           ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
