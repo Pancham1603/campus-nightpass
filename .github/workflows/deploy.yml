@@ -16,14 +16,15 @@ jobs:
       - name: Set up SSH
         env:
           GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-          GITHUB_ORG: ${{ secrets.ORG }}
         run: |
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa 13.233.***.*** >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy code
+        env:
+          GITHUB_ORG: TIET-Official  # Replace YourOrgName with your GitHub organization name
         run: |
           ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:$GITHUB_ACCESS_TOKEN@github.com/$GITHUB_ORG/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
