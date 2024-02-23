@@ -18,10 +18,9 @@ jobs:
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/campus_nightpass
           chmod 600 ~/.ssh/campus_nightpass
+          cat ~/.ssh/campus_nightpass  # Print the contents of the key file
           eval $(ssh-agent -s)
           ssh-add ~/.ssh/campus_nightpass
-          ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
-          chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy code
         run: |
