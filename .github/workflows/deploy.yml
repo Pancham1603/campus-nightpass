@@ -16,8 +16,8 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/campus-nightpass
+          chmod 600 ~/.ssh/campus-nightpass
           ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
