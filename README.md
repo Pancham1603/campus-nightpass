@@ -1,4 +1,4 @@
-## Campus NightPass
+# Campus NightPass
 
 ### Project Description
 This project aims to develop a Campus NightPass System for Thapar Institute of Engineering and Technology, Patiala,  enhancing the access and management of on-campus resources during late hours. The system will allow students to request and obtain permission to leave their hostels after 08:30 pm for academic purposes by booking available seats in laboratories, libraries, and discussion rooms on a first-come, first-served basis. To ensure security and accountability, the system will also provide a robust verification process for students checking in and out of these facilities.
