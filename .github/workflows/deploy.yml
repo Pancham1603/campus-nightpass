@@ -14,8 +14,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH
-        env:
-          GITHUB_ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
@@ -24,7 +22,5 @@ jobs:
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy code
-        env:
-          GITHUB_ORG: TIET-Official  # Replace YourOrgName with your GitHub organization name
         run: |
-          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:$GITHUB_ACCESS_TOKEN@github.com/$GITHUB_ORG/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
+          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/TIET-Official/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
