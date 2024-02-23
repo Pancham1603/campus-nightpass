@@ -23,4 +23,4 @@ jobs:
 
       - name: Deploy code
         run: |
-          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/${{ secrets.ORG }}/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
+          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
