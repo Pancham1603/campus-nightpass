@@ -17,7 +17,7 @@ This project aims to develop a Campus NightPass System for Thapar Institute of E
 ## Technology Stack
 
 - **Backend**: Django Python
-- **Frontend**: HTML, CSS, JavaScript
+- **Frontend**: HTML, CSS, Vanilla JS
 - **Database**: PostgreSQL
 
 ## Project Scope
