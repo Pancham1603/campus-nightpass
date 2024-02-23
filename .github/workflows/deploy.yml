@@ -10,17 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/campus_nightpass
-          chmod 600 ~/.ssh/campus_nightpass
-          cat ~/.ssh/campus_nightpass  # Print the contents of the key file
-          eval $(ssh-agent -s)
-          ssh-add ~/.ssh/campus_nightpass
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/new_key_name
+          echo -e "Host *\n\tIdentityFile ~/.ssh/new_key_name" > ~/.ssh/config
+          chmod 600 ~/.ssh/new_key_name
+          chmod 600 ~/.ssh/config
 
       - name: Deploy code
         run: |
