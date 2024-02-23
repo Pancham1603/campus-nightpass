@@ -1,0 +1,26 @@
+name: Deploy to Ubuntu SSH Server
+
+on:
+  push:
+    branches:
+      - production  # Change this to your main branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: Deploy code
+        run: |
+          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.GH_TOKEN }}@github.com/TIET-Official/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
