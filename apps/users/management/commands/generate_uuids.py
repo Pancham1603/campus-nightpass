@@ -9,9 +9,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         users_without_uuid = CustomUser.objects.filter(unique_id__isnull=True)
-
+        
         for user in users_without_uuid:
             user.unique_id = uuid.uuid4()
             user.save()
+            print(f'[{user.unique_id}] {user.username}')
 
         self.stdout.write(self.style.SUCCESS('UUIDs generated successfully for existing users.'))
