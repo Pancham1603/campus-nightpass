@@ -8,6 +8,10 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 import uuid
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class CustomUserManager(BaseUserManager):
@@ -118,10 +122,8 @@ class Student(models.Model):
 
 @receiver(post_delete, sender=Student)
 def delete_image_from_imagekit(sender, instance, **kwargs):
-    print('deleting image')
-    settings = Settings.objects.first()
     endpoint = "https://api.imagekit.io/v1/files"
-    private_api_key = settings.imagekit_private_key
+    private_api_key = os.getenv("Imagekit_Private_key")
     params = {
         "name": instance.picture.split('/')[-1],
         "filetype": "image"

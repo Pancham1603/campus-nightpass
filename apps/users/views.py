@@ -11,6 +11,10 @@ from django.http import JsonResponse
 import requests
 from urllib.parse import urlencode
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def gauth(request):
@@ -146,7 +150,8 @@ def check_user(request):
             response = {
                 'status':True,
                 'image' : image,
-                'uuid': student.user.unique_id
+                'uuid': student.user.unique_id,
+                'message':'Image found' if image else 'Image not found'
             }
             return JsonResponse(response)
         else:
@@ -182,9 +187,8 @@ def update_user_image(request):
         
 
 def is_image_uploaded(image_url):
-    settings = Settings.objects.first()
     endpoint = "https://api.imagekit.io/v1/files"
-    private_api_key = settings.imagekit_private_key
+    private_api_key = os.getenv("Imagekit_Private_key")
     params = {
         "name": image_url.split('/')[-1],
         "filetype": "image"
