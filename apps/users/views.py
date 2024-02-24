@@ -143,7 +143,6 @@ def check_user(request):
         student = Student.objects.filter(registration_number=data.get('registration_number')).first()
         if student:
             if str(student.picture).find('imagekit') != -1:
-                r = requests.get(student.picture)
                 image = is_image_uploaded(student.picture)
             else:
                 image = False
