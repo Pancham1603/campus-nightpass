@@ -140,13 +140,12 @@ def check_user(request):
             response = {
                 'status':True,
                 'image' : True if str(student.picture).find('imagekit') != -1 else False,
-                'uuid': str(student.user.unique_id)
+                'uuid': student.user.unique_id
             }
             return JsonResponse(response)
         else:
             return JsonResponse({'status': False,
                                  'message':'Student with the given registration number not found'})
-        
         
 
 @csrf_exempt
