@@ -196,6 +196,7 @@ def is_image_uploaded(image_url):
     response = requests.get(endpoint, params=params, auth=auth)
     if response.status_code == 200:
         data = response.json()
+        print(data)
         return True if data else False
     else:
         return False
