@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.views import View
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Student, CustomUser
+from ..global_settings.models import Settings
 from .google_config import config
 from django.http import JsonResponse
 import requests
@@ -137,9 +138,14 @@ def check_user(request):
                                  'message':'You are not authorized to access this page'})
         student = Student.objects.filter(registration_number=data.get('registration_number')).first()
         if student:
+            if str(student.picture).find('imagekit') != -1:
+                r = requests.get(student.picture)
+                image = is_image_uploaded(student.picture)
+            else:
+                image = False
             response = {
                 'status':True,
-                'image' : True if str(student.picture).find('imagekit') != -1 else False,
+                'image' : image,
                 'uuid': student.user.unique_id
             }
             return JsonResponse(response)
@@ -173,3 +179,20 @@ def update_user_image(request):
         else:
             return JsonResponse({'status': False,
                                  'message':'Student with the given registration number not found'})
+        
+
+def is_image_uploaded(image_url):
+    settings = Settings.objects.first()
+    endpoint = "https://api.imagekit.io/v1/files"
+    private_api_key = settings.imagekit_private_key
+    params = {
+        "name": image_url.split('/')[-1],
+        "filetype": "image"
+    }
+    auth = (private_api_key, ":")
+    response = requests.get(endpoint, params=params, auth=auth)
+    if response.status_code == 200:
+        data = response.json()
+        return True if data else False
+    else:
+        return False

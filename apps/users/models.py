@@ -3,7 +3,11 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from apps.nightpass.models import CampusResource, Hostel
+from apps.global_settings.models import Settings
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 import uuid
+import requests
 
 
 class CustomUserManager(BaseUserManager):
@@ -111,7 +115,23 @@ class Student(models.Model):
 
     def __str__(self):
         return str(self.registration_number)
-    
+
+@receiver(post_delete, sender=Student)
+def delete_image_from_imagekit(sender, instance, **kwargs):
+    print('deleting image')
+    settings = Settings.objects.first()
+    endpoint = "https://api.imagekit.io/v1/files"
+    private_api_key = settings.imagekit_private_key
+    params = {
+        "name": instance.picture.split('/')[-1],
+        "filetype": "image"
+    }
+    auth = (private_api_key, ":")
+    response = requests.get(endpoint, params=params, auth=auth)
+    if response.status_code == 200:
+        fileId = response.json()[0]['fileId']
+    r = requests.delete(f'https://api.imagekit.io/v1/files/{fileId}', auth=auth)
+
 
 class Security(models.Model):
     name = models.CharField(max_length=100)
