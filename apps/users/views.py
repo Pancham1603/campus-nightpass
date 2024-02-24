@@ -132,6 +132,9 @@ def check_user(request):
             else:
                 return JsonResponse({'status': False,
                                      'message':'Invalid credentials'})
+        if not request.user.is_superuser:
+            return JsonResponse({'status': False,
+                                 'message':'You are not authorized to access this page'})
         student = Student.objects.filter(registration_number=data.get('registration_number')).first()
         if student:
             response = {
@@ -159,6 +162,10 @@ def update_user_image(request):
             else:
                 return JsonResponse({'status': False,
                                      'message':'Invalid credentials'})
+        if not request.user.is_superuser:
+            return JsonResponse({'status': False,
+                                 'message':'You are not authorized to access this page'})
+
         student = Student.objects.filter(registration_number=data.get('registration_number')).first()
         if student:
             student.picture = data.get('url')
