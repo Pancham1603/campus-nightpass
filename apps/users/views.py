@@ -6,9 +6,10 @@ from django.views import View
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Student, CustomUser
 from .google_config import config
-import json
+from django.http import JsonResponse
 import requests
 from urllib.parse import urlencode
+import json
 
 
 def gauth(request):
@@ -118,3 +119,51 @@ def logout_user(request):
     return redirect('/login')
 
 
+@csrf_exempt
+def check_user(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if not request.user.is_authenticated:
+            email = data.get('email')
+            password = data.get('password')
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+            else:
+                return JsonResponse({'status': False,
+                                     'message':'Invalid credentials'})
+        student = Student.objects.filter(registration_number=data.get('registration_number')).first()
+        if student:
+            response = {
+                'status':True,
+                'image' : True if str(student.picture).find('imagekit') != -1 else False,
+                'uuid': str(student.user.unique_id)
+            }
+            return JsonResponse(response)
+        else:
+            return JsonResponse({'status': False,
+                                 'message':'Student with the given registration number not found'})
+        
+        
+
+@csrf_exempt
+def update_user_image(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        if not request.user.is_authenticated:
+            email = data.get('email')
+            password = data.get('password')
+            user = authenticate(request, email=email, password=password)
+            if user is not None:
+                login(request, user)
+            else:
+                return JsonResponse({'status': False,
+                                     'message':'Invalid credentials'})
+        student = Student.objects.filter(registration_number=data.get('registration_number')).first()
+        if student:
+            student.picture = data.get('url')
+            student.save()
+            return JsonResponse({'url':data.get('url')})
+        else:
+            return JsonResponse({'status': False,
+                                 'message':'Student with the given registration number not found'})

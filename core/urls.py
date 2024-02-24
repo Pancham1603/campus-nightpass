@@ -22,6 +22,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
    path('', include("apps.nightpass.urls")),
+   path('', include("apps.users.urls")),
    path('admin/', admin.site.urls),
    path('admin/login', user_views.login_user),
    path('login/', user_views.login_user),
