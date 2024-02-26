@@ -142,10 +142,7 @@ def check_user(request):
                                  'message':'You are not authorized to access this page'})
         student = Student.objects.filter(registration_number=data.get('registration_number')).first()
         if student:
-            if str(student.picture).find('imagekit') != -1:
-                image = is_image_uploaded(student.picture)
-            else:
-                image = False
+            image = student.picture
             response = {
                 'status':True,
                 'image' : image,
