@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'hijack',
     'hijack.contrib.admin',
     "rangefilter",
+    'admin_extra_buttons',
     # 'pwa'
 ]
 
