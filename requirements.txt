@@ -17,3 +17,4 @@ XlsxWriter
 pytz
 django-sql-explorer[xls]
 django-pwa
+django-admin-extra-buttons
