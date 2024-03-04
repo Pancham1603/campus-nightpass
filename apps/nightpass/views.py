@@ -15,16 +15,6 @@ from .models import *
 from ..users.views import *
 from datetime import datetime, date, timedelta
 
-sem_vs_year = {
-    "1": 1,
-    "2": 1,
-    "3": 2,
-    "4": 2,
-    "5": 3,
-    "6": 3,
-    "7": 4,
-    "8": 4,
-}
 
 @login_required
 def campus_resources_home(request):
@@ -93,25 +83,25 @@ def generate_pass(request, campus_resource):
                 'status':False,
                 'message':'All slots are booked for today!'
                 }
-        student_year = sem_vs_year[user.student.semester]
+        student_year = int(user.student.year)
         if student_year == 1:
             student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
-                                                         user__student__semester__in=['1','2']).count()
+                                                         user__student__year='1').count()
             if student_year_pass_count >= Settings.first_year:
                 return HttpResponse(json.dumps(data))
         elif student_year == 2:
             student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
-                                                         user__student__semester__in=['3','4']).count()
+                                                         user__student__year='2').count()
             if student_year_pass_count >= Settings.second_year:
                 return HttpResponse(json.dumps(data))
         elif student_year == 3:
             student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
-                                                         user__student__semester__in=['5','6']).count()
+                                                         user__student__year='3').count()
             if student_year_pass_count >= Settings.third_year:
                 return HttpResponse(json.dumps(data))
         elif student_year == 4:
             student_year_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
-                                                         user__student__semester__in=['7','8']).count()
+                                                         user__student__year='4').count()
             if student_year_pass_count >= Settings.fourth_year:
                 return HttpResponse(json.dumps(data))
             

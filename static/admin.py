@@ -26,13 +26,13 @@ class YearWiseFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == '1':
-            return queryset.filter(user__student__semester__in=['1','2'])
+            return queryset.filter(user__student__year__in=['1','2'])
         if self.value() == '2':
-            return queryset.filter(user__student__semester__in=['3','4'])
+            return queryset.filter(user__student__year__in=['3','4'])
         if self.value() == '3':
-            return queryset.filter(user__student__semester__in=['5','6'])
+            return queryset.filter(user__student__year__in=['5','6'])
         if self.value() == '4':
-            return queryset.filter(user__student__semester__in=['7','8'])
+            return queryset.filter(user__student__year__in=['7','8'])
 
 class NightPassAdmin(admin.ModelAdmin):
     list_display = ( 'name','user','hostel','date', 'campus_resource','hostel_check_out', 'check_in', 'check_out', 'hostel_check_in', 'defaulter')

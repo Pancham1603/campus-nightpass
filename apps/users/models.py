@@ -102,7 +102,7 @@ class Student(models.Model):
     father_name = models.CharField(max_length=100, null=True, blank=True)
     mother_name = models.CharField(max_length=100, null=True, blank=True)
     course = models.CharField(max_length=50, null=True, blank=True)
-    semester = models.CharField(max_length=10, null=True, blank=True)
+    year = models.CharField(max_length=10, null=True, blank=True)
     parent_contact = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     picture = models.URLField(blank=True, null=True)
