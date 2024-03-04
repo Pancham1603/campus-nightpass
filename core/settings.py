@@ -244,3 +244,5 @@ EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
 # ]
 # PWA_APP_DIR = 'ltr'
 # PWA_APP_LANG = 'en-US'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

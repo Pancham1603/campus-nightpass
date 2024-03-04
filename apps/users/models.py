@@ -49,7 +49,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField(max_length=100, unique=True)
     choices = (('student', 'Student'), ('admin', 'Admin'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
@@ -95,7 +95,7 @@ class Admin(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=100)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
-    registration_number = models.CharField(max_length=20, unique=True)
+    registration_number = models.CharField(max_length=20)
     branch = models.CharField(max_length=50, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True, choices=(('male','Male'), ('female','Female')))
