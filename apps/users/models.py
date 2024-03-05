@@ -124,15 +124,16 @@ class Student(models.Model):
 def delete_image_from_imagekit(sender, instance, **kwargs):
     endpoint = "https://api.imagekit.io/v1/files"
     private_api_key = os.getenv("Imagekit_Private_key")
-    params = {
-        "name": instance.picture.split('/')[-1],
-        "filetype": "image"
-    }
-    auth = (private_api_key, ":")
-    response = requests.get(endpoint, params=params, auth=auth)
-    if response.status_code == 200:
-        fileId = response.json()[0]['fileId']
-    r = requests.delete(f'https://api.imagekit.io/v1/files/{fileId}', auth=auth)
+    if instance.picture:
+        params = {
+            "name": instance.picture.split('/')[-1],
+            "filetype": "image"
+        }
+        auth = (private_api_key, ":")
+        response = requests.get(endpoint, params=params, auth=auth)
+        if response.status_code == 200:
+            fileId = response.json()[0]['fileId']
+            r = requests.delete(f'https://api.imagekit.io/v1/files/{fileId}', auth=auth)
 
 
 class Security(models.Model):
