@@ -69,7 +69,7 @@ def fetch_user_status(request):
                 if type(admin_campus_resource) == Hostel:
                     data['task'] = {
                         'check_in':True if not user.is_checked_in else False,
-                        'check_out':True if user.is_checked_in else False
+                        'check_out':True if (user.is_checked_in and user.has_booked) else False
                     }
                     data['request_user_location'] = 'hostel'
                     return HttpResponse(json.dumps(data))
