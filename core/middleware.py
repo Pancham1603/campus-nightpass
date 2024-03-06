@@ -9,10 +9,8 @@ class RedirectUserMiddleware:
         # Check if the user is authenticated and if their username is a specific value
         if (
             request.user.is_authenticated
-            and request.user.user_type == 'security'
-            and not request.session.get('redirected', False)
+            and request.user.user_type == 'security' and request.path not in ['/access', '/access/', '/logout', '/logout/', '/hostel', '/hostel/']
         ):
-            request.session['redirected'] = True
             return redirect('/access')
 
         # Continue with the normal request/response cycle
