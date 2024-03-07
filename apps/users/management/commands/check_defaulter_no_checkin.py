@@ -45,17 +45,18 @@ def check_defaulters_no_checkin():
                     remarks+= f"Late check in at {nightpass.campus_resource.name}"
             if not nightpass.check_out_time:
                 defaulter= False
-                # remarks+= f"Left {nightpass.campus_resource.name} without checking out."
-            else:
-                if not nightpass.hostel_checkin_time: # not counting those who did not checkin to hostel
-                    defaulter = False                 # taking it as caretakers mistake
-                    remarks+= "Late check in at hostel"
-                elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=checkin_timer):            
-                    defaulter = True
-                    remarks+= "Late check in at hostel"
-                if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
-                    defaulter = True
-                    remarks+= f"Stayed for very less time at {nightpass.campus_resource.name}" 
+                nightpass.check_out_time = nightpass.campus_resource.end_time
+                nightpass.save()
+
+            if not nightpass.hostel_checkin_time: # not counting those who did not checkin to hostel
+                defaulter = False                 # taking it as caretakers mistake
+                remarks+= "Late check in at hostel"
+            elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=checkin_timer):            
+                defaulter = True
+                remarks+= "Late check in at hostel"
+            if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
+                defaulter = True
+                remarks+= f"Stayed for very less time at {nightpass.campus_resource.name}" 
 
         if defaulter:
             nightpass.defaulter = True
