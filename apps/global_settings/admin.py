@@ -3,6 +3,7 @@ from .models import Settings
 from ..nightpass.models import CampusResource
 from ..users.models import Student, NightPass
 from ..users.management.commands.check_defaulters import check_defaulters
+from ..users.management.commands.check_defaulter_no_checkin import check_defaulters_no_checkin
 from datetime import date, timedelta
 
 from admin_extra_buttons.api import ExtraButtonsMixin, button, confirm_action, link, view
@@ -45,5 +46,12 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
             check_defaulters()
         return confirm_action(self, request, _action, "Confirm action",
                           "Successfully executed: Check defaulters", )
+    
+    @button()
+    def check_defaulters_no_checkin(self, request):
+        def _action(request):
+            check_defaulters_no_checkin()
+        return confirm_action(self, request, _action, "Confirm action",
+                          "Successfully executed: Check defaulters without checkin", )
 # Register your models here.
 admin.site.register(Settings, SettingsAdmin)
