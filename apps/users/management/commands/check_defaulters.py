@@ -46,7 +46,8 @@ def check_defaulters():
                     remarks+= f"Late check in at {nightpass.campus_resource.name}"
             if not nightpass.check_out_time:
                 defaulter= False
-                nightpass.check_out_time = nightpass.campus_resource.end_time
+                nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.end_time)
+                nightpass.check_out_time = timezone.make_aware(nightpass.check_out_time, timezone.get_current_timezone())
                 nightpass.save()
             if not nightpass.hostel_checkin_time:
                 defaulter = True
@@ -54,9 +55,9 @@ def check_defaulters():
             elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=checkin_timer):            
                 defaulter = True
                 remarks+= "Late check in at hostel"
-            if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
-                defaulter = True
-                remarks+= f"Stayed for very less time at {nightpass.campus_resource.name}" 
+            # if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
+            #     defaulter = True
+            #     remarks+= f"Stayed for very less time at {nightpass.campus_resource.name}" 
 
         if defaulter:
             nightpass.defaulter = True
