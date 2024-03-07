@@ -17,6 +17,13 @@
         <h1>Thapar NightPass</h1>
         <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
     </div>
+    {% if announcement %}
+        <div class="announcement-strip">
+            <marquee behavior="scroll" direction="left">
+                {{ announcement }}
+            </marquee>
+        </div>
+        {% endif %}
     {% block content %}
     {% endblock %}
 

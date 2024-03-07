@@ -24,6 +24,7 @@ class Settings(models.Model):
 
     imagekit_private_key = models.CharField(max_length=100, blank=True, null=True, help_text="Used to delete images when a student is deleted.")
 
-    
+    announcement = models.TextField(blank=True, null=True)
+
     class Meta:
         verbose_name_plural = 'Settings'
