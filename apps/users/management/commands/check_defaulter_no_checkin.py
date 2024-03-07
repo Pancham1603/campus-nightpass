@@ -44,8 +44,8 @@ def check_defaulters_no_checkin():
                     defaulter = True
                     remarks+= f"Late check in at {nightpass.campus_resource.name}"
             if not nightpass.check_out_time:
-                defaulter= True
-                remarks+= f"Left {nightpass.campus_resource.name} without checking out."
+                defaulter= False
+                # remarks+= f"Left {nightpass.campus_resource.name} without checking out."
             else:
                 if not nightpass.hostel_checkin_time: # not counting those who did not checkin to hostel
                     defaulter = False                 # taking it as caretakers mistake
