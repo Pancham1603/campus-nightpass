@@ -53,5 +53,15 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
             check_defaulters_no_checkin()
         return confirm_action(self, request, _action, "Confirm action",
                           "Successfully executed: Check defaulters without checkin", )
+    
+    @button()
+    def force_violation_count(self, request):
+        def _action(request):
+            students = Student.objects.all()
+            for student in students:
+                student.violation_flags=NightPass.objects.filter(user=student.user, defaulter=True).count()
+                student.save()
+        return confirm_action(self, request, _action, "Confirm action",
+                          "Successfully executed: Reset violation count", )
 # Register your models here.
 admin.site.register(Settings, SettingsAdmin)

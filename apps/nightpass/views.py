@@ -57,6 +57,14 @@ def generate_pass(request, campus_resource):
         return HttpResponse(json.dumps(data))
     
     Settings = settings.objects.first()
+
+    if int(user.student.violation_flags) >= int(Settings.max_violation_count):
+        data = {
+                'status':False,
+                'message':'Nightpass facility has been temporarily suspended! Contact DOSA office for further details.'
+                }
+        return HttpResponse(json.dumps(data))
+
     if Settings.enable_gender_ratio:
         if user.student.gender == 'male':
             male_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource,
@@ -115,12 +123,6 @@ def generate_pass(request, campus_resource):
                 }
             return HttpResponse(json.dumps(data))
 
-    if int(user.student.violation_flags) >= int(Settings.max_violation_count):
-        data = {
-                'status':False,
-                'message':'Nightpass facility has been temporarily suspended! Contact DOSA office for further details.'
-                }
-        return HttpResponse(json.dumps(data))
 
     user_pass = NightPass.objects.filter(user=user, date=date.today()).first()
     if not user_pass:
