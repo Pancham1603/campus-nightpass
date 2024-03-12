@@ -243,6 +243,7 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
+    margin-top: 10px;
 }
 
 .custom-table {
@@ -289,6 +290,24 @@ footer {
     background-color: #fff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 
+}
+
+.announcement-strip {
+    background-color: #fffdb5;
+    padding: 8px 0px 8px 0px;
+    width: 100%;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    justify-content: space-between;
+}
+
+.announcement-strip marquee {
+    font-size: 16px;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: marquee 15s linear infinite;
 }
 
 @media (max-width: 768px) {

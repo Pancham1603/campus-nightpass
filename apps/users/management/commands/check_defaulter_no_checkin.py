@@ -6,14 +6,13 @@ from django.utils import timezone
 
 
 
-def check_defaulters():
+def check_defaulters_no_checkin():
     Settings = settings.objects.first()
 
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=True)
     for nightpass in previous_day_nightpasses:
         nightpass.user.student.violation_flags+=1
         nightpass.user.student.save()
-
 
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=False)
     previous_day_nightpasses.update(defaulter=False, defaulter_remarks='')
@@ -49,9 +48,10 @@ def check_defaulters():
                 nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.end_time)
                 nightpass.check_out_time = timezone.make_aware(nightpass.check_out_time, timezone.get_current_timezone())
                 nightpass.save()
-            if not nightpass.hostel_checkin_time:
-                defaulter = True
-                remarks+= "Late check in at hostel"
+
+            if not nightpass.hostel_checkin_time: # not counting those who did not checkin to hostel
+                defaulter = False                 # taking it as caretakers mistake
+                # remarks+= "Late check in at hostel"
             elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=checkin_timer):            
                 defaulter = True
                 remarks+= "Late check in at hostel"
@@ -68,10 +68,10 @@ def check_defaulters():
 
 
 class Command(BaseCommand):
-    help = 'Check for defaulters'
+    help = 'Check for defaulters without ones who did not checkin to hostel'
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Running your cron job...'))
-        check_defaulters()
+        check_defaulters_no_checkin()
         self.stdout.write(self.style.SUCCESS('Cron job completed successfully'))
 

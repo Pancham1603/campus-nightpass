@@ -11,7 +11,7 @@
                 <p><strong>Name:</strong> {{ user.name }}</p>
                 <p><strong>Roll Number:</strong> {{ user }}</p>
                 <p><strong>Hostel:</strong> {{ user.hostel }}</p>
-                <p><strong>Room Number:</strong> {{ user.room_number }}</p>
+                <!-- <p><strong>Room Number:</strong> {{ user.room_number }}</p> -->
                 {% if user.is_checked_in  %}
                     <p class="safe"><strong>Status:</strong> Inside Hostel {{ user.hostel }}  </p>
                 {% else %}
@@ -75,7 +75,7 @@
                 {% if resource.is_booking %}
                 <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
                 {% else %}
-                <button class="book-button" style="background-color: gray;">Unavailable</button>
+                <button class="book-button" style="background-color: gray;">Booking time 10am - 8pm</button>
                 {% endif %}
             </div>
         </div>

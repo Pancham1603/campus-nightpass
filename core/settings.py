@@ -31,7 +31,6 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
-
 ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
 CSRF_COOKIE_SECURE = True
@@ -57,6 +56,7 @@ INSTALLED_APPS = [
     'hijack',
     'hijack.contrib.admin',
     "rangefilter",
+    'admin_extra_buttons',
     # 'pwa'
 ]
 
@@ -133,7 +133,6 @@ DATABASES = {
 
 STATIC_URL = "static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-STATICFILES_DIRS = (os.path.join(BASE_DIR,"apps/users"), )
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -243,3 +242,5 @@ EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
 # ]
 # PWA_APP_DIR = 'ltr'
 # PWA_APP_LANG = 'en-US'
+
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240

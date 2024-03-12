@@ -17,11 +17,18 @@
         <h1>Thapar NightPass</h1>
         <button class="logout-button" onclick="window.location.href = '/logout';">Logout</button>
     </div>
+    {% if announcement %}
+        <div class="announcement-strip">
+            <marquee behavior="scroll" direction="left">
+                {{ announcement }}
+            </marquee>
+        </div>
+        {% endif %}
     {% block content %}
     {% endblock %}
 
     <footer>
-        Made with ♥ by <a href="https://www.linkedin.com/in/pancham1603/" target="_blank" style="text-decoration: underline; color: white;">Pancham Agarwal</a>
+        Made in TIET by <a href="https://www.linkedin.com/in/pancham1603/" target="_blank" style="text-decoration: underline; color: white;">Pancham Agarwal</a>
     </footer>
 
 

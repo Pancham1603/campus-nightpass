@@ -3,7 +3,15 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from apps.nightpass.models import CampusResource, Hostel
+from apps.global_settings.models import Settings
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 import uuid
+import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class CustomUserManager(BaseUserManager):
@@ -41,7 +49,7 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    unique_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    unique_id = models.UUIDField(default=uuid.uuid4, editable=False)
     email = models.EmailField(max_length=100, unique=True)
     choices = (('student', 'Student'), ('admin', 'Admin'), ('security', 'Security'))
     user_type = models.CharField(max_length=20, choices=choices, default='student')
@@ -87,14 +95,14 @@ class Admin(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=100)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
-    registration_number = models.CharField(max_length=20, unique=True)
+    registration_number = models.CharField(max_length=20)
     branch = models.CharField(max_length=50, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True, choices=(('male','Male'), ('female','Female')))
     father_name = models.CharField(max_length=100, null=True, blank=True)
     mother_name = models.CharField(max_length=100, null=True, blank=True)
     course = models.CharField(max_length=50, null=True, blank=True)
-    semester = models.CharField(max_length=10, null=True, blank=True)
+    year = models.CharField(max_length=10, null=True, blank=True)
     parent_contact = models.CharField(max_length=15, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
     picture = models.URLField(blank=True, null=True)
@@ -111,7 +119,22 @@ class Student(models.Model):
 
     def __str__(self):
         return str(self.registration_number)
-    
+
+@receiver(post_delete, sender=Student)
+def delete_image_from_imagekit(sender, instance, **kwargs):
+    endpoint = "https://api.imagekit.io/v1/files"
+    private_api_key = os.getenv("Imagekit_Private_key")
+    if instance.picture:
+        params = {
+            "name": instance.picture.split('/')[-1],
+            "filetype": "image"
+        }
+        auth = (private_api_key, ":")
+        response = requests.get(endpoint, params=params, auth=auth)
+        if response.status_code == 200:
+            fileId = response.json()[0]['fileId']
+            r = requests.delete(f'https://api.imagekit.io/v1/files/{fileId}', auth=auth)
+
 
 class Security(models.Model):
     name = models.CharField(max_length=100)
