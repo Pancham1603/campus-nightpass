@@ -13,6 +13,8 @@ class Hostel(models.Model):
     frontend_checkin_timer = models.IntegerField(blank=True, null=True, default=0)
     backend_checkin_timer = models.IntegerField(blank=True, null=True, default=0)
 
+    max_students_allowed = models.IntegerField(blank=True, null=True, default=0)
+
     def __str__(self):
         return self.name
 
