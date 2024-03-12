@@ -129,7 +129,7 @@ function updateProfile(data) {
 }
 
 // Function to update the user pass section with data
-function updateUserPass(data,user_data, task, request_user_location) {
+function updateUserPass(data,user_data, task, request_user_location, message) {
     const passDetails = document.querySelector('.pass-details');
     const passIdElement = passDetails.querySelector('p:nth-child(2)');
     const accessElement = passDetails.querySelector('p:nth-child(3)');
@@ -145,7 +145,12 @@ function updateUserPass(data,user_data, task, request_user_location) {
     entryTimeElement.textContent = `Entry Time: ${data.check_in_time}`;
     checkoutElement.textContent = `Check-out: ${data.check_out}`;
     exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
-    
+
+    if (!data.pass_id) {
+        document.getElementById('pass-card').style.backgroundColor = '#FF7F7F';
+        toastr.error(message);
+    } else {
+
     if (task['check_out']) {
         if (request_user_location == 'campus_resource') {
             if (is_mobile()){
@@ -181,7 +186,7 @@ function updateUserPass(data,user_data, task, request_user_location) {
     } else {
         document.getElementById('pass-card').style.backgroundColor = '#FF7F7F';
     }
-}
+}}
 
 function updateStats(data) {
     document.getElementById('total_count').innerHTML = 'Booking: ' + data.total_count;
@@ -200,11 +205,7 @@ function fetch_data(dump) {
         let res = response.status;
         if (res) {
             updateProfile(response.user);
-            updateUserPass(response.user_pass, response.user, response.task, response.request_user_location);
-            if (response.user_pass.pass_id) {
-            } else [
-            document.getElementById('pass-card').style.backgroundColor = '#FF7F7F'
-            ]
+            updateUserPass(response.user_pass, response.user, response.task, response.request_user_location, response.message);
         }
         else {
             toastr.error(response.message);

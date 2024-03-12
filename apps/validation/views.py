@@ -20,7 +20,7 @@ def fetch_user_status(request):
                 if not user_pass:
                     data = {
                         'status':True,
-                        'message':'Successfully fetched!',
+                        'message':f'Pass for {admin_campus_resource.name} does not exist!',
                         'user':{
                             'name':user.name,
                             'registration_number':user.registration_number,
@@ -73,11 +73,12 @@ def fetch_user_status(request):
                     }
                     data['request_user_location'] = 'hostel'
                     return HttpResponse(json.dumps(data))
-                elif type(admin_campus_resource) == CampusResource and admin_campus_resource == (user_pass.campus_resource if user_pass else None):
-                    data['task'] = {
-                        'check_in':True if not user_pass.check_in else False,
-                        'check_out':True if (not user_pass.check_out and user_pass.check_in) else False
-                    }
+                elif type(admin_campus_resource) == CampusResource:
+                    if user_pass:
+                        data['task'] = {
+                            'check_in':True if not user_pass.check_in else False,
+                            'check_out':True if (not user_pass.check_out and user_pass.check_in) else False
+                        }
                     data['request_user_location'] = 'campus_resource'
                     return HttpResponse(json.dumps(data))
                 else:
