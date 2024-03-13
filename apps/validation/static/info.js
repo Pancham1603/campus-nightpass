@@ -160,7 +160,7 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
                 actionButton.onclick = function()  {checkOut(user_data.registration_number);}
             } else {
                 checkOut(user_data.registration_number);
-                document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+                // document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
             }            
         } else {
             actionButton.style.visibility = 'visible';
@@ -261,6 +261,7 @@ function checkOut(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
+            document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
             toastr.success(response.message);
             for (var i = 0; i < timeouts.length; i++) {
                 clearTimeout(timeouts[i]);
@@ -268,6 +269,7 @@ function checkOut(registration_number) {
             timeouts.push(setTimeout(function(){ resetProfile(); }, 7000));
         }
         else {
+            if (response.repeated) {updateStats(response.student_stats); document.getElementById('pass-card').style.backgroundColor = '#90EE90';}
             toastr.error(response.message);
         }
     },

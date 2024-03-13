@@ -175,9 +175,14 @@ def checkout_from_location(user_pass, admin_campus_resource:CampusResource=None 
         }
     else:
         data = {
-                'status':False,
-                'message':'You just checked in! Please wait for 10mins before checking out'
-            }
+        'status':False,
+        'repeated':True,
+        'message':'You just checked in! Please wait for 10mins before checking out'
+        }
+        data['student_stats'] = {
+            'check_in_count':NightPass.objects.filter(check_in=True, check_out=False,valid=True, date=date.today(), campus_resource=admin_campus_resource).count(),
+            'total_count':NightPass.objects.filter(valid=True, date=date.today(), campus_resource=admin_campus_resource).count()
+        }
     return HttpResponse(json.dumps(data))
 
 @csrf_exempt
