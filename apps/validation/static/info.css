@@ -195,3 +195,29 @@ body {
         opacity: 1;
     }
 }
+
+.stats {
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+.column {
+    width: 48%; /* Adjust as needed */
+    text-align: justify;
+    font-weight: bold;
+}
+
+footer {
+    font-size: smaller;
+    background-color: #696b6d;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-top: 10px;
+}
