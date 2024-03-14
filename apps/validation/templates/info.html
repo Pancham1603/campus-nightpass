@@ -18,23 +18,48 @@
 
     <div class="container">
         <div class="main-card">
-            <div class="profile-card">
+            <div class="profile-card" id="profile-card">
                 <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity: 0.5;" draggable="false" class="profile-picture">
-            </div>
-
-            <div class="pass-card" id="pass-card">
-                <div class="pass-details">
-                    <h2 class="user-pass-info">User Pass Information</h2>
-                    <p><strong>Pass ID:</strong> </p>
-                    <p><strong>Access:</strong> </p>
-                    <p><strong>Check-in:</strong> </p>
-                    <p><strong>Entry Time:</strong> </p>
-                    <p><strong>Check-out:</strong> </p>
-                    <p><strong>Exit Time:</strong> </p>
-                </div>
                 <button id="action-button" style="visibility: hidden;" class="action-button"></button>
-
             </div>
+            {% if request.user.security.campus_resource %}
+                <div class="pass-card" id="pass-card">
+                            <img src="https://i.imgur.com/qPyDWcB.png" alt="Image 1" class="tempimg profile-picture slideshow-image fade">
+                            <img src="https://i.imgur.com/m5ADAmu.png" alt="Image 2" class="tempimg profile-picture slideshow-image fade">
+                            <h2>Zero Tolerance Period</h2>
+                </div>
+
+                <script>
+                let slideIndex = 0;
+                const slides = document.querySelectorAll('.slideshow-image');
+
+                function showSlides() {
+                    slides.forEach(slide => slide.style.display = 'none');
+                    slideIndex++;
+                    if (slideIndex > slides.length) {
+                        slideIndex = 1;
+                    }
+                    slides[slideIndex - 1].style.display = 'block';
+                    setTimeout(showSlides, 1500); 
+                }
+
+                showSlides(); // Start the slideshow
+                </script>
+            {% else %}
+                <div class="pass-card" id="pass-card">
+                    <div class="pass-details">
+                        <h2 class="user-pass-info">User Pass Information</h2>
+                        <p><strong>Pass ID:</strong> </p>
+                        <p><strong>Access:</strong> </p>
+                        <p><strong>Check-in:</strong> </p>
+                        <p><strong>Entry Time:</strong> </p>
+                        <p><strong>Check-out:</strong> </p>
+                        <p><strong>Exit Time:</strong> </p>
+                    </div>
+                    <button id="action-button" style="visibility: hidden;" class="action-button"></button>
+
+                </div>
+            {% endif %}
         </div>
 
         <div class="camera-card">

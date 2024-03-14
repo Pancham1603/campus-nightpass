@@ -47,27 +47,32 @@ function resetProfile() {
     resetPass();
 }
 function resetPass() {
-    const passDetails = document.querySelector('.pass-details');
-    const passIdElement = passDetails.querySelector('p:nth-child(2)');
-    const accessElement = passDetails.querySelector('p:nth-child(3)');
-    const checkinElement = passDetails.querySelector('p:nth-child(4)');
-    const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
-    const checkoutElement = passDetails.querySelector('p:nth-child(6)');
-    const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
-    const actionButton = document.getElementById('action-button')
-    document.getElementById('pass-card').style.backgroundColor = '#FFFFFF'
-    passIdElement.textContent = `Pass ID: `;
-    accessElement.textContent = `Access: `;
-    checkinElement.textContent = `Check-in: `;
-    entryTimeElement.textContent = `Entry Time: `;
-    checkoutElement.textContent = `Check-out: `;
-    exitTimeElement.textContent = `Exit Time: `;
-
-            actionButton.style.visibility = 'hidden';
-            actionButton.innerHTML = ``;
-            actionButton.style.setProperty('priority', 'important');
-            actionButton.onclick = function()  {}
-
+    try {
+        const passDetails = document.querySelector('.pass-details');
+        const passIdElement = passDetails.querySelector('p:nth-child(2)');
+        const accessElement = passDetails.querySelector('p:nth-child(3)');
+        const checkinElement = passDetails.querySelector('p:nth-child(4)');
+        const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
+        const checkoutElement = passDetails.querySelector('p:nth-child(6)');
+        const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
+        passIdElement.textContent = `Pass ID: `;
+        accessElement.textContent = `Access: `;
+        checkinElement.textContent = `Check-in: `;
+        entryTimeElement.textContent = `Entry Time: `;
+        checkoutElement.textContent = `Check-out: `;
+        exitTimeElement.textContent = `Exit Time: `;
+    } catch (error) {
+        
+    }
+    document.getElementById('profile-card').style.backgroundColor = '#FFFFFF'
+    try {
+        const actionButton = document.getElementById('action-button')
+        actionButton.style.visibility = 'hidden';
+        actionButton.innerHTML = ``;
+        actionButton.style.setProperty('priority', 'important');
+        actionButton.onclick = function()  {}
+    } catch (error) {
+    }     
     }
 
 var timeouts = [];
@@ -130,6 +135,7 @@ function updateProfile(data) {
 
 // Function to update the user pass section with data
 function updateUserPass(data,user_data, task, request_user_location, message) {
+    try{
     const passDetails = document.querySelector('.pass-details');
     const passIdElement = passDetails.querySelector('p:nth-child(2)');
     const accessElement = passDetails.querySelector('p:nth-child(3)');
@@ -145,9 +151,12 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
     entryTimeElement.textContent = `Entry Time: ${data.check_in_time}`;
     checkoutElement.textContent = `Check-out: ${data.check_out}`;
     exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
+    } catch (error) {}
 
+    console.log('redached reset pass')
     if (!data.pass_id) {
-        document.getElementById('pass-card').style.backgroundColor = '#FF7F7F';
+        console.log('no pass')
+        document.getElementById('profile-card').style.backgroundColor = '#FF7F7F';
         toastr.error(message);
     } else {
 
@@ -156,35 +165,35 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
             if (is_mobile()){
                 actionButton.style.visibility = 'visible';
                 actionButton.innerHTML = `Check Out`;
-                document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+                document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
                 actionButton.onclick = function()  {checkOut(user_data.registration_number);}
             } else {
                 checkOut(user_data.registration_number);
-                // document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+                // document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
             }            
         } else {
             actionButton.style.visibility = 'visible';
             actionButton.innerHTML = `Check Out`;
-            document.getElementById('pass-card').style.backgroundColor = '#90EE90'
+            document.getElementById('profile-card').style.backgroundColor = '#90EE90'
             actionButton.onclick = function()  {checkOut(user_data.registration_number);}}
     } else if (task['check_in']) {
         if (request_user_location == 'campus_resource') {
             if (is_mobile()){
                 actionButton.style.visibility = 'visible';
                 actionButton.innerHTML = `Check In`;
-                document.getElementById('pass-card').style.backgroundColor = '#90EE90';
+                document.getElementById('profile-card').style.backgroundColor = '#90EE90';
                 actionButton.onclick = function()  {checkIn(user_data.registration_number);}
             } else {
                 checkIn(user_data.registration_number);
-                document.getElementById('pass-card').style.backgroundColor = '#90EE90';    
+                document.getElementById('profile-card').style.backgroundColor = '#90EE90';    
             }
         } else {
-            document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+            document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
             actionButton.style.visibility = 'visible';
             actionButton.innerHTML = `Check In`;
             actionButton.onclick = function(){checkIn(user_data.registration_number);}}
     } else {
-        document.getElementById('pass-card').style.backgroundColor = '#FF7F7F';
+        document.getElementById('profile-card').style.backgroundColor = '#FF7F7F';
     }
 }}
 
@@ -261,7 +270,7 @@ function checkOut(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
-            document.getElementById('pass-card').style.backgroundColor = '#F0E68C';
+            document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
             toastr.success(response.message);
             for (var i = 0; i < timeouts.length; i++) {
                 clearTimeout(timeouts[i]);
@@ -269,7 +278,7 @@ function checkOut(registration_number) {
             timeouts.push(setTimeout(function(){ resetProfile(); }, 7000));
         }
         else {
-            if (response.repeated) {updateStats(response.student_stats); document.getElementById('pass-card').style.backgroundColor = '#90EE90';}
+            if (response.repeated) {updateStats(response.student_stats); document.getElementById('profile-card').style.backgroundColor = '#90EE90';}
             toastr.error(response.message);
         }
     },

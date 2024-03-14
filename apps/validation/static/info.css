@@ -66,6 +66,8 @@ body {
     margin: 10px;
     flex: 1;
     padding: 20px;
+    vertical-align: middle;
+    justify-content: center;
 }
 .tempimg{
     max-width: 100%;
@@ -87,8 +89,7 @@ body {
     }
   }
   
-.profile-card .image,
-.pass-card img {
+.profile-card .image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -175,4 +176,22 @@ body {
     border-radius: 5px;
     font-size: 14px;
     margin-bottom: 10px;
+}
+
+.slideshow-image {
+    width: max-content;
+    opacity: 0.7;
+}
+
+.fade {
+    animation: fadeEffect 1.5s ease-in-out infinite;
+}
+
+@keyframes fadeEffect {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
 }
