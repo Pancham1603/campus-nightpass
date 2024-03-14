@@ -20,7 +20,7 @@ def fetch_user_status(request):
                 if not user_pass:
                     data = {
                         'status':True,
-                        'message':f'Pass for {admin_campus_resource.name} does not exist!',
+                        'message':f'Pass does not exist!',
                         'user':{
                             'name':user.name,
                             'registration_number':user.registration_number,
@@ -82,6 +82,7 @@ def fetch_user_status(request):
                     data['request_user_location'] = 'campus_resource'
                     return HttpResponse(json.dumps(data))
                 else:
+                    print(213)
                     data = {
                             'status':False,
                             'message':f'Pass for {admin_campus_resource.name} does not exist!'

@@ -42,7 +42,8 @@ function is_mobile() {
 
 function resetProfile() {
     document.querySelector('.profile-card').innerHTML=`
-    <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity:0.5;" class="profile-picture">
+    <img class="tempimg"src="https://static.vecteezy.com/system/resources/previews/005/129/844/non_2x/profile-user-icon-isolated-on-white-background-eps10-free-vector.jpg" alt="Profile Picture" style="opacity:0.5;" class="profile-picture"><br>
+    <button id="action-button" style="visibility: hidden;" class="action-button"></button>
     </div>`;
     resetPass();
 }
@@ -94,7 +95,9 @@ function updateProfile(data) {
     document.querySelector('.profile-card').innerHTML=`
     <h2></h2>
     <p><strong>Roll Number:</strong> </p>
-    <img class="tempimg" id="user_picture" src="" alt="Student Picture"></div>
+    <img class="tempimg" id="user_picture" src="" alt="Student Picture"><br>
+    <button id="action-button" style="visibility: hidden;" class="action-button"></button>
+    </div>
 `;
 
 
@@ -135,6 +138,7 @@ function updateProfile(data) {
 
 // Function to update the user pass section with data
 function updateUserPass(data,user_data, task, request_user_location, message) {
+    const actionButton = document.getElementById('action-button')
     try{
     const passDetails = document.querySelector('.pass-details');
     const passIdElement = passDetails.querySelector('p:nth-child(2)');
@@ -143,8 +147,6 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
     const entryTimeElement = passDetails.querySelector('p:nth-child(5)');
     const checkoutElement = passDetails.querySelector('p:nth-child(6)');
     const exitTimeElement = passDetails.querySelector('p:nth-child(7)');
-    const actionButton = document.getElementById('action-button')
-
     passIdElement.textContent = `Pass ID: ${data.pass_id}`;
     accessElement.textContent = `Access: ${data.campus_resource}`;
     checkinElement.textContent = `Check-in: ${data.check_in}`;
@@ -153,9 +155,7 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
     exitTimeElement.textContent = `Exit Time: ${data.check_out_time}`;
     } catch (error) {}
 
-    console.log('redached reset pass')
     if (!data.pass_id) {
-        console.log('no pass')
         document.getElementById('profile-card').style.backgroundColor = '#FF7F7F';
         toastr.error(message);
     } else {
