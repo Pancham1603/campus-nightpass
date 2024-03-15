@@ -30,7 +30,7 @@ def campus_resources_home(request):
         else:
             checkin_timer = Settings.frontend_checkin_timer
         announcement = Settings.announcement if Settings.announcement else False
-        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement})	
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement, 'valid_entry_without_checkout':Settings.valid_entry_without_hostel_checkout})	
     elif user.user_type == 'security':
         return redirect('/access')
     elif user.user_type == 'admin':

@@ -46,11 +46,16 @@
                 document.getElementById("timer").innerHTML = 
                     minutes + "m " + seconds + "s ";
  
+            
+
                 // Output for over time
                 if (t < 0) {
                     clearInterval(x);
+                    valid_time_wo_checkout = new Date("{{ valid_entry_without_checkout|date:'M d, Y H:i:s' }}" ).getTime();
+                    if (now < valid_time_wo_checkout) {
+                    } else {
                     document.getElementById("timer")
-                            .innerHTML = "Defaulter Recorded! Successive violations will lead to revocation of nightpass facility.";
+                            .innerHTML = "Defaulter Recorded! Successive violations will lead to revocation of nightpass facility.";}
                 }
             }, 1000);
         </script>
