@@ -63,5 +63,16 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
                 student.save()
         return confirm_action(self, request, _action, "Confirm action",
                           "Successfully executed: Reset violation count", )
+    
+    @button()
+    def mark_booked(self, request):
+        def _action(request):
+            today_passes = NightPass.objects.filter(date=date.today())
+            today_passes.update(valid=True)
+            for night_pass in today_passes:
+                night_pass.user.student.has_booked = True
+                night_pass.user.student.save()
+        return confirm_action(self, request, _action, "Confirm action",
+                          "Successfully executed: Marked booked passes", )
 # Register your models here.
 admin.site.register(Settings, SettingsAdmin)
