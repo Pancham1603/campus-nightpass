@@ -11,7 +11,8 @@ def check_defaulters():
 
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=True)
     for nightpass in previous_day_nightpasses:
-        nightpass.user.student.violation_flags+=1
+        nightpass.user.student.violation_flags = NightPass.objects.filter(user=nightpass.user, defaulter=True).count()
+        nightpass.user.student.defaulter_notification = True
         nightpass.user.student.save()
 
 
