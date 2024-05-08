@@ -18,9 +18,9 @@ jobs:
           mkdir -p ~/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa 13.233.141.245 >> ~/.ssh/known_hosts
+          ssh-keyscan -t rsa 13.200.106.24 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy code
         run: |
-          ssh ubuntu@13.233.141.245 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
+          ssh ubuntu@13.200.106.24 'cd /home/ubuntu/campus-nightpass && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
