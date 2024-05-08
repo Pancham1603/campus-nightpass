@@ -63,7 +63,8 @@ def check_defaulters():
             nightpass.defaulter = True
             nightpass.defaulter_remarks = remarks
             nightpass.save()
-            nightpass.user.student.violation_flags+=1
+            nightpass.user.student.violation_flags = NightPass.objects.filter(user=nightpass.user, defaulter=True).count()
+            nightpass.user.student.defaulter_notification = True
             nightpass.user.student.save()
 
 

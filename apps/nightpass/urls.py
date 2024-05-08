@@ -6,4 +6,5 @@ urlpatterns = [
     path('book/<str:campus_resource>', views.generate_pass),
     path('cancel/', views.cancel_pass),
     path('hostel/', views.hostel_home),
+    path('defaulter_notification/', views.remove_defaulter_notif),
     ]

@@ -116,6 +116,7 @@ class Student(models.Model):
     violation_flags = models.IntegerField(default=0)
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     email = models.EmailField(max_length=100, blank=True, null=True)
+    defaulter_notification = models.BooleanField(default=False, blank=True, null=True)
 
     def __str__(self):
         return str(self.registration_number)

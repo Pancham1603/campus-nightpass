@@ -30,7 +30,8 @@ def campus_resources_home(request):
         else:
             checkin_timer = Settings.frontend_checkin_timer
         announcement = Settings.announcement if Settings.announcement else False
-        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement, 'valid_entry_without_checkout':Settings.valid_entry_without_hostel_checkout})	
+        default_pass = NightPass.objects.filter(user=user, defaulter=True).order_by('-date').first() if user.student.defaulter_notification else None
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement, 'valid_entry_without_checkout':Settings.valid_entry_without_hostel_checkout, 'default_pass':default_pass})	
     elif user.user_type == 'security':
         return redirect('/access')
     elif user.user_type == 'admin':
@@ -221,3 +222,15 @@ def hostel_home(request):
         return render(request, 'caretaker.html', {'hostel_passes':hostel_passes})
     else:
         return redirect('/access')
+    
+@csrf_exempt
+@login_required
+def remove_defaulter_notif(request):
+    user = request.user
+    user.student.defaulter_notification = False
+    user.student.save()
+    data = {
+        'status':True,
+        'message':'Notification dismissed!'
+    }
+    return HttpResponse(json.dumps(data))

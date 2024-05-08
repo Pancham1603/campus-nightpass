@@ -16,10 +16,12 @@ class StudentResource(resources.ModelResource):
                 if not user.student:
                     instance.registration_number = int(instance.registration_number)
                     instance.user = user
+                    instance.gender = instance.gender.lower()
                     return super().save_instance(instance, is_create, using_transactions, dry_run)
             except:
                     instance.registration_number = int(instance.registration_number)
                     instance.user = user
+                    instance.gender = instance.gender.lower()
                     return super().save_instance(instance, is_create, using_transactions, dry_run)
 
 
