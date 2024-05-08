@@ -98,7 +98,7 @@ class Student(models.Model):
     registration_number = models.CharField(max_length=20)
     branch = models.CharField(max_length=50, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    gender = models.CharField(max_length=10, null=True, blank=True, choices=(('male','Male'), ('female','Female')))
+    gender = models.CharField(max_length=10, null=True, blank=True, choices=(('Male','Male'), ('Female','Female')))
     father_name = models.CharField(max_length=100, null=True, blank=True)
     mother_name = models.CharField(max_length=100, null=True, blank=True)
     course = models.CharField(max_length=50, null=True, blank=True)
