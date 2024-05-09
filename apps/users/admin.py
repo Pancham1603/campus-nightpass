@@ -40,7 +40,7 @@ class NightPassAdmin(admin.ModelAdmin):
     actions = ['export_as_xlsx']
     list_filter = (('date', DateRangeFilter),'campus_resource','user__student__gender','user__student__hostel', YearWiseFilter,'defaulter', 'check_in', 'check_out')
     autocomplete_fields = ('user', 'campus_resource') 
-    readonly_fields = ('pass_id', 'check_in_time', 'check_out_time', 'hostel_checkout_time', 'hostel_checkin_time')
+    readonly_fields = ('pass_id')
 
     def name(self, obj):
         return obj.user.student.name
