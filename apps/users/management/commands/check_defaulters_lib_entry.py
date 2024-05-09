@@ -72,6 +72,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.SUCCESS('Running your cron job...'))
-        check_defaulters()
+        check_defaulters_lib_entry()
         self.stdout.write(self.style.SUCCESS('Cron job completed successfully'))
 
