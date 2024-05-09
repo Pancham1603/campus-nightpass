@@ -4,6 +4,7 @@ from ..nightpass.models import CampusResource
 from ..users.models import Student, NightPass
 from ..users.management.commands.check_defaulters import check_defaulters
 from ..users.management.commands.check_defaulter_no_checkin import check_defaulters_no_checkin
+from ..users.management.commands.check_defaulters_lib_entry import check_defaulters_lib_entry
 from datetime import date, timedelta
 
 from admin_extra_buttons.api import ExtraButtonsMixin, button, confirm_action, link, view
@@ -53,6 +54,13 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
             check_defaulters_no_checkin()
         return confirm_action(self, request, _action, "Confirm action",
                           "Successfully executed: Check defaulters without checkin", )
+    
+    @button()
+    def check_defaulters_entry_lib(self, request):
+        def _action(request):
+            check_defaulters_lib_entry()
+        return confirm_action(self, request, _action, "Confirm action",
+                          "Successfully executed: Check defaulters lib entry", )
     
     @button()
     def force_violation_count(self, request):
