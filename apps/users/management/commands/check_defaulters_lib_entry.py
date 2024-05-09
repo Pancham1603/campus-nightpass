@@ -3,8 +3,9 @@ from ...models import NightPass
 from ....global_settings.models import Settings as settings
 from datetime import date, timedelta, datetime, time
 from django.utils import timezone
+import pytz
 
-
+ist_timezone = pytz.timezone('Asia/Kolkata')
 
 def check_defaulters_lib_entry():
     Settings = settings.objects.first()
@@ -37,11 +38,11 @@ def check_defaulters_lib_entry():
 
             if nightpass.hostel_checkout_time:
                 if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=checkin_timer):
-                    if (nightpass.check_in_time.time() > start_default_time):
+                    if (nightpass.check_in_time.astimezone(ist_timezone).time() > start_default_time):
                         defaulter = True
                         remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             else:
-                if (nightpass.check_in_time.time() > end_default_time):
+                if (nightpass.check_in_time.astimezone(ist_timezone).time() > end_default_time):
                     defaulter = True
                     remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             # if not nightpass.check_out_time:
