@@ -21,8 +21,8 @@ def check_defaulters_no_checkin():
     # previous_day_nightpasses.update(defaulter=False, defaulter_remarks='')
     for nightpass in previous_day_nightpasses:
         print(nightpass.user.email)
-        defaulter = nightpass.defaulter
-        remarks = nightpass.defaulter_remarks
+        defaulter = nightpass.defaulter if nightpass.defaulter else False
+        remarks = nightpass.defaulter_remarks if nightpass.defaulter_remarks else ""
         if not nightpass.check_in:
             defaulter = True
             remarks = remarks + f"Did not visit {nightpass.campus_resource.name}" if f"Did not visit {nightpass.campus_resource.name}" not in remarks else remarks
@@ -47,7 +47,6 @@ def check_defaulters_no_checkin():
                     defaulter = True
                     remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             if not nightpass.check_out_time:
-                defaulter= False
                 nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.end_time)
                 nightpass.check_out_time = timezone.make_aware(nightpass.check_out_time, timezone.get_current_timezone())
                 nightpass.save()
