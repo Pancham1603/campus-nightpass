@@ -9,22 +9,21 @@ from django.utils import timezone
 def check_defaulters():
     Settings = settings.objects.first()
 
-    previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=True)
-    for nightpass in previous_day_nightpasses:
-        nightpass.user.student.violation_flags = NightPass.objects.filter(user=nightpass.user, defaulter=True).count()
-        nightpass.user.student.defaulter_notification = True
-        nightpass.user.student.save()
+    # previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=True)
+    # for nightpass in previous_day_nightpasses:
+    #     nightpass.user.student.violation_flags = NightPass.objects.filter(user=nightpass.user, defaulter=True).count()
+    #     nightpass.user.student.defaulter_notification = True
+    #     nightpass.user.student.save()
 
 
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=False)
-    previous_day_nightpasses.update(defaulter=False, defaulter_remarks='')
     for nightpass in previous_day_nightpasses:
         print(nightpass.user.email)
-        defaulter = False
-        remarks = ""
+        defaulter = nightpass.defaulter
+        remarks =nightpass.defaulter_remarks
         if not nightpass.check_in:
             defaulter = True
-            remarks+= f"Did not visit {nightpass.campus_resource.name}"
+            remarks+= f"Did not visit {nightpass.campus_resource.name}" if f"Did not visit {nightpass.campus_resource.name}" not in remarks else remarks
         else:
             # start_default_time = timezone.make_aware(datetime.combine(nightpass.check_in_time.date(), time(20,45)), timezone.get_current_timezone())
             # end_default_time = timezone.make_aware(datetime.combine(nightpass.check_in_time.date(), time(21,00)), timezone.get_current_timezone())
@@ -40,22 +39,21 @@ def check_defaulters():
                 if (nightpass.check_in_time - nightpass.hostel_checkout_time) > timedelta(minutes=checkin_timer):
                     if (nightpass.check_in_time.time() > start_default_time):
                         defaulter = True
-                        remarks+= f"Late check in at {nightpass.campus_resource.name}"
+                        remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             else:
                 if (nightpass.check_in_time.time() > end_default_time):
                     defaulter = True
-                    remarks+= f"Late check in at {nightpass.campus_resource.name}"
+                    remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             if not nightpass.check_out_time:
-                defaulter= False
                 nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.end_time)
                 nightpass.check_out_time = timezone.make_aware(nightpass.check_out_time, timezone.get_current_timezone())
                 nightpass.save()
             if not nightpass.hostel_checkin_time:
                 defaulter = True
-                remarks+= "Late check in at hostel"
+                remarks+= "Late check in at hostel" if "Late check in at hostel" not in remarks else remarks
             elif (nightpass.hostel_checkin_time - nightpass.check_out_time) > timedelta(minutes=checkin_timer):            
                 defaulter = True
-                remarks+= "Late check in at hostel"
+                remarks+= "Late check in at hostel" if "Late check in at hostel" not in remarks else remarks
             # if (nightpass.check_out_time-nightpass.check_in_time) < timedelta(minutes=10):
             #     defaulter = True
             #     remarks+= f"Stayed for very less time at {nightpass.campus_resource.name}" 
