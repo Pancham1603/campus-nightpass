@@ -22,8 +22,8 @@ def check_defaulters():
     previous_day_nightpasses = NightPass.objects.filter(date=date.today()-timedelta(days=1), defaulter=False)
     for nightpass in previous_day_nightpasses:
         print(nightpass.user.email)
-        defaulter = nightpass.defaulter
-        remarks =nightpass.defaulter_remarks
+        defaulter = nightpass.defaulter if nightpass.defaulter else False
+        remarks =nightpass.defaulter_remarks if nightpass.defaulter_remarks else ""
         if not nightpass.check_in:
             defaulter = True
             remarks+= f"Did not visit {nightpass.campus_resource.name}" if f"Did not visit {nightpass.campus_resource.name}" not in remarks else remarks

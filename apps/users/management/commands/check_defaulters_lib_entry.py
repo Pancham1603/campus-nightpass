@@ -21,8 +21,8 @@ def check_defaulters_lib_entry():
     # nightpasses.update(defaulter=False, defaulter_remarks='')
     for nightpass in nightpasses:
         print(nightpass.user.email)
-        defaulter = nightpass.defaulter
-        remarks = nightpass.defaulter_remarks
+        defaulter = nightpass.defaulter if nightpass.defaulter else False
+        remarks = nightpass.defaulter_remarks if nightpass.defaulter_remarks else ""
         if not nightpass.check_in:
             pass
         else:
