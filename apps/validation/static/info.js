@@ -302,9 +302,12 @@ function checkInput() {
             inputElement.value = '';
             enteredIntegers = 0;
         } 
-    } 
+    } else if (inputElement.value.length > 9) {
+        inputElement.value = '';
+        enteredIntegers = 0;
+    }
 }
 
 setInterval(function () {
     checkInput()
-}, 300);
+}, 200);
