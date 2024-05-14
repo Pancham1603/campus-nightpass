@@ -121,7 +121,7 @@
                 {% if resource.is_booking and current_time >= resource.start_time and resource.end_time >= current_time %}
                 <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
                 {% else %}
-                <button class="book-button" style="background-color: gray;">Booking time 10am - 8pm</button>
+                <button class="book-button" style="background-color: gray;">Booking time {{resource.start_time}} - {{ resource.end_time }}</button>
                 {% endif %}
             </div>
         </div>
