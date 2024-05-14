@@ -118,7 +118,7 @@
             <div class="resource-details">
                 <h2 style="margin-bottom: 5px;">{{ resource.name }}</h2>
                 <p style="margin-bottom: 5px;">{{ resource.description }}</p>
-                {% if resource.is_booking %}
+                {% if resource.is_booking and current_time >= resource.start_time and resource.end_time >= current_time %}
                 <button class="book-button" onclick="openModal('{{ resource.name }}', '{{ resource.description }}', '{{ resource.picture }}', true)">Book Slot</button>
                 {% else %}
                 <button class="book-button" style="background-color: gray;">Booking time 10am - 8pm</button>

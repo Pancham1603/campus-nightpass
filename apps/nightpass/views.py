@@ -31,7 +31,7 @@ def campus_resources_home(request):
             checkin_timer = Settings.frontend_checkin_timer
         announcement = Settings.announcement if Settings.announcement else False
         default_pass = NightPass.objects.filter(user=user, defaulter=True).order_by('-date').first() if user.student.defaulter_notification else None
-        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement, 'valid_entry_without_checkout':Settings.valid_entry_without_hostel_checkout, 'default_pass':default_pass})	
+        return render(request, 'lmao.html', {'user':user.student,'campus_resources':campus_resources, 'user_pass':user_pass, 'user_incidents':user_incidents, 'frontend_checkin_timer':checkin_timer, 'announcement':announcement, 'valid_entry_without_checkout':Settings.valid_entry_without_hostel_checkout, 'default_pass':default_pass, 'current_time':datetime.now().time()})	
     elif user.user_type == 'security':
         return redirect('/access')
     elif user.user_type == 'admin':
@@ -57,6 +57,13 @@ def generate_pass(request, campus_resource):
                 }
         return HttpResponse(json.dumps(data))
     
+    if campus_resource.start_time > datetime.now().time() or campus_resource.end_time < datetime.now().time():
+        data = {
+                'status':False,
+                'message':f'Booking is available only between {campus_resource.start_time} and {campus_resource.end_time}!'
+                }
+        return HttpResponse(json.dumps(data))
+    
     Settings = settings.objects.first()
 
     if int(user.student.violation_flags) >= int(Settings.max_violation_count):
@@ -67,7 +74,7 @@ def generate_pass(request, campus_resource):
         return HttpResponse(json.dumps(data))
 
     if Settings.enable_gender_ratio:
-        if user.student.gender == 'male':
+        if user.student.gender.lower() == 'male':
             male_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource,
                                                         user__student__gender='male').count()
             if (male_pass_count > Settings.male_ratio*(campus_resource.max_capacity)) or Settings.male_ratio==float(0):
@@ -77,7 +84,7 @@ def generate_pass(request, campus_resource):
                 }
                 return HttpResponse(json.dumps(data))
 
-        elif user.student.gender == 'female':
+        elif user.student.gender.lower() == 'female':
             female_pass_count = NightPass.objects.filter(valid=True, campus_resource=campus_resource, 
                                                          user__student__gender='female').count()
             if (female_pass_count > Settings.female_ratio*(campus_resource.max_capacity)) or Settings.female_ratio==float(0) :
