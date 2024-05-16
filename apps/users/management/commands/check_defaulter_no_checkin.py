@@ -47,7 +47,7 @@ def check_defaulters_no_checkin():
                     defaulter = True
                     remarks+= f"Late check in at {nightpass.campus_resource.name}" if f"Late check in at {nightpass.campus_resource.name}" not in remarks else remarks
             if not nightpass.check_out_time:
-                nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.end_time)
+                nightpass.check_out_time = datetime.combine(nightpass.check_in_time.date(), nightpass.campus_resource.closing_time)
                 nightpass.check_out_time = timezone.make_aware(nightpass.check_out_time, timezone.get_current_timezone())
                 nightpass.save()
 

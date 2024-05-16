@@ -25,6 +25,7 @@ class CampusResource(models.Model):
     max_capacity = models.IntegerField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    closing_time = models.TimeField(blank=True, null=True)
     is_booking = models.BooleanField(default=False)
     is_display = models.BooleanField(default=False)
     booking_complete = models.BooleanField(default=False)
