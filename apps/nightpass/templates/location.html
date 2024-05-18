@@ -1,0 +1,70 @@
+<button onclick="startWatchingLocation()">Start Watching Location</button>
+<p id="message"></p>
+<script>
+    let watchID;
+
+    function startWatchingLocation() {
+        if ("geolocation" in navigator) {
+            const options = {
+                enableHighAccuracy: true,
+                maximumAge: 1000,
+                timeout: 10000,
+            };
+
+            watchID = navigator.geolocation.watchPosition(success, error, options);
+
+            // Stop watching after 10 seconds
+            setTimeout(() => {
+                navigator.geolocation.clearWatch(watchID);
+                console.log('Stopped watching location');
+                document.getElementById('message').innerText = 'Stopped watching location';
+            }, 10000);
+        } else {
+            alert("Geolocation is not available");
+        }
+    }
+
+    function success(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+
+        const targetLatitude = 30.351405314236214;
+        const targetLongitude = 76.3623620892594;
+
+        const targetDistance = 30; // in meters
+
+        const distance = calculateDistance(latitude, longitude, targetLatitude, targetLongitude);
+
+        if (distance <= targetDistance) {
+            console.log('Coordinates are within 30 meters of the target location', distance);
+            document.getElementById('message').innerText = 'Coordinates are within 30 meters of the target location';
+        } else {
+            console.log('Coordinates are NOT within 30 meters of the target location', distance);
+            document.getElementById('message').innerText = 'Coordinates are NOT within 30 meters of the target location';
+        }
+    }
+
+    function error() {
+        alert("Sorry, no position available.");
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const earthRadius = 6371e3; // Earth's radius in meters
+        const φ1 = toRadians(lat1);
+        const φ2 = toRadians(lat2);
+        const Δφ = toRadians(lat2 - lat1);
+        const Δλ = toRadians(lon2 - lon1);
+
+        const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                  Math.cos(φ1) * Math.cos(φ2) *
+                  Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+        const distance = earthRadius * c;
+        return distance;
+    }
+
+    function toRadians(degrees) {
+        return degrees * Math.PI / 180;
+    }
+</script>

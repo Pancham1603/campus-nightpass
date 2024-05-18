@@ -241,3 +241,7 @@ def remove_defaulter_notif(request):
         'message':'Notification dismissed!'
     }
     return HttpResponse(json.dumps(data))
+
+
+def self_checkin_testing(request):
+    return render(request, 'location.html')
