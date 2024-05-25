@@ -137,5 +137,35 @@
         }, 5000);
     </script>
         <script src="../static/info.js"></script>
+
+    {% if request.user.security.campus_resource %}
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.4.0/dist/confetti.browser.min.js"></script>
+        <script>
+            function fireConfetti() {
+                // Start confetti
+                const duration = 500; // Duration in milliseconds
+                const end = Date.now() + duration;
+        
+                (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+        
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+                }());
+            }
+        </script>
+    {% endif %}
 </body>
 </html>

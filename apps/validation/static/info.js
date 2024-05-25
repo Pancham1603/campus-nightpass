@@ -167,9 +167,10 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
                 actionButton.innerHTML = `Check Out`;
                 document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
                 actionButton.onclick = function()  {checkOut(user_data.registration_number);}
-            } else {
+            } else {    
+                document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
+                fireConfetti();
                 checkOut(user_data.registration_number);
-                // document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
             }            
         } else {
             actionButton.style.visibility = 'visible';
@@ -198,7 +199,7 @@ function updateUserPass(data,user_data, task, request_user_location, message) {
 }}
 
 function updateStats(data) {
-    document.getElementById('total_count').innerHTML = 'Booking: ' + data.total_count;
+    document.getElementById('total_count').innerHTML = 'Expected: ' + data.total_count;
     document.getElementById('check_in_count').innerHTML = 'Checked In: ' + data.check_in_count;
 }
 
@@ -240,7 +241,7 @@ function checkIn(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
-            toastr.success(response.message);
+            if (is_mobile()){toastr.success(response.message);}
             for (var i = 0; i < timeouts.length; i++) {
                 clearTimeout(timeouts[i]);
             }
@@ -270,8 +271,8 @@ function checkOut(registration_number) {
         let res = response.status;
         if (res) {
             if (response.student_stats) {updateStats(response.student_stats);}
-            document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
-            toastr.success(response.message);
+            // document.getElementById('profile-card').style.backgroundColor = '#F0E68C';
+            if (is_mobile()){toastr.success(response.message);}
             for (var i = 0; i < timeouts.length; i++) {
                 clearTimeout(timeouts[i]);
             }
