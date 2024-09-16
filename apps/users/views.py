@@ -22,7 +22,7 @@ def gauth(request):
         'include_granted_scopes': 'true',
         'response_type': 'code',
         'state': 'state_parameter_passthrough_value',
-        'redirect_uri': request.build_absolute_uri('/accounts/google/login/callback/'),
+        'redirect_uri': request.build_absolute_uri('/accounts/google/login/callback/').replace('http://', 'https://'),
         'client_id': config['web']['client_id'],
     }
 
