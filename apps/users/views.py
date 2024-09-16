@@ -66,7 +66,7 @@ def oauth_callback(request):
         # Your client credentials
         client_id = config['web']['client_id']
         client_secret = config['web']['client_secret']
-        redirect_uri = request.build_absolute_uri('/accounts/google/login/callback/')
+        redirect_uri = request.build_absolute_uri('/accounts/google/login/callback/').replace('http://', 'https://')
 
         # Build the POST data
         post_data = {
