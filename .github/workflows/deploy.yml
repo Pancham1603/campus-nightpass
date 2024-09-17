@@ -20,7 +20,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -t rsa 13.200.106.24 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
-          sudo docker system prune -a --force
+          sudo docker ps -a
 
           # chmod 644 ~/.ssh/known_hosts
 
