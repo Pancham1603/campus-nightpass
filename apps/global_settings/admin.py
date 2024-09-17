@@ -1,10 +1,9 @@
 from django.contrib import admin
 from .models import Settings
 from ..nightpass.models import CampusResource
-from ..users.models import Student, NightPass
+from ..users.models import Student, NightPass, CustomUser
 from ..users.management.commands.check_defaulters import check_defaulters
 from ..users.management.commands.check_defaulter_no_checkin import check_defaulters_no_checkin
-from ..users.management.commands.check_defaulters_lib_entry import check_defaulters_lib_entry
 from datetime import date, timedelta
 
 from admin_extra_buttons.api import ExtraButtonsMixin, button, confirm_action, link, view
@@ -56,13 +55,6 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
                           "Successfully executed: Check defaulters without checkin", )
     
     @button()
-    def check_defaulters_entry_lib(self, request):
-        def _action(request):
-            check_defaulters_lib_entry()
-        return confirm_action(self, request, _action, "Confirm action",
-                          "Successfully executed: Check defaulters lib entry", )
-    
-    @button()
     def force_violation_count(self, request):
         def _action(request):
             students = Student.objects.all()
@@ -73,14 +65,11 @@ class SettingsAdmin(ExtraButtonsMixin, admin.ModelAdmin):
                           "Successfully executed: Reset violation count", )
     
     @button()
-    def mark_booked(self, request):
+    def inactive_all_users(self, request):
         def _action(request):
-            today_passes = NightPass.objects.filter(date=date.today())
-            today_passes.update(valid=True)
-            for night_pass in today_passes:
-                night_pass.user.student.has_booked = True
-                night_pass.user.student.save()
+            users = CustomUser.objects.all()
+            users.update(is_active=False)
         return confirm_action(self, request, _action, "Confirm action",
-                          "Successfully executed: Marked booked passes", )
+                          "Successfully executed: All users inactive", )
 # Register your models here.
 admin.site.register(Settings, SettingsAdmin)
