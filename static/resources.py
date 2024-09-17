@@ -4,7 +4,7 @@ from .models import Student, CustomUser
 class StudentResource(resources.ModelResource):
     class Meta:
         model = Student
-        fields = ('id','name', 'contact_number', 'registration_number','gender', 'branch', 'date_of_birth', 'father_name', 'mother_name', 'course', 'semester', 'parent_contact', 'address', 'picture', 'hostel', 'room_number', 'email')
+        fields = ('name', 'contact_number', 'registration_number','gender', 'branch', 'date_of_birth', 'father_name', 'mother_name', 'course', 'semester', 'parent_contact', 'address', 'picture', 'hostel', 'room_number', 'email')
 
     def save_instance(self, instance, is_create, using_transactions=True, dry_run=False):
         user = CustomUser.objects.filter(email=instance.email).first()
