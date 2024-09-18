@@ -8,16 +8,12 @@ class StudentResource(resources.ModelResource):
         fields = ('name', 'contact_number', 'registration_number', 'gender', 'branch', 'date_of_birth', 
                   'father_name', 'mother_name', 'course', 'year', 'parent_contact', 'address', 'picture', 
                   'hostel', 'room_number', 'email')
-        import_id_fields = ('registration_number',)  # Keep only fields that exist
-
-    def before_import(self, dataset, **kwargs):
-        # Ensure 'id' is calculated but not added as a field
-        dataset.headers.append("id")
-        super().before_import(dataset, **kwargs)
+        import_id_fields = ('registration_number',)  # Use 'registration_number' as the unique ID
 
     def before_import_row(self, row, **kwargs):
-        # Generate id from registration_number for internal processing
-        row["id"] = hashlib.sha256(row["registration_number"].encode()).hexdigest()
+        # Generate id internally from registration_number
+        internal_id = hashlib.sha256(row["registration_number"].encode()).hexdigest()
+        row["internal_id"] = internal_id  # This will not interfere with the dataset headers
 
     def save_instance(self, instance, is_create, using_transactions=True, dry_run=False):
         user = CustomUser.objects.filter(email=instance.email).first()
@@ -31,5 +27,5 @@ class StudentResource(resources.ModelResource):
                 instance.user = user
                 instance.gender = instance.gender.lower()
         
-        # Finally, save the instance
+        # Save the instance
         return super().save_instance(instance, is_create, using_transactions, dry_run)
