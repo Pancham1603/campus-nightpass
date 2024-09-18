@@ -31,7 +31,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'explorer',
     'import_export',
     'django_crontab',
-    'hijack',
-    'hijack.contrib.admin',
+    # 'hijack',
+    # 'hijack.contrib.admin',
     "rangefilter",
     'admin_extra_buttons',
     # 'pwa'
@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'core.middleware.RedirectUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hijack.middleware.HijackUserMiddleware',
+    # 'hijack.middleware.HijackUserMiddleware',
     'detect.middleware.UserAgentDetectionMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
