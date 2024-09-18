@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 
 class Hostel(models.Model):
-    name = models.CharField(max_length=10, unique=True, primary_key=True)
+    name = models.CharField(max_length=100, unique=True, primary_key=True)
     contact_number = models.CharField(max_length=15)
     email = models.EmailField(max_length=100)
 
