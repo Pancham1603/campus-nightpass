@@ -26,4 +26,4 @@ jobs:
 
       - name: Deploy code
         run: |
-          ssh ubuntu@13.200.106.24 'cd /home/ubuntu/campus-nightpass && git stash && git pull https://Pancham1603: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@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
+          ssh ubuntu@13.200.106.24 'cd /home/ubuntu/campus-nightpass && sudo git stash && git pull https://Pancham1603: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@github.com/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
