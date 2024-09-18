@@ -95,7 +95,7 @@ class Admin(models.Model):
 class Student(models.Model):
     name = models.CharField(max_length=100)
     contact_number = models.CharField(max_length=15, null=True, blank=True)
-    registration_number = models.CharField(max_length=20)
+    registration_number = models.CharField(max_length=20, unique=True)
     branch = models.CharField(max_length=50, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, null=True, blank=True, choices=(('Male','Male'), ('Female','Female')))
