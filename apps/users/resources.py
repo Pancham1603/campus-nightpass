@@ -55,6 +55,7 @@ class StudentResource(resources.ModelResource):
         else:
             # Associate the existing student with the found user
             student.user = user
+            student.gender = student.gender.title()
             student.save()
 
     def get_import_id_fields(self):
