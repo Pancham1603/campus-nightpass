@@ -16,7 +16,7 @@ class StudentResource(resources.ModelResource):
         row['registration_number'] = int(row.get('registration_number', 0))
         
         # Set gender to lowercase
-        row['gender'] = row.get('gender', '').lower()
+        row['gender'] = row.get('gender', '')
 
         # Handle CustomUser creation or retrieval
         email = row.get('email')
