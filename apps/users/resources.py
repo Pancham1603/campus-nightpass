@@ -7,6 +7,13 @@ class StudentResource(resources.ModelResource):
         fields = ('name', 'contact_number', 'registration_number','gender', 'branch', 'date_of_birth', 'father_name', 'mother_name', 'course', 'year', 'parent_contact', 'address', 'picture', 'hostel', 'room_number', 'email')
         import_id_fields = ('registration_number',)
 
+    def before_import(self, dataset, **kwargs):
+        dataset.headers.append("id")
+        super().before_import(dataset, **kwargs)
+
+    def before_import_row(self, row, **kwargs):
+        row["id"] = hashlib.sha256(row["registration_number"].encode()).hexdigest()
+
     def save_instance(self, instance, is_create, using_transactions=True, dry_run=False):
         user = CustomUser.objects.filter(email=instance.email).first()
         if not user:
