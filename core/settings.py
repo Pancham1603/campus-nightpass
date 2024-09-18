@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'explorer',
     'import_export',
     'django_crontab',
-    'hijack',
-    'hijack.contrib.admin',
+    # 'hijack',
+    # 'hijack.contrib.admin',
     "rangefilter",
     'admin_extra_buttons',
     # 'pwa'
@@ -72,7 +72,7 @@ MIDDLEWARE = [
     'core.middleware.RedirectUserMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'hijack.middleware.HijackUserMiddleware',
+    # 'hijack.middleware.HijackUserMiddleware',
     'detect.middleware.UserAgentDetectionMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]

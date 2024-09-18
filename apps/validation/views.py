@@ -131,7 +131,10 @@ def check_out(request):
                     return checkout_from_hostel(user_pass)
                 elif type(admin_campus_resource) == CampusResource:
                     if admin_campus_resource.name == 'Library':
-                        req_library_logs(user.registration_number)
+                        try:
+                            req_library_logs(user.registration_number)
+                        except:
+                            pass
                     return checkout_from_location(user_pass, admin_campus_resource)
             except Student.DoesNotExist:
                 data = {
@@ -206,7 +209,10 @@ def check_in(request):
                         }
                         return HttpResponse(json.dumps(data))
                     if admin_campus_resource.name == 'Library':
-                        req_library_logs(user.registration_number)
+                        try:
+                            req_library_logs(user.registration_number)
+                        except:
+                            pass
                     return checkin_to_location(user_pass, admin_campus_resource)
             except Student.DoesNotExist:
                 data = {
