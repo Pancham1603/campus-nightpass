@@ -13,8 +13,8 @@ class StudentResource(resources.ModelResource):
             instance.user = CustomUser.objects.create(email=instance.email, user_type='student')
             return super().save_instance(instance, is_create, using_transactions, dry_run)
         else:
-            # user.is_active = True
-            # user.save()
+            user.is_active = True
+            user.save()
             try:
                 if not user.student:
                     instance.registration_number = int(instance.registration_number)
@@ -28,5 +28,5 @@ class StudentResource(resources.ModelResource):
                     return super().save_instance(instance, is_create, using_transactions, dry_run)
 
 
-    def get_import_id_fields(self):
-        return ('registration_number',)
+    # def get_import_id_fields(self):
+    #     return ('registration_number',)
