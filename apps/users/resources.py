@@ -38,7 +38,7 @@ class StudentResource(resources.ModelResource):
                 name=row.get('name'),
                 contact_number=row.get('contact_number'),
                 registration_number=row.get('registration_number'),
-                gender=row.get('gender'),
+                gender=row.get('gender').title(),
                 branch=row.get('branch'),
                 father_name=row.get('father_name'),
                 mother_name=row.get('mother_name'),
