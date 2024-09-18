@@ -31,6 +31,7 @@ DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = False
 
 ALLOWED_HOSTS = ['https://permissions.onlinehostel.in','*', 'localhost', '127.0.0.1', '0.0.0.0']
 
