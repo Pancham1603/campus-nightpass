@@ -14,7 +14,7 @@ django-cors-headers==4.4.0
 django-crontab==0.7.1
 django-cryptography-django5==2.2
 django-detect==1.0.20
-django-hijack==3.6.0
+django-hijack==3.4.5
 django-import-export==4.1.1
 django-pwa==2.0.0
 django-six==1.0.5
