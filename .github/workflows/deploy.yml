@@ -26,4 +26,4 @@ jobs:
 
       - name: Deploy code
         run: |
-          ssh ubuntu@13.200.106.24 'cd /home/ubuntu/campus-nightpass && sudo git stash && git pull https://arunverma94:${{ secrets.ACCESS_TOKEN }}/${{ secrets.ORG }}/${{ secrets.REPO }} main && sudo docker-compose down && sudo docker-compose up --build -d'
+          ssh ubuntu@13.200.106.24 'cd /home/ubuntu/campus-nightpass && sudo git stash && git pull https://Arunverma94:${{ secrets.ACCESS_TOKEN }}@github.com/TIET-Official/campus-nightpass.git main && sudo docker-compose down && sudo docker-compose up --build -d'
