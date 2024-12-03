@@ -55,8 +55,8 @@ INSTALLED_APPS = [
     'explorer',
     'import_export',
     'django_crontab',
-    # 'hijack',
-    # 'hijack.contrib.admin',
+    'hijack',
+    'hijack.contrib.admin',
     "rangefilter",
     'admin_extra_buttons',
     # 'pwa'
