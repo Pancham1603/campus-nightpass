@@ -290,19 +290,22 @@ function checkOut(registration_number) {
 
 
 let enteredIntegers = 0;
+
 function checkInput() {
     const inputElement = document.getElementById('roll_num');
 
-    if (inputElement.value.length >= 0 && inputElement.value.length == 9) {
+    // Check if the input length is either 9 or 10
+    if (inputElement.value.length >= 9 && inputElement.value.length <= 10) {
         enteredIntegers = inputElement.value.length;
-        if (enteredIntegers === 9) {
-            fetch_data({'registration_number':inputElement.value})
+        if (enteredIntegers === 9 || enteredIntegers === 10) {
+            fetch_data({ 'registration_number': inputElement.value });
             var audio = new Audio('../static/beep.mp3');
             audio.play();
-            inputElement.value = '';
-            enteredIntegers = 0;
-        } 
-    } else if (inputElement.value.length > 9) {
+            inputElement.value = ''; // Reset the input field
+            enteredIntegers = 0;    // Reset enteredIntegers
+        }
+    } else if (inputElement.value.length > 10) {
+        // Reset the input if it exceeds 10 characters
         inputElement.value = '';
         enteredIntegers = 0;
     }

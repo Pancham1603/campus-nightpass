@@ -121,7 +121,7 @@
             if (!lastScannedBarcode.includes(code)) {
                 var audio = new Audio('../static/beep.mp3');
                 audio.play();
-                if (code.length == 9) {fetch_data({'registration_number':code})}
+                if (code.length == 9 || code.length == 10) {fetch_data({'registration_number':code})}
                 lastScannedBarcode.push(code);
             }
 
