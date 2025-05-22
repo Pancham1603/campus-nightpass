@@ -65,7 +65,7 @@ class NightPassAdmin(admin.ModelAdmin):
         for obj in queryset:
             data.append([obj.user.student.name, 
                          obj.user.email ,
-                         obj.user.student.hostel.name,
+                         obj.user.student.hostel.name if obj.user.student.hostel else "None",
                          obj.user.student.gender,
                          obj.pass_id,
                          obj.date.strftime('%d/%m/%y'),
