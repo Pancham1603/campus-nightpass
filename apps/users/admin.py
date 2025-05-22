@@ -46,7 +46,7 @@ class NightPassAdmin(admin.ModelAdmin):
         return obj.user.student.name
     
     def hostel(self, obj):
-        return obj.user.student.hostel.name
+        return obj.user.student.hostel.name if obj.user.student.hostel else "None"
 
     def hostel_check_out(self, obj):
         return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">') if obj.hostel_checkout_time is not None else format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')
