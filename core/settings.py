@@ -54,12 +54,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'explorer',
     'import_export',
-    'django_crontab',
     'hijack',
     'hijack.contrib.admin',
     "rangefilter",
     'admin_extra_buttons',
-    # 'pwa'
 ]
 
 
@@ -245,4 +243,4 @@ EXPLORER_PERMISSION_VIEW = lambda r: r.user.is_superuser
 # PWA_APP_DIR = 'ltr'
 # PWA_APP_LANG = 'en-US'
 
-DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 20480
