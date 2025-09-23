@@ -9,6 +9,205 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <link rel="stylesheet" href="../static/styles.css">
+    <style>
+        /* Modal Styles */
+        .opensource-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 0;
+            padding: 20px;
+            border: none;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            display: block;
+        }
+        
+        .modal-header {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: block;
+            width: 100%;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 22px;
+            display: block;
+            width: 100%;
+        }
+        
+        .opensource-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            display: block;
+            width: 100%;
+        }
+        
+        .modal-body {
+            display: block;
+            width: 100%;
+        }
+        
+        .modal-body p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            font-size: 14px;
+            display: block;
+            width: 100%;
+        }
+        
+        .modal-body ul {
+            font-size: 14px;
+            text-align: left;
+            margin: 20px auto;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .modal-body li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+        
+        .modal-buttons {
+            display: block;
+            text-align: center;
+            margin-top: 25px;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            font-size: 16px;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .close:hover {
+            color: #000;
+            background-color: #f0f0f0;
+            border-radius: 50%;
+        }
+        
+        /* Mobile responsive styles */
+        @media (max-width: 480px) {
+            .opensource-modal {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                margin: 10% auto;
+                padding: 20px 15px;
+                width: 95%;
+                max-width: none;
+            }
+            
+            .modal-header h2 {
+                font-size: 20px;
+            }
+            
+            .opensource-icon {
+                font-size: 36px;
+            }
+            
+            .modal-body p {
+                font-size: 13px;
+                margin-bottom: 12px;
+            }
+            
+            .modal-body ul {
+                font-size: 13px;
+                padding-left: 20px;
+                max-width: none;
+            }
+            
+            .modal-body li {
+                margin-bottom: 6px;
+            }
+            
+            .btn-primary {
+                padding: 12px 20px;
+                font-size: 14px;
+                min-width: 150px;
+                display: inline-block;
+            }
+            
+            .close {
+                top: 10px;
+                right: 15px;
+                font-size: 24px;
+                width: 25px;
+                height: 25px;
+            }
+        }
+        
+        @media (max-width: 320px) {
+            .modal-content {
+                padding: 15px 10px;
+            }
+            
+            .btn-primary {
+                padding: 10px 15px;
+                font-size: 13px;
+                min-width: 130px;
+            }
+            
+            .modal-body ul {
+                padding-left: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
     
@@ -58,5 +257,59 @@
 </script>
 {% endfor %}
 {% endif %}
+
+<!-- Open Source Modal -->
+<div id="opensourceModal" class="opensource-modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Thapar NightPass is now Open Source!</h2>
+        </div>
+        <div class="modal-body">
+            <p>We've made our codebase public to encourage collaboration and transparency. You can now:</p>
+            <ul style="text-align: left; margin: 20px 0;">
+                <li>View and study the source code</li>
+                <li>Contribute new features and improvements</li>
+                <li>Report bugs and suggest enhancements</li>
+                <li>Star the repository to show your support</li>
+            </ul>
+            <p>Help us make NightPass even better for the entire Thapar community!</p>
+        </div>
+        <div class="modal-buttons">
+            <a href="https://github.com/pancham1603/campus-nightpass" target="_blank" class="btn-primary">
+                ⭐ Star & Contribute
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Show the modal on every page load
+    var modal = document.getElementById('opensourceModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+    
+    // Close modal function
+    window.closeModal = function() {
+        modal.style.display = 'none';
+    }
+    
+    // Close modal when clicking the X
+    var closeBtn = modal.querySelector('.close');
+    if (closeBtn) {
+        closeBtn.onclick = closeModal;
+    }
+    
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+});
+</script>
+
 </body>
 </html>
