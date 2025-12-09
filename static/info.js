@@ -290,21 +290,32 @@ function checkOut(registration_number) {
 
 
 let enteredIntegers = 0;
+let inputTimeout = null;
 function checkInput() {
     const inputElement = document.getElementById('roll_num');
+    const inputLength = inputElement.value.length;
 
-    if (inputElement.value.length >= 0 && inputElement.value.length == 9) {
-        enteredIntegers = inputElement.value.length;
-        if (enteredIntegers === 9) {
-            fetch_data({'registration_number':inputElement.value})
-            var audio = new Audio('../static/beep.mp3');
-            audio.play();
-            inputElement.value = '';
-            enteredIntegers = 0;
-        } 
-    } else if (inputElement.value.length > 9) {
+    if (inputLength >= 9 && inputLength <= 10) {
+        // Clear any existing timeout
+        if (inputTimeout) {
+            clearTimeout(inputTimeout);
+        }
+        // Set a small delay to allow for 10-digit input
+        inputTimeout = setTimeout(function() {
+            if (inputElement.value.length >= 9 && inputElement.value.length <= 10) {
+                fetch_data({'registration_number': inputElement.value});
+                var audio = new Audio('../static/beep.mp3');
+                audio.play();
+                inputElement.value = '';
+                enteredIntegers = 0;
+            }
+        }, 300);
+    } else if (inputLength > 10) {
         inputElement.value = '';
         enteredIntegers = 0;
+        if (inputTimeout) {
+            clearTimeout(inputTimeout);
+        }
     }
 }
 

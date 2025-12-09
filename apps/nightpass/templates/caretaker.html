@@ -1,6 +1,90 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="search-container" style="padding: 15px; text-align: center;">
+    <input type="text" id="roll_num" placeholder="Scan or type Roll Number (9-10 digits)" 
+           style="padding: 12px 20px; font-size: 16px; width: 100%; max-width: 400px; border: 2px solid #ddd; border-radius: 8px; outline: none;"
+           autofocus>
+    <p id="search-status" style="margin-top: 10px; color: #666;"></p>
+</div>
+
+<script>
+let searchTimeout = null;
+const rollInput = document.getElementById('roll_num');
+const searchStatus = document.getElementById('search-status');
+
+rollInput.addEventListener('input', function() {
+    const value = this.value.replace(/\D/g, ''); // Remove non-digits
+    this.value = value;
+    
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);
+    }
+    
+    if (value.length >= 9 && value.length <= 10) {
+        searchStatus.textContent = 'Searching...';
+        searchStatus.style.color = '#007bff';
+        
+        // Small delay to allow for 10-digit input completion
+        searchTimeout = setTimeout(function() {
+            highlightStudent(value);
+            rollInput.value = '';
+        }, 400);
+    } else if (value.length > 10) {
+        this.value = '';
+        searchStatus.textContent = 'Invalid input - cleared';
+        searchStatus.style.color = '#dc3545';
+    } else if (value.length > 0) {
+        searchStatus.textContent = 'Enter ' + (9 - value.length) + ' more digits...';
+        searchStatus.style.color = '#666';
+    } else {
+        searchStatus.textContent = '';
+    }
+});
+
+function highlightStudent(rollNumber) {
+    // Find and highlight the matching row in the table
+    const rows = document.querySelectorAll('.custom-table tbody tr');
+    let found = false;
+    
+    rows.forEach(function(row) {
+        row.style.backgroundColor = ''; // Reset all rows
+    });
+    
+    rows.forEach(function(row) {
+        const nameCell = row.querySelector('td:first-child');
+        const roomCell = row.querySelector('td:nth-child(2)');
+        // Check if the row contains matching data
+        if (row.textContent.includes(rollNumber) || 
+            (nameCell && nameCell.textContent.toLowerCase().includes(rollNumber.toLowerCase()))) {
+            row.style.backgroundColor = '#fff3cd';
+            row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            found = true;
+            searchStatus.textContent = 'Student found!';
+            searchStatus.style.color = '#28a745';
+        }
+    });
+    
+    if (!found) {
+        searchStatus.textContent = 'No matching student found';
+        searchStatus.style.color = '#dc3545';
+    }
+    
+    // Play beep sound
+    try {
+        var audio = new Audio('../static/beep.mp3');
+        audio.play();
+    } catch(e) {}
+}
+
+// Keep focus on input
+rollInput.addEventListener('blur', function() {
+    setTimeout(function() {
+        rollInput.focus();
+    }, 100);
+});
+</script>
+
 <div class="table-container">
     <div class="table-responsive">
         <table class="custom-table">
